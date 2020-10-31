@@ -1,0 +1,28 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    List<Drzava> lista = (List<Drzava>)ViewData["drzave"];
+}
+<center>
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>Šifra</th>
+            <th>Naziv</th>
+        </thead>
+        <tbody>
+            @foreach (var x in lista)
+            {
+                <tr>
+                    <td>@x.Drazava_ID</td>
+                    <td>@x.Sifra</td>
+                    <td>@x.Naziv</td>
+                    <td><a class="btn btn-danger" href="/Drzava/Ukloni?id=@x.Drazava_ID">Ukloni</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+        <a href="/Drzava/Unos" class="btn btn-success">Dodaj novu</a>
+</center>

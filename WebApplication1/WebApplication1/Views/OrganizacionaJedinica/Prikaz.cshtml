@@ -1,0 +1,34 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    List<OrganizacionaJedinica> lista = (List<OrganizacionaJedinica>)ViewData["org_jed"];
+}
+<center>
+    <table class="table">
+        <thead>
+        <th>ID</th>
+        <th>Organizacija</th>
+        <th>PTT</th>
+        <th>Država</th>
+        <th>Naziv</th>
+        <th>Adresa</th>
+        <th>Akcija</th>
+        </thead>
+        <tbody>
+            @foreach (var x in lista)
+            {
+                <tr>
+                    <td>@x.OrganizacionaJedinica_ID</td>
+                    <td>@x.organizacija.Naziv</td>
+                    <td>@x.ptt.Naziv</td>
+                    <td>@x.drzava.Naziv</td>
+                    <td>@x.Naziv</td>
+                    <td>@x.Adresa</td>
+                    <td><a href="/OrganizacionaJedinica/Ukloni?id=@x.OrganizacionaJedinica_ID" class="btn btn-danger">Ukloni</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="/OrganizacionaJedinica/Unos" class="btn btn-success">Unesi novu</a>
+</center>

@@ -1,0 +1,39 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    List<ProjekatAktivnostPlan> lista = (List<ProjekatAktivnostPlan>)ViewData["pro_aktiv_plan"];
+}
+
+<center>
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>Projekat plan</th>
+            <th>Šifra</th>
+            <th>Naziv</th>
+            <th>Datum od</th>
+            <th>Datum do</th>
+            <th>Jedinica mjere</th>
+            <th>Količina</th>
+            <th>Akcija</th>
+        </thead>
+        <tbody>
+            @foreach(var x in lista)
+            {
+                <tr>
+                    <td>@x.ProjekatAktivnostPlan_ID</td>
+                    <td>@x.projekatPlan.Naziv</td>
+                    <td>@x.Sifra</td>
+                    <td>@x.Naziv</td>
+                    <td>@x.DatumOd</td>
+                    <td>@x.DatumDo</td>
+                    <td>@x.JedinicaMjere</td>
+                    <td>@x.Kolicina</td>
+                    <td><a class="btn btn-danger" href="/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID">Ukloni</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="btn btn-success" href="/ProjekatAktivnostPlan/Unos">Dodaj novi</a>
+</center>

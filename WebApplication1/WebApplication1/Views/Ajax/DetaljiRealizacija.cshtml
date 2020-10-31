@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model WebApplication1.Models.VM.DetaljiRealizacijaVM
+@{
+}
+<style>
+    #nm,#dat,#desc,#am {
+        width: 100%;
+        height: 100%;
+        border:0px;
+    }
+    select, option, input{
+        width:100%;
+    }
+</style>
+<center>
+    <table class="table">
+        <tr>
+            <td><label>Naziv projekta</label></td>
+            <td><input id="nm" readonly="readonly" value="@Model.NazivProjekta" /></td>
+        </tr>
+        <tr>
+            <td><label>Datum</label></td>
+            <td><input id="dat" readonly="readonly" value="@(Model.datum.Day+"."+Model.datum.Month+"."+Model.datum.Year+".")" /></td>
+        </tr>
+        <tr>
+            <td><label>Ostvarena količina</label></td>
+            <td><input  id="am" readonly="readonly" value="@Model.kolicina" /></td>
+        </tr>
+        <tr>
+            <td><label>Opis</label></td>
+            <td><input  id="desc" readonly="readonly" value="@Model.opis" /></td>
+        </tr>
+    </table>
+    <button id="sakrij" class="btn btn-primary">Sakrij</button>
+    <script>
+        $("#sakrij").click(function () {
+            $("#sakrij").hide();
+            $("#box").hide();
+            $("#glavni").hide();
+        });
+    </script>
+</center>

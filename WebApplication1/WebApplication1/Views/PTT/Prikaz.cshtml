@@ -1,0 +1,28 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    List<PTT> lista = (List<PTT>)ViewData["ptt"];
+}
+
+<center>
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>Šifra</th>
+            <th>Naziv</th>
+            <th>Akcija</th>
+        </thead>
+        @foreach(var x in lista)
+        {
+            <tr>
+                <td>@x.PTT_ID</td>
+                <td>@x.Sifra</td>
+                <td>@x.Naziv</td>
+                <td><a href="/PTT/Ukloni?id=@x.PTT_ID" class="btn btn-danger">Ukloni</a></td>
+            </tr>
+        }
+    </table>
+    <a class="btn btn-success" href="/PTT/Unos">Dodaj novi</a>
+</center>
