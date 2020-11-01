@@ -17,6 +17,6 @@ namespace WebApplication1.Models.VM
 
     public class lista_realizacijaVM
     {
-        public List<RealizacijaVM> liste { get; set; }
+        public List<RealizacijaVM>? liste { get; set; }
     }
 }

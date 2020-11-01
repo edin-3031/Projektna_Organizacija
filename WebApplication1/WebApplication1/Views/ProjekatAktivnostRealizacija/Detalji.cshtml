@@ -33,37 +33,39 @@
     }
 
 </style>
-    <center>
-        <form method="post" action="/ProjekatAktivnostRealizacija/Detalji">
+<center>
+    <form method="post" action="/ProjekatAktivnostRealizacija/Detalji">
 
-            <table>
-                <tr>
-                    <td><label>Projekat</label></td>
-                    <td>
-                        <select name="projekatId">
-                            <option>---Odaberi---</option>
-                            @foreach(var x in projekti)
-                            {
-                                <option value="@x.ProjekatPlan_ID">@x.Naziv</option>
-                            }
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label>Datum od</label></td>
-                    <td><input id="dat2" type="datetime-local" name="OD" /></td>
-                </tr>
-                <tr>
-                    <td><label>Datum do</label></td>
-                    <td><input id="dat2" type="datetime-local" name="DO" /></td>
-                </tr>
-                @*<tr>
+        <table>
+            <tr>
+                <td><label>Projekat</label></td>
+                <td>
+                    <select name="projekatId">
+                        <option>---Odaberi---</option>
+                        @foreach (var x in projekti)
+                        {
+                            <option value="@x.ProjekatPlan_ID">@x.Naziv</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Datum od</label></td>
+                <td><input id="dat2" type="datetime-local" name="OD" /></td>
+            </tr>
+            <tr>
+                <td><label>Datum do</label></td>
+                <td><input id="dat2" type="datetime-local" name="DO" /></td>
+            </tr>
+            @*<tr>
                     <td><label>Prikaži detaljnije</label></td>
                     <td><input id="cb" type="checkbox"/></td>
                 </tr>*@
-            </table>
-            <button type="submit" class="btn btn-primary" id="tragaj">Traži</button>
-        </form>
+        </table>
+        <button type="submit" class="btn btn-primary" id="tragaj" name="traziDugme" value="10">Traži</button>
+    </form>
+    @if (Model.liste != null)
+    {
         @if (Model.liste.Count > 0)
         {
             <center>
@@ -86,26 +88,26 @@
                             {
                                 <tr>
                                     <td>@x.nazivProjekta</td>
-                                    <td>@(x.datum.Day+"."+ x.datum.Month + "." + x.datum.Year+ ".")</td>
+                                    <td>@(x.datum.Day + "." + x.datum.Month + "." + x.datum.Year + ".")</td>
                                     <td>@x.planirano</td>
                                     <td>@x.odradjeno</td>
-                                    <td>@(Math.Round((x.odradjeno/x.planirano)*100))%</td>
+                                    <td>@(Math.Round((x.odradjeno / x.planirano) * 100))%</td>
                                     <td>
                                         <div id="progressBar" style="width:100%;">
-                                            <div style="width:@(Math.Round((x.odradjeno/x.planirano)*100))%;" id="vrijednost"></div>
+                                            <div style="width:@(Math.Round((x.odradjeno / x.planirano) * 100))%;" id="vrijednost"></div>
                                         </div>
                                     </td>
                                     <td>
                                         <a class="btn btn-warning" id="Detalji__@x.projekatId">Detalji</a>
                                         <script>
-                                    $("#Detalji__@x.projekatId").click(function (event) {
-                                        $.get("/Ajax/DetaljiRealizacija?idRealizacija=@x.realizacijaId&idProjekat=@x.projekatId", function (result) {
-                                            $("#box").show();
-                                            $("#glavni").show();
-                                            $("#box").html(result);
-                                            $("#glavni").css("border", "5px solid black");
+                                        $("#Detalji__@x.projekatId").click(function (event) {
+                                            $.get("/Ajax/DetaljiRealizacija?idRealizacija=@x.realizacijaId&idProjekat=@x.projekatId", function (result) {
+                                                $("#box").show();
+                                                $("#glavni").show();
+                                                $("#box").html(result);
+                                                $("#glavni").css("border", "5px solid black");
+                                            });
                                         });
-                                    });
                                         </script>
                                     </td>
                                 </tr>
@@ -115,7 +117,8 @@
                 </div>
             </center>
         }
-    </center>
+    }
+</center>
 <center>
     <div id="glavni">
         <div id="box">
