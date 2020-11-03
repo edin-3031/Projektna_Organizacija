@@ -1,7 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model WebApplication1.Models.VM.DetaljiRealizacijaVM
+@model WebApplication1.Models.VM.lista_DetaljiRealizacijaVM
 @{
 }
 <style>
@@ -16,22 +16,23 @@
 </style>
 <center>
     <table class="table">
-        <tr>
-            <td><label>Naziv projekta</label></td>
-            <td><input id="nm" readonly="readonly" value="@Model.NazivProjekta" /></td>
-        </tr>
-        <tr>
-            <td><label>Datum</label></td>
-            <td><input id="dat" readonly="readonly" value="@(Model.datum.Day+"."+Model.datum.Month+"."+Model.datum.Year+".")" /></td>
-        </tr>
-        <tr>
-            <td><label>Ostvarena količina</label></td>
-            <td><input  id="am" readonly="readonly" value="@Model.kolicina" /></td>
-        </tr>
-        <tr>
-            <td><label>Opis</label></td>
-            <td><input  id="desc" readonly="readonly" value="@Model.opis" /></td>
-        </tr>
+        <thead>
+            <th>Korisnik</th>
+            <th>Datum</th>
+            <th>Ostvarena količina</th>
+            <th>Opis</th>
+        </thead>
+        <tbody>
+            @foreach(var x in Model.lista)
+            {
+                <tr>
+                    <td>@x.korisnik</td>
+                    <td>@x.datum</td>
+                    <td>@x.kolicina</td>
+                    <td>@x.opis</td>
+                </tr>
+            }
+        </tbody>
     </table>
     <button id="sakrij" class="btn btn-primary">Sakrij</button>
     <script>

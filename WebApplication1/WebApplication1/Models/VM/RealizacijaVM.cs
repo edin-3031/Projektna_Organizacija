@@ -9,10 +9,13 @@ namespace WebApplication1.Models.VM
     {
         public int projekatId { get; set; }
         public int realizacijaId { get; set; }
+        public int aktivnostId { get; set; }
+        public string naziv_aktivnosti { get; set; }
         public string nazivProjekta { get; set; }
         public DateTime datum { get; set; }
         public float planirano { get; set; }
         public float odradjeno { get; set; }
+        public int korisnikId { get; set; }
     }
 
     public class lista_realizacijaVM

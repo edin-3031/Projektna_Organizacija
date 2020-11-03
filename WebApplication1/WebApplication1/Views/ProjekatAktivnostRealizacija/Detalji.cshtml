@@ -8,6 +8,8 @@
 
     List<WebApplication1.Models.VM.RealizacijaVM> lista_projekata = (List<WebApplication1.Models.VM.RealizacijaVM>)ViewData["lista_projekata"];
 
+    RealizacijaDetaljiSuma suma = (RealizacijaDetaljiSuma)ViewData["suma"];
+
 }
 <style>
     #cb{
@@ -76,6 +78,7 @@
                     <table style="border:5px solid black" class="table">
                         <thead>
                         <th>Projekat</th>
+                        <th>Aktivnost</th>
                         <th>Datum</th>
                         <th>Planirano</th>
                         <th>Ostvareno</th>
@@ -88,6 +91,7 @@
                             {
                                 <tr>
                                     <td>@x.nazivProjekta</td>
+                                    <td>@x.naziv_aktivnosti</td>
                                     <td>@(x.datum.Day + "." + x.datum.Month + "." + x.datum.Year + ".")</td>
                                     <td>@x.planirano</td>
                                     <td>@x.odradjeno</td>
@@ -98,10 +102,10 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a class="btn btn-warning" id="Detalji__@x.projekatId">Detalji</a>
+                                        <a class="btn btn-warning" id="Detalji__@x.aktivnostId">Detalji</a>
                                         <script>
-                                        $("#Detalji__@x.projekatId").click(function (event) {
-                                            $.get("/Ajax/DetaljiRealizacija?idRealizacija=@x.realizacijaId&idProjekat=@x.projekatId", function (result) {
+                                        $("#Detalji__@x.aktivnostId").click(function (event) {
+                                            $.get("/Ajax/DetaljiRealizacija?idAktivnost=@x.aktivnostId&idProjekat=@x.projekatId&idRealizacija=@x.realizacijaId&korisnikId=@x.korisnikId", function (result) {
                                                 $("#box").show();
                                                 $("#glavni").show();
                                                 $("#box").html(result);
@@ -112,8 +116,32 @@
                                     </td>
                                 </tr>
                             }
+                            @if (suma != null)
+                            {
+                                <tr>
+                                    <hr />
+                                    <td style="font-weight:bold;">Projekat</td>
+                                    <td style="font-weight:bold;">Planirano</td>
+                                    <td style="font-weight:bold;">Ostvareno</td>
+                                    <td style="font-weight:bold;">Procentualno</td>
+                                    <td style="font-weight:bold;">Grafički</td>
+                                </tr>
+                                <tr>
+                                    <hr />
+                                    <td>@suma.naziv_projekta</td>
+                                    <td>@suma.planirano</td>
+                                    <td>@suma.ostvareno</td>
+                                    <td>@(Math.Round(suma.procenti) + "%")</td>
+                                    <td>
+                                        <div id="progressBar" style="width:100%;">
+                                            <div style="width:@(Math.Round(suma.procenti))%;" id="vrijednost"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
+
                 </div>
             </center>
         }

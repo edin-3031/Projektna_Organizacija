@@ -26,8 +26,8 @@
                     <td>@x.projekatPlan.Naziv</td>
                     <td>@x.Sifra</td>
                     <td>@x.Naziv</td>
-                    <td>@x.DatumOd</td>
-                    <td>@x.DatumDo</td>
+                    <td>@(x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".")</td>
+                    <td>@(x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".")</td>
                     <td>@x.JedinicaMjere</td>
                     <td>@x.Kolicina</td>
                     <td><a class="btn btn-danger" href="/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID">Ukloni</a></td>
