@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Xeo6vxevwg2v0mF6m5sFMwOlUNUc1BuGDAhg13o966SNMOUGWo2DryyY5zodph2HHW7znqoYO4YT2LzHRIPGBA==",
+  "dgSpecHash": "FfNsCq+poa4RBGwMlR2Mkj18rj/Xs105SRq5a1hbh2ZvKf+4WPCcljOx5/xx2HbkaopRqL2XBYq4ZY0czAizdg==",
   "success": true,
-  "projectFilePath": "D:\\New Project\\Projektna_Organizacija\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+  "projectFilePath": "D:\\New Project\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Edin\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\Edin\\.nuget\\packages\\google.protobuf\\3.11.4\\google.protobuf.3.11.4.nupkg.sha512",
