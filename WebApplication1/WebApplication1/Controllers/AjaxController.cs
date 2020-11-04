@@ -39,7 +39,7 @@ namespace WebApplication1.Controllers
                         idRealizacija=idRealizacija,
                         idUser=korisnikId,
                         kolicina=x.Kolicina,
-                        korisnik=db.Korisnici.Where(a=>a.Korisnici_ID== _user).Select(o=>o.Ime).FirstOrDefault(),
+                        korisnik=db.Korisnici.Where(a=>a.Korisnici_ID== _user).Select(o=>o.Ime.ToString()+" "+o.Prezime.ToString()).FirstOrDefault(),
                         NazivAktivnosti=db.ProjekatAktivnostPlan.Where(a=>a.ProjekatAktivnostPlan_ID==idAktivnost).Select(o=>o.Naziv).FirstOrDefault(),
                         NazivProjekta=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID==idProjekat).Select(o=>o.Naziv).FirstOrDefault(),
                         opis=x.Opis

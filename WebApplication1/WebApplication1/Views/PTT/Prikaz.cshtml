@@ -7,14 +7,20 @@
 }
 
 <center>
+    <h1>Prikaz PTT-ova</h1>
+    <div id="dugmad">
+        <div id="dodaj">
+            <a class="btn btn-success" href="/PTT/Unos">Dodaj novi</a>
+        </div>
+    </div>
     <table class="table">
         <thead>
-            <th>ID</th>
-            <th>Šifra</th>
-            <th>Naziv</th>
-            <th>Akcija</th>
+        <th>ID</th>
+        <th>Šifra</th>
+        <th>Naziv</th>
+        <th>Akcija</th>
         </thead>
-        @foreach(var x in lista)
+        @foreach (var x in lista)
         {
             <tr>
                 <td>@x.PTT_ID</td>
@@ -24,5 +30,5 @@
             </tr>
         }
     </table>
-    <a class="btn btn-success" href="/PTT/Unos">Dodaj novi</a>
+
 </center>

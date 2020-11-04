@@ -5,15 +5,21 @@
     List<Organizacija> lista_organizacija = (List<Organizacija>)ViewData["organizacija"];
 }
 <center>
+    <h1>Prikaz Organizacija</h1>
+    <div id="dugmad">
+        <div id="dodaj">
+            <a href="/Organizacija/Unos" class="btn btn-success">Dodaj novu</a>
+        </div>
+    </div>
     <table class="table">
         <thead>
-            <th>ID</th>
-            <th>PTT</th>
-            <th>Država</th>
-            <th>Šifra</th>
-            <th>Naziv</th>
-            <th>Adresa</th>
-            <th>Akcija</th>
+        <th>ID</th>
+        <th>PTT</th>
+        <th>Država</th>
+        <th>Šifra</th>
+        <th>Naziv</th>
+        <th>Adresa</th>
+        <th>Akcija</th>
         </thead>
         <tbody>
             @foreach (var x in lista_organizacija)
@@ -30,5 +36,4 @@
             }
         </tbody>
     </table>
-    <a href="/Organizacija/Unos" class="btn btn-success">Dodaj novu</a>
 </center>

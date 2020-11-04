@@ -5,14 +5,20 @@
     List<Korisnici_OrganizacionaJedinica> lista = (List<Korisnici_OrganizacionaJedinica>)ViewData["kor_org_jed"];
 }
 <center>
+    <h1>Prikaz Korisnika - Organizacione Jedinice</h1>
+    <div id="dugmad">
+        <div id="dodaj">
+            <a class="btn btn-success" href="/KorisnikOrg/Unos">Unesi novo</a>
+        </div>
+    </div>
     <table class="table">
         <thead>
-            <th>ID</th>
-            <th>Korisnik</th>
-            <th>Organizaciona jedinica</th>
-            <th>Akcija</th>
+        <th>ID</th>
+        <th>Korisnik</th>
+        <th>Organizaciona jedinica</th>
+        <th>Akcija</th>
         </thead>
-        @foreach(var x in lista)
+        @foreach (var x in lista)
         {
             <tr>
                 <td>@x.Korisnici_OrganizacionaJedinica_ID</td>
@@ -22,5 +28,4 @@
             </tr>
         }
     </table>
-    <a class="btn btn-success" href="/KorisnikOrg/Unos">Unesi novo</a>
 </center>

@@ -1,0 +1,58 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    @model WebApplication1.Models.VM.lista_DetaljiRealizacijaVM
+}
+<div id="print_pdf"><a class="btn btn-info" id="etpdf">Export to PDF</a></div>
+<script>
+            $("#etpdf").click(function () {
+                //var sHtml = $("#forPrint").html();
+                //sHtml = sHtml.replace(/</g, "StrTag").replace(/>/g, "EndTag");
+                //window.open("../ProjekatAktivnostRealizacija/Pdf?html=" + sHtml, "blank");
+
+                var t3 = document.getElementById("forPrint").innerHTML;
+
+                var test = { "html": t3 };
+
+
+                $.ajax({
+                    url: "/ProjekatAktivnostRealizacija/Pdf",
+                    type: "POST",
+                    data: test,
+                    success: function (response) {
+                        
+                    }
+                });
+            });
+</script>
+
+<div id="forPrint">
+    <table class="table">
+        <thead>
+        <th>
+            Realizacija ID
+        </th>
+        @*<th>Projekat</th>*@
+        <th>Aktivnost</th>
+        <th>Korisnik</th>
+        <th>Datum</th>
+        <th>Količnia</th>
+        <th>Opis</th>
+        </thead>
+        <tbody>
+            @foreach (var x in Model.lista)
+            {
+                <tr>
+                    <td>@x.idRealizacija</td>
+                    @*<td>@x.NazivProjekta</td>*@
+                    <td>@x.NazivAktivnosti</td>
+                    <td>@x.korisnik</td>
+                    <td>@x.datum</td>
+                    <td>@x.kolicina</td>
+                    <td>@x.opis</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

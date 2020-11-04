@@ -101,9 +101,6 @@ D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\SshNet.Se
 D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\System.Xml.XPath.XmlDocument.dll
 D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\MySql.Data.EntityFrameworkCore.dll
 D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\MySqlConnector.dll
-D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.csproj.CoreCompileInputs.cache
-D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.MvcApplicationPartsAssemblyInfo.cs
-D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.MvcApplicationPartsAssemblyInfo.cache
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Uloge\Prikaz.cshtml.g.cs
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Uloge\Unos.cshtml.g.cs
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Resursi\Prikaz.cshtml.g.cs
@@ -120,7 +117,6 @@ D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Vie
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\OrganizacionaJedinica\Unos.cshtml.g.cs
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\KorisnikOrg\Prikaz.cshtml.g.cs
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\KorisnikOrg\Unos.cshtml.g.cs
-D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.csprojAssemblyReference.cache
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\ProjekatPlan\Prikaz.cshtml.g.cs
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\ProjekatPlan\Unos.cshtml.g.cs
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\ProjekatAktivnostPlan\Prikaz.cshtml.g.cs
@@ -130,3 +126,15 @@ D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Vie
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\ProjekatAktivnostRealizacija\Detalji.cshtml.g.cs
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Ajax\DetaljiRealizacija.cshtml.g.cs
 D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\ProjekatAktivnostRealizacija\Uredi.cshtml.g.cs
+D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Pocetak\Index.cshtml.g.cs
+D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\ClosedXML.dll
+D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\DocumentFormat.OpenXml.dll
+D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\ExcelNumberFormat.dll
+D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\System.IO.Packaging.dll
+D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.csprojAssemblyReference.cache
+D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\ProjekatAktivnostRealizacija\PrintPreview.cshtml.g.cs
+D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\Select.Html.dep
+D:\New Project\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\Select.HtmlToPdf.dll
+D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.csproj.CoreCompileInputs.cache
+D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.MvcApplicationPartsAssemblyInfo.cs
+D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.MvcApplicationPartsAssemblyInfo.cache

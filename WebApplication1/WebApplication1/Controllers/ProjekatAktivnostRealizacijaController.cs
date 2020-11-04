@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Misc;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.VM;
+using Microsoft.AspNetCore.Hosting;
+using SelectPdf;
 
 namespace WebApplication1.Controllers
 {
@@ -19,6 +23,91 @@ namespace WebApplication1.Controllers
         public ProjekatAktivnostRealizacijaController(ApplicationDbContext _db)
         {
             db = _db;
+
+        }
+
+        public IActionResult Pdf(string html)
+        {
+            html = html.Replace("StrTag", "<").Replace("EndTag", ">");
+
+            HtmlToPdf oHtmlToPdf = new HtmlToPdf();
+            PdfDocument oPdfDocument = oHtmlToPdf.ConvertHtmlString(html);
+            byte[] pdf = oPdfDocument.Save();
+            oPdfDocument.Close();
+
+            return File(
+                pdf,
+                "application/pdf",
+                "Realizacija.pdf"
+                );
+        }
+
+        public IActionResult Excel()
+        {
+            List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
+
+            using(var workbook=new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Realizacija");
+                var currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "Realizacija ID";
+                worksheet.Cell(currentRow, 2).Value = "Aktivnost_ID";
+                worksheet.Cell(currentRow, 3).Value = "Korisnik_ID";
+                worksheet.Cell(currentRow, 4).Value = "Korisnik";
+                worksheet.Cell(currentRow, 5).Value = "Datum";
+                worksheet.Cell(currentRow, 6).Value = "Količina";
+                worksheet.Cell(currentRow, 7).Value = "Opis";
+
+                foreach(var x in _real)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = x.ProjekatAktivnostRealizacija_ID;
+                    worksheet.Cell(currentRow, 2).Value = x.ProjekatAktivnostPlan_FK;
+                    worksheet.Cell(currentRow, 3).Value = x.Korisnici_FK;
+                    worksheet.Cell(currentRow, 4).Value = db.Korisnici.Where(a=>a.Korisnici_ID==x.Korisnici_FK).Select(o=>o.Ime.ToString()+" "+o.Prezime.ToString()).FirstOrDefault();
+                    worksheet.Cell(currentRow, 5).Value = x.Datum.Date;
+                    worksheet.Cell(currentRow, 6).Value = x.Kolicina;
+                    worksheet.Cell(currentRow, 7).Value = x.Opis;
+                }
+
+                using (var stream=new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return File(content,"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RealizacijaInfo.xlsx");
+                }
+            }
+        }
+
+        public IActionResult PrintPreview()
+        {
+            List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
+
+            List<DetaljiRealizacijaVM> _lista = new List<DetaljiRealizacijaVM>();
+            foreach(var x in _real)
+            {
+                _lista.Add(new DetaljiRealizacijaVM
+                {
+                    datum = x.Datum,
+                    idAktivnost = x.ProjekatAktivnostPlan_FK,
+                    idProjekat = db.ProjekatPlan.Where(s => s.ProjekatPlan_ID == db.ProjekatAktivnostPlan.Where(a => a.ProjekatPlan_FK == x.ProjekatAktivnostPlan_FK).Select(o => o.ProjekatPlan_FK).FirstOrDefault()).Select(o => o.ProjekatPlan_ID).FirstOrDefault(),
+                    idRealizacija = x.ProjekatAktivnostRealizacija_ID,
+                    idUser = x.Korisnici_FK,
+                    kolicina = x.Kolicina,
+                    korisnik = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Ime.ToString() + " " + o.Prezime.ToString()).FirstOrDefault(),
+                    NazivAktivnosti = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                    //NazivProjekta = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).Select(o => o.projekatPlan.Naziv).FirstOrDefault(),
+                    opis = x.Opis
+
+                });
+            }
+
+            lista_DetaljiRealizacijaVM model = new lista_DetaljiRealizacijaVM
+            {
+                lista=_lista
+            };
+
+            return View(model);
         }
 
         public IActionResult Detalji(int projekatId = 0, DateTime? OD=null, DateTime? DO=null, int traziDugme=0)

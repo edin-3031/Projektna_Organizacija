@@ -5,12 +5,20 @@
 
     List<Drzava> lista = (List<Drzava>)ViewData["drzave"];
 }
+
+
 <center>
+    <h1>Prikaz Država</h1>
+    <div id="dugmad">
+        <div id="dodaj">
+            <a href="/Drzava/Unos" class="btn btn-success">Dodaj novu</a>
+        </div>
+    </div>
     <table class="table">
         <thead>
-            <th>ID</th>
-            <th>Šifra</th>
-            <th>Naziv</th>
+        <th>ID</th>
+        <th>Šifra</th>
+        <th>Naziv</th>
         </thead>
         <tbody>
             @foreach (var x in lista)
@@ -24,5 +32,4 @@
             }
         </tbody>
     </table>
-        <a href="/Drzava/Unos" class="btn btn-success">Dodaj novu</a>
 </center>

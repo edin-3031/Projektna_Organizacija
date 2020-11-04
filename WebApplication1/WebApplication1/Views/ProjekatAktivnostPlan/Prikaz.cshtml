@@ -6,20 +6,26 @@
 }
 
 <center>
+    <h1>Prikaz Projektnih aktivnosti</h1>
+    <div id="dugmad">
+        <div id="dodaj">
+            <a class="btn btn-success" href="/ProjekatAktivnostPlan/Unos">Dodaj novi</a>
+        </div>
+    </div>
     <table class="table">
         <thead>
-            <th>ID</th>
-            <th>Projekat plan</th>
-            <th>Šifra</th>
-            <th>Naziv</th>
-            <th>Datum od</th>
-            <th>Datum do</th>
-            <th>Jedinica mjere</th>
-            <th>Količina</th>
-            <th>Akcija</th>
+        <th>ID</th>
+        <th>Projekat plan</th>
+        <th>Šifra</th>
+        <th>Naziv</th>
+        <th>Datum od</th>
+        <th>Datum do</th>
+        <th>Jedinica mjere</th>
+        <th>Količina</th>
+        <th>Akcija</th>
         </thead>
         <tbody>
-            @foreach(var x in lista)
+            @foreach (var x in lista)
             {
                 <tr>
                     <td>@x.ProjekatAktivnostPlan_ID</td>
@@ -35,5 +41,5 @@
             }
         </tbody>
     </table>
-    <a class="btn btn-success" href="/ProjekatAktivnostPlan/Unos">Dodaj novi</a>
+
 </center>
