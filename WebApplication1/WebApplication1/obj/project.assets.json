@@ -8612,11 +8612,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\New Project\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+      "projectUniqueName": "D:\\New Project\\Projektna_Organizacija\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
       "projectName": "WebApplication1",
-      "projectPath": "D:\\New Project\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+      "projectPath": "D:\\New Project\\Projektna_Organizacija\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
       "packagesPath": "C:\\Users\\Edin\\.nuget\\packages\\",
-      "outputPath": "D:\\New Project\\WebApplication1\\WebApplication1\\obj\\",
+      "outputPath": "D:\\New Project\\Projektna_Organizacija\\WebApplication1\\WebApplication1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",

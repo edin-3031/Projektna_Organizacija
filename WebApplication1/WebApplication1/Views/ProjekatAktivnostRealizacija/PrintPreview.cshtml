@@ -6,22 +6,23 @@
 }
 <div id="print_pdf"><a class="btn btn-info" id="etpdf">Export to PDF</a></div>
 <script>
-            $("#etpdf").click(function () {
-                //var sHtml = $("#forPrint").html();
-                //sHtml = sHtml.replace(/</g, "StrTag").replace(/>/g, "EndTag");
-                //window.open("../ProjekatAktivnostRealizacija/Pdf?html=" + sHtml, "blank");
+    $("#etpdf").click(function () {
+                var sHtml = $("#forPrint").html();
+                sHtml = sHtml.replace(/</g, "StrTag").replace(/>/g, "EndTag");
 
-                var t3 = document.getElementById("forPrint").innerHTML;
+                var t3 = sHtml;
 
                 var test = { "html": t3 };
-
 
                 $.ajax({
                     url: "/ProjekatAktivnostRealizacija/Pdf",
                     type: "POST",
                     data: test,
                     success: function (response) {
-                        
+                        window.open("../ProjekatAktivnostRealizacija/Pdf?html=" + test.t3, "blank");
+                    },
+                    fail: function (response) {
+                        alert("Fail!");
                     }
                 });
             });
@@ -30,9 +31,7 @@
 <div id="forPrint">
     <table class="table">
         <thead>
-        <th>
-            Realizacija ID
-        </th>
+        <th>Realizacija ID</th>
         @*<th>Projekat</th>*@
         <th>Aktivnost</th>
         <th>Korisnik</th>

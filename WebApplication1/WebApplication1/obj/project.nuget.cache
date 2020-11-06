@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cQNIP1/cDeMx1s4Am4/xMlEosQ6vmQN2wNkLWP4oVirIadF4gnrGlD8CJIcDBE9TjfWzdelEDHX09N1EJVq3MA==",
+  "dgSpecHash": "qzQOug9CuSCKbxLoYuX7JWXJVIpj6IbS1WI9MWuW0qArDATA1fyKbdALB1M+/csSUgk7xq9EWODLg5YEL9ALmA==",
   "success": true,
-  "projectFilePath": "D:\\New Project\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+  "projectFilePath": "D:\\New Project\\Projektna_Organizacija\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Edin\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\Edin\\.nuget\\packages\\closedxml\\0.95.3\\closedxml.0.95.3.nupkg.sha512",
