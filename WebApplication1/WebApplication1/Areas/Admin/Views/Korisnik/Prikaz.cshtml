@@ -1,0 +1,47 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models;
+@{
+    List<Korisnici> lista = (List<Korisnici>)ViewData["korisnik"];
+}
+
+<center>
+    <h1>Prikaz Korisnika</h1>
+    <div id="dugmad">
+        <div id="dodaj">
+            <a href="/Admin/Korisnik/Unos" class="btn btn-success">Dodaj novog</a>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <th>ID</th>
+        <th>Korisničko ime</th>
+        <th>Uloga</th>
+        <th>Šifra</th>
+        <th>Ime</th>
+        <th>Prezime</th>
+        <th>Telefon</th>
+        <th>Mail</th>
+        <th>Lozinka</th>
+        <th>Akcija</th>
+        </thead>
+        <tbody>
+            @foreach (var x in lista)
+            {
+                <tr>
+                    <td>@x.Korisnici_ID</td>
+                    <td>@x.Korisnicko_Ime</td>
+                    <td>@x.uloge.Naziv</td>
+                    <td>@x.Sifra</td>
+                    <td>@x.Ime</td>
+                    <td>@x.Prezime</td>
+                    <td>@x.Telefon</td>
+                    <td>@x.Mail</td>
+                    <td>@x.Lozinka</td>
+                    <td><a class="btn btn-danger" href="/Admin/Korisnik/Ukloni?id=@x.Korisnici_ID">Ukloni</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</center>

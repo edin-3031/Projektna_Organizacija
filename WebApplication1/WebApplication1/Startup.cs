@@ -68,8 +68,13 @@ namespace WebApplication1
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "areaRoutes",
+                    pattern: "{area}/{controller=Pocetak}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Pocetak}/{action=Index}/{id?}");
+                    pattern: "{controller=Auth}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
             });
         }

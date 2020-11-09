@@ -13,6 +13,9 @@ using WebApplication1.Models;
 using WebApplication1.Models.VM;
 using Microsoft.AspNetCore.Hosting;
 using SelectPdf;
+using Aspose.Pdf;
+using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace WebApplication1.Controllers
 {
@@ -26,21 +29,93 @@ namespace WebApplication1.Controllers
 
         }
 
-        public IActionResult Pdf(string html)
+        public IActionResult Pdf()
         {
-            html = html.Replace("StrTag", "<").Replace("EndTag", ">");
+            var document = new Document
+            {
+                PageInfo = new PageInfo
+                {
+                    Margin=new MarginInfo(28,28,28,40)
+                }
+            };
+            var pdfpage = document.Pages.Add();
+            Table table = new Table
+            {
+                ColumnWidths = "25% 25% 25% 25%",
+                DefaultCellPadding = new MarginInfo(10, 5, 10, 5),
+                Border = new BorderInfo(BorderSide.All, .5f, Color.Black),
+                DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Color.Black),
+            };
 
-            HtmlToPdf oHtmlToPdf = new HtmlToPdf();
-            PdfDocument oPdfDocument = oHtmlToPdf.ConvertHtmlString(html);
-            byte[] pdf = oPdfDocument.Save();
-            oPdfDocument.Close();
+            DataTable GetRecord()
+            {
+                //List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
 
-            return File(
-                pdf,
-                "application/pdf",
-                "Realizacija.pdf"
-                );
+                //List<DetaljiRealizacijaVM> _lista = new List<DetaljiRealizacijaVM>();
+                //foreach (var x in _real)
+                //{
+                //    _lista.Add(new DetaljiRealizacijaVM
+                //    {
+                //        datum = x.Datum,
+                //        idAktivnost = x.ProjekatAktivnostPlan_FK,
+                //        idProjekat = db.ProjekatPlan.Where(s => s.ProjekatPlan_ID == db.ProjekatAktivnostPlan.Where(a => a.ProjekatPlan_FK == x.ProjekatAktivnostPlan_FK).Select(o => o.ProjekatPlan_FK).FirstOrDefault()).Select(o => o.ProjekatPlan_ID).FirstOrDefault(),
+                //        idRealizacija = x.ProjekatAktivnostRealizacija_ID,
+                //        idUser = x.Korisnici_FK,
+                //        kolicina = x.Kolicina,
+                //        korisnik = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Ime.ToString() + " " + o.Prezime.ToString()).FirstOrDefault(),
+                //        NazivAktivnosti = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                //        //NazivProjekta = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).Select(o => o.projekatPlan.Naziv).FirstOrDefault(),
+                //        opis = x.Opis
+
+                //    });
+                //}
+
+                //lista_DetaljiRealizacijaVM model = new lista_DetaljiRealizacijaVM
+                //{
+                //    lista = _lista
+                //};
+
+                SqlConnection con = new SqlConnection("server=127.0.0.1;port=3306;database=ProjektnaOrganizacija;user=root;password=3031_elemeNtaL_3031;");
+
+                SqlCommand com = new SqlCommand("select * from projekataktivnostrealizacija", con);
+
+                SqlDataAdapter da = new SqlDataAdapter();
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+                
+            }
+
+            DataTable dt = GetRecord();
+            table.ImportDataTable(dt,true,0,0);
+            document.Pages[1].Paragraphs.Add(table);
+
+            using(var streamout=new MemoryStream())
+            {
+                document.Save(streamout);
+                return new FileContentResult(streamout.ToArray(), "application/pdf")
+                {
+                    FileDownloadName = "Realizacija.pdf"
+                };
+            }
         }
+
+        //public IActionResult Pdf(string html)
+        //{
+        //    html = html.Replace("StrTag", "<").Replace("EndTag", ">");
+
+        //    HtmlToPdf oHtmlToPdf = new HtmlToPdf();
+        //    PdfDocument oPdfDocument = oHtmlToPdf.ConvertHtmlString(html);
+        //    byte[] pdf = oPdfDocument.Save();
+        //    oPdfDocument.Close();
+
+        //    return File(
+        //        pdf,
+        //        "application/pdf",
+        //        "Realizacija.pdf"
+        //        );
+        //}
 
         public IActionResult Excel()
         {

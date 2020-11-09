@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models;
+@{
+    List<Organizacija> lista_organizacija = (List<Organizacija>)ViewData["organizacija"];
+}
+<center>
+    <h1>Prikaz Organizacija</h1>
+    <div id="dugmad">
+        <div id="dodaj">
+            <a href="/Admin/Organizacija/Unos" class="btn btn-success">Dodaj novu</a>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <th>ID</th>
+        <th>PTT</th>
+        <th>Država</th>
+        <th>Šifra</th>
+        <th>Naziv</th>
+        <th>Adresa</th>
+        <th>Akcija</th>
+        </thead>
+        <tbody>
+            @foreach (var x in lista_organizacija)
+            {
+                <tr>
+                    <td>@x.Organizacija_ID</td>
+                    <td>@x.ptt.Naziv</td>
+                    <td>@x.drzava.Naziv</td>
+                    <td>@x.Sifra</td>
+                    <td>@x.Naziv</td>
+                    <td>@x.Adresa</td>
+                    <td><a href="/Admin/Organizacija/Ukloni?id=@x.Organizacija_ID" class="btn btn-danger">Ukloni</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</center>

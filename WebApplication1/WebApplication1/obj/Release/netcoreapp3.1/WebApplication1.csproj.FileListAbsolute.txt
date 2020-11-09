@@ -138,3 +138,9 @@ D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Releas
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\WebApplication1.dll
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\WebApplication1.pdb
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\WebApplication1.genruntimeconfig.cache
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Release\netcoreapp3.1\Aspose.PDF.dll
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Release\netcoreapp3.1\Microsoft.DotNet.PlatformAbstractions.dll
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Release\netcoreapp3.1\Microsoft.Extensions.DependencyModel.dll
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Release\netcoreapp3.1\System.Diagnostics.PerformanceCounter.dll
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\Razor\Views\Auth\Index.cshtml.g.cs

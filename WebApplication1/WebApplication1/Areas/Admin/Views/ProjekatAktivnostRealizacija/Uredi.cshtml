@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models;
+@{
+    ProjekatAktivnostRealizacija temp = (ProjekatAktivnostRealizacija)ViewData["uredi"];
+}
+
+<center>
+    <h1>Uređivanje Realizacija</h1>
+    <form method="post" action="/Admin/ProjekatAktivnostRealizacija/UrediSnimi">
+        <table>
+            <tr>
+                <input hidden="hidden" name="realizacijaId" value="@temp.ProjekatAktivnostRealizacija_ID"></input>
+                <input hidden="hidden" name="aktivnostId" value="@temp.ProjekatAktivnostPlan_FK"></input>
+                <td><label>Naziv aktivnosti</label></td>
+                <td><input name="projekat" readonly="readonly" value="@temp.projekatAktivnostPlan.Naziv" /></td>
+            </tr>
+            <tr>
+                <td><label>Količina</label></td>
+                <td><input value="@temp.Kolicina" name="kolicina" /></td>
+            </tr>
+            <tr>
+                <td><label>Datum</label></td>
+                <td><input type="datetime" value="@temp.Datum.Date" name="datum" /></td>
+            </tr>
+            <tr>
+                <td><label>Opis</label></td>
+                <td><input type="text" value="@temp.Opis" name="opis" /></td>
+            </tr>
+        </table>
+
+        <button class="btn btn-primary">Snimi</button>
+    </form>
+</center>

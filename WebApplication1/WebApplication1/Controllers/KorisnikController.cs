@@ -31,7 +31,8 @@ namespace WebApplication1.Controllers
                 Sifra = x.Sifra,
                 Telefon = x.Telefon,
                 uloge = db.Uloge.Where(c => c.Uloge_ID == x.Uloge_FK).SingleOrDefault(),
-                Uloge_FK = x.Uloge_FK
+                Uloge_FK = x.Uloge_FK,
+                Korisnicko_Ime=x.Korisnicko_Ime
             }).ToList();
 
             ViewData["korisnik"] = lista_korisnici;
@@ -54,7 +55,7 @@ namespace WebApplication1.Controllers
             return View("Unos");
         }
 
-        public IActionResult UnosSnimi(int uloga, int sifra, string ime, string prezime, string telefon, string mail, string lozinka)
+        public IActionResult UnosSnimi(int uloga, int sifra, string ime, string prezime, string telefon, string mail, string lozinka, string username)
         {
             Korisnici temp = new Korisnici
             {
@@ -64,7 +65,8 @@ namespace WebApplication1.Controllers
                 Mail = mail,
                 Prezime = prezime,
                 Telefon = telefon,
-                Uloge_FK = uloga
+                Uloge_FK = uloga,
+                Korisnicko_Ime=username
             };
 
             db.Korisnici.Add(temp);

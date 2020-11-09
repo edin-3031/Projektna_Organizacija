@@ -1,0 +1,52 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    string? poruka = (string)TempData["poruka"];
+}
+
+<style>
+    #login{
+        border:1px solid black;
+        width:60%;
+        height:60%;
+        margin-top:10%;
+        background-color:rgba(0,0,0,0.5);
+        border-radius:100px;
+    }
+    input {
+        position: relative;
+        width: 70%;
+        height: 10%;
+        border-radius: 100px;
+        font-size: 2vw;
+        text-align-last: center;
+    }
+    label{
+        color:white;
+        font-family:Arial;
+        font-size:2vw;
+        font-weight:bold;
+    }
+</style>
+<center>
+    <span id="poruka"></span>
+    <script>
+        $("#poruka").hide();
+
+        if (@poruka!= null) {
+                document.getElementById("poruka").innerText = @poruka;
+                $("#poruka").slideDown().delay(1500).slideUp();
+        }
+    </script>
+    <form id="login" method="post" action="/Auth/AuthProces">
+        <div style="position:relative; margin-top:10%;">
+            <label>Korisničko ime</label><br/>
+            <input type="text" name="username"></input><br />
+            <label>Lozinka</label><br/>
+            <input type="password" name="pass"></input><br /><br />
+        </div>
+        <button class="btn btn-danger" type="submit">Prijavi se</button>
+    </form>
+</center>

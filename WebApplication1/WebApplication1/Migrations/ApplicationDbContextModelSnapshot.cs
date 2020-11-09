@@ -43,6 +43,9 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Ime")
                         .HasColumnType("text");
 
+                    b.Property<string>("Korisnicko_Ime")
+                        .HasColumnType("text");
+
                     b.Property<string>("Lozinka")
                         .HasColumnType("text");
 

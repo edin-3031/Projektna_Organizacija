@@ -1,0 +1,82 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models;
+@{
+}
+
+<style>
+    tr {
+        /*border: 1px solid black;*/
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    a, td {
+        /*font-weight: bold;*/
+        text-align-last: center;
+    }
+</style>
+<center>
+    <h1>Meni</h1>
+    <table>
+        <tr>
+            <td>Država</td>
+            <td><a class="btn btn-primary" href="/Admin/Drzava/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/Drzava/Unos">Unos</a></td>
+        </tr>
+        <tr>
+            <td>Korisnici</td>
+            <td><a class="btn btn-primary" href="/Admin/Korisnik/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/Korisnik/Unos">Unos</a></td>
+        </tr>
+        <tr>
+            <td>Korisnici - Organizaciona Jedinica</td>
+            <td><a class="btn btn-primary" href="/Admin/KorisnikOrg/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/KorisnikOrg/Unos">Unos</a></td>
+        </tr>
+        <tr>
+            <td>Organizacija</td>
+            <td><a class="btn btn-primary" href="/Admin/Organizacija/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/Organizacija/Unos">Unos</a></td>
+        </tr>
+        <tr>
+            <td>Organizaciona Jedinica</td>
+            <td><a class="btn btn-primary" href="/Admin/OrganizacionaJedinica/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/OrganizacionaJedinica/Unos">Unos</a></td>
+        </tr>
+        <tr>
+            <td>Projekat Aktivnost Plan</td>
+            <td><a class="btn btn-primary" href="/Admin/ProjekatAktivnostPlan/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/ProjekatAktivnostPlan/Unos">Unos</a></td>
+        </tr>
+        <tr>
+            <td>Projekat Aktivnost Realizacija</td>
+            <td><a class="btn btn-primary" href="/Admin/ProjekatAktivnostRealizacija/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/ProjekatAktivnostRealizacija/Unos">Unos</a></td>
+            <td><a class="btn btn-warning" href="/Admin/ProjekatAktivnostRealizacija/Detalji">Detalji</a></td>
+        </tr>
+        <tr>
+            <td>Projekat Plan</td>
+            <td><a class="btn btn-primary" href="/Admin/ProjekatPlan/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/ProjekatPlan/Unos">Unos</a></td>
+        </tr>
+        <tr>
+            <td>PTT</td>
+            <td><a class="btn btn-primary" href="/Admin/PTT/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/PTT/Unos">Unos</a></td>
+        </tr>
+        <tr>
+            <td>Resursi</td>
+            <td><a class="btn btn-primary" href="/Admin/Resursi/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/Resursi/Unos">Unos</a></td>
+        </tr>
+        <tr>
+            <td>Uloge</td>
+            <td><a class="btn btn-primary" href="/Admin/Uloge/Prikaz">Prikaz</a></td>
+            <td><a class="btn btn-success" href="/Admin/Uloge/Unos">Unos</a></td>
+        </tr>
+    </table>
+</center>

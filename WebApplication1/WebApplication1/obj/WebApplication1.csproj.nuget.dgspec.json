@@ -43,6 +43,14 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Aspose.PDF": {
+              "target": "Package",
+              "version": "[20.9.0, )"
+            },
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.0, )"
+            },
             "ClosedXML": {
               "target": "Package",
               "version": "[0.95.3, )"

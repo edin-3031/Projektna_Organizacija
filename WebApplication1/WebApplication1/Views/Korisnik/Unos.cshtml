@@ -30,12 +30,18 @@
                 <td><input type="text" name="mail" /></td>
             </tr>
             <tr>
+                <td><label>Korisničko ime</label></td>
+                <td><input type="text" name="username" /></td>
+            </tr>
+            <tr>
                 <td><label>Lozinka</label></td>
                 <td><input type="password" name="lozinka" /></td>
             </tr>
             <tr>
                 <td>
                     <label>Uloga</label>
+                </td>
+                <td>
                     <select name="uloga">
                         <option>---Odaberi---</option>
                         @foreach (var x in lista_uloge)

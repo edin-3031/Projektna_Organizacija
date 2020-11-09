@@ -1,0 +1,160 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models;
+@{
+    @model WebApplication1.Models.VM.lista_realizacijaVM
+
+    List<ProjekatPlan> projekti = (List<ProjekatPlan>)ViewData["projekti"];
+
+    List<WebApplication1.Models.VM.RealizacijaVM> lista_projekata = (List<WebApplication1.Models.VM.RealizacijaVM>)ViewData["lista_projekata"];
+
+    RealizacijaDetaljiSuma suma = (RealizacijaDetaljiSuma)ViewData["suma"];
+
+}
+<style>
+    #cb {
+        width: 50%;
+    }
+
+    td {
+        padding: 2%;
+    }
+
+    #progressBar {
+        border: 1px solid black;
+        background-color: dimgray;
+        height: 25px;
+        width: 100%;
+    }
+
+    #vrijednost {
+        position: relative;
+        background-color: dodgerblue;
+        height: 100%;
+        display: block;
+    }
+
+    #dat2 {
+        width: 100%;
+    }
+</style>
+<center>
+    <h1>Detalji Realizacija</h1>
+    <form method="post" action="/Admin/ProjekatAktivnostRealizacija/Detalji">
+
+        <table>
+            <tr>
+                <td><label>Projekat</label></td>
+                <td>
+                    <select name="projekatId">
+                        <option>---Odaberi---</option>
+                        @foreach (var x in projekti)
+                        {
+                            <option value="@x.ProjekatPlan_ID">@x.Naziv</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Datum od</label></td>
+                <td><input id="dat2" type="datetime-local" name="OD" /></td>
+            </tr>
+            <tr>
+                <td><label>Datum do</label></td>
+                <td><input id="dat2" type="datetime-local" name="DO" /></td>
+            </tr>
+            @*<tr>
+                    <td><label>Prikaži detaljnije</label></td>
+                    <td><input id="cb" type="checkbox"/></td>
+                </tr>*@
+        </table>
+        <button type="submit" class="btn btn-primary" id="tragaj" name="traziDugme" value="10">Traži</button>
+    </form>
+    @if (Model.liste != null)
+    {
+        @if (Model.liste.Count > 0)
+        {
+            <center>
+                <div id="podaci">
+                    <br /><br />
+                    <h3>Rezultati projekata</h3>
+
+                    <table style="border:5px solid black" class="table">
+                        <thead>
+                        <th>Projekat</th>
+                        <th>Aktivnost</th>
+                        <th>Datum</th>
+                        <th>Planirano</th>
+                        <th>Ostvareno</th>
+                        <th>Procenti</th>
+                        <th>Grafički</th>
+                        <th>Detalji</th>
+                        </thead>
+                        <tbody>
+                            @foreach (var x in Model.liste)
+                            {
+                                <tr>
+                                    <td>@x.nazivProjekta</td>
+                                    <td>@x.naziv_aktivnosti</td>
+                                    <td>@(x.datum.Day + "." + x.datum.Month + "." + x.datum.Year + ".")</td>
+                                    <td>@x.planirano</td>
+                                    <td>@x.odradjeno</td>
+                                    <td>@(Math.Round((x.odradjeno / x.planirano) * 100))%</td>
+                                    <td>
+                                        <div id="progressBar" style="width:100%;">
+                                            <div style="width:@(Math.Round((x.odradjeno / x.planirano) * 100))%;" id="vrijednost"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-warning" id="Detalji__@x.aktivnostId">Detalji</a>
+                                        <script>
+                                        $("#Detalji__@x.aktivnostId").click(function (event) {
+                                            $.get("/Admin/Ajax/DetaljiRealizacija?idAktivnost=@x.aktivnostId&idProjekat=@x.projekatId&idRealizacija=@x.realizacijaId&korisnikId=@x.korisnikId", function (result) {
+                                                $("#box").show();
+                                                $("#glavni").show();
+                                                $("#box").html(result);
+                                                $("#glavni").css("border", "5px solid black");
+                                            });
+                                        });
+                                        </script>
+                                    </td>
+                                </tr>
+                            }
+                            @if (suma != null)
+                            {
+                                <tr>
+                                    <hr />
+                                    <td style="font-weight:bold;">Projekat</td>
+                                    <td style="font-weight:bold;">Planirano</td>
+                                    <td style="font-weight:bold;">Ostvareno</td>
+                                    <td style="font-weight:bold;">Procentualno</td>
+                                    <td style="font-weight:bold;">Grafički</td>
+                                </tr>
+                                <tr>
+                                    <hr />
+                                    <td>@suma.naziv_projekta</td>
+                                    <td>@suma.planirano</td>
+                                    <td>@suma.ostvareno</td>
+                                    <td>@(Math.Round(suma.procenti) + "%")</td>
+                                    <td>
+                                        <div id="progressBar" style="width:100%;">
+                                            <div style="width:@(Math.Round(suma.procenti))%;" id="vrijednost"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </center>
+        }
+    }
+</center>
+<center>
+    <div id="glavni">
+        <div id="box">
+        </div>
+    </div>
+</center>
