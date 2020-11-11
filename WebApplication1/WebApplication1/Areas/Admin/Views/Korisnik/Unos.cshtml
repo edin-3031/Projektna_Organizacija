@@ -2,13 +2,19 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @using WebApplication1.Models;
+@using WebApplication1.Models.VM;
+
 @{
     List<Uloge> lista_uloge = (List<Uloge>)ViewData["uloge"];
+    uor id = (uor)ViewData["id"];
 }
 
 <center>
     <h1>Unos Korisnika</h1>
     <form action="/Admin/Korisnik/UnosSnimi">
+        <input hidden="hidden" name="o" value="@id.organisationId" />
+        <input hidden="hidden" name="u" value="@id.userId" />
+        <input hidden="hidden" name="r" value="@id.roleId" />
         <table>
             <tr>
                 <td><label>Šifra</label></td>

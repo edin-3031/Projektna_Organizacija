@@ -1,0 +1,98 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models;
+@using WebApplication1.Models.VM;
+@{
+    List<ProjekatPlan> lista_proj_plan = (List<ProjekatPlan>)ViewData["lista_proj_plan"];
+
+    uor id = (uor)ViewData["id"];
+}
+
+<center>
+    <h1>Unos Projektnog Plana</h1>
+    <form method="post" action="/AdminOrg/ProjekatAktivnostPlan/UnosSnimi">
+        <input name="u" value="@id.userId" hidden="hidden"/>
+        <input name="o" value="@id.organisationId" hidden="hidden"/>
+        <input name="r" value="@id.roleId" hidden="hidden"/>
+        <table>
+            <tr>
+                <td>
+                    <label>
+                        Projekat plan
+                    </label>
+                </td>
+                <td>
+                    <select name="projekatPlan">
+                        <option>---Odaberi---</option>
+                        @foreach (var x in lista_proj_plan)
+                        {
+                            <option value="@x.ProjekatPlan_ID">@x.Naziv</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Šifra
+                    </label>
+                </td>
+                <td>
+                    <input type="text" name="sifra" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Naziv
+                    </label>
+                </td>
+                <td>
+                    <input type="text" name="naziv" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Datum od
+                    </label>
+                </td>
+                <td>
+                    <input type="datetime-local" name="Od" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Datum do
+                    </label>
+                </td>
+                <td>
+                    <input type="datetime-local" name="Do" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Jedinica mjere
+                    </label>
+                </td>
+                <td>
+                    <input type="text" name="jedinicaMjere" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Količina
+                    </label>
+                </td>
+                <td>
+                    <input type="text" name="kolicina" />
+                </td>
+            </tr>
+        </table>
+        <button type="submit" class="btn btn-primary">Spremi</button>
+    </form>
+</center>

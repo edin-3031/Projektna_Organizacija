@@ -2,7 +2,12 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @using WebApplication1.Models;
+@using WebApplication1.Models.VM;
 @{
+
+    uor id = (uor)ViewData["id"];
+}
+
     <center>
         <h1>Unos države</h1>
         <form action="/Admin/Drzava/UnosSnimi">
@@ -15,9 +20,11 @@
                     <td><label>Naziv</label></td>
                     <td><input type="text" name="naziv" /></td>
                 </tr>
+                <input hidden="hidden" name="u" value="@id.userId"/>
+                <input hidden="hidden" name="r" value="@id.roleId"/>
+                <input hidden="hidden" name="o" value="@id.organisationId"/>
             </table>
 
             <button type="submit" class="btn btn-primary">Snimi</button>
         </form>
     </center>
-}

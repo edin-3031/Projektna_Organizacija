@@ -22,16 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Developer\Models\" />
+    <Folder Include="Areas\Developer\" />
     <Folder Include="Areas\User\Models\" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Update="Areas\Admin\Views\Admin\Index.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Areas\Developer\Views\Developer\Index.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

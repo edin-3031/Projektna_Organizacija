@@ -1,0 +1,53 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models;
+@using WebApplication1.Models.VM;
+@{
+    List<ProjekatAktivnostRealizacija> lista = (List<ProjekatAktivnostRealizacija>)ViewData["lista_relizacija"];
+
+    uor id = (uor)ViewData["id"];
+}
+
+<center>
+    <h1>Prikaz Realizacija</h1>
+    <div id="dugmad">
+        @*<div id="dodaj">
+            <a class="btn btn-success" href="/UserReport/ProjekatAktivnostRealizacija/Unos">Unesi novu</a>
+        </div>*@
+        <div id="detalji">
+            <a class="btn btn-warning" href="/UserReport/ProjekatAktivnostRealizacija/Detalji?u=@id.userId&o=@id.organisationId&r=@id.roleId">Detalji</a>
+        </div>
+        @*<div id="print_preview"><a href="/ProjekatAktivnostRealizacija/PrintPreview" class="btn btn-info">Export to PDF</a></div>*@
+        @*<div id="print_preview"><a href="/UserReport/ProjekatAktivnostRealizacija/Pdf" class="btn btn-info">Export to PDF</a></div>*@
+        <div id="print_excel"><a href="/UserReport/ProjekatAktivnostRealizacija/Excel" class="btn btn-info">Export to Excel</a></div>
+        <div></div>
+        <div></div>
+    </div>
+    <table class="table">
+        <thead>
+        <th>ID</th>
+        <th>Projekat aktivnost plan</th>
+        @*<th>Korisnik</th>*@
+        <th>Datum</th>
+        <th>Količina</th>
+        <th>Opis</th>
+        @*<th>Akcija</th>*@
+        </thead>
+        <tbody>
+            @foreach (var x in lista)
+            {
+                <tr>
+                    <td>@x.ProjekatAktivnostRealizacija_ID</td>
+                    <td>@x.projekatAktivnostPlan.Naziv</td>
+                    @*<td>@(x.korisnici.Ime+" "+x.korisnici.Prezime)</td>*@
+                    <td>@(x.Datum.Date.Day+"."+ x.Datum.Date.Month + "." + x.Datum.Date.Year + ".")</td>
+                    <td>@x.Kolicina</td>
+                    <td>@x.Opis</td>
+                    @*<td><a class="btn btn-danger" href="/UserReport/ProjekatAktivnostRealizacija/Ukloni?id=@x.ProjekatAktivnostRealizacija_ID">Ukloni</a></td>
+                    <td><a class="btn btn-primary" href="/UserReport/ProjekatAktivnostRealizacija/Uredi?id=@x.ProjekatAktivnostRealizacija_ID">Uredi</a></td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+</center>

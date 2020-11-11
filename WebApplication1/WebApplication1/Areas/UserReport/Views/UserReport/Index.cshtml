@@ -1,0 +1,37 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models;
+@using WebApplication1.Models.VM;
+@model WebApplication1.Models.VM.uor;
+@{
+}
+
+<style>
+    tr {
+        /*border: 1px solid black;*/
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    a, td {
+        /*font-weight: bold;*/
+        text-align-last: center;
+    }
+</style>
+<center>
+
+    <h1>User_Report</h1><br />
+
+    <h1>Meni</h1>
+    <table>
+        <tr>
+            <td>Projekat Aktivnost Realizacija</td>
+            <td><a class="btn btn-primary" href="/UserReport/ProjekatAktivnostRealizacija/Prikaz?u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Prikaz</a></td>
+            @*<td><a class="btn btn-success" href="/UserReport/ProjekatAktivnostRealizacija/Unos">Unos</a></td>*@
+            <td><a class="btn btn-warning" href="/UserReport/ProjekatAktivnostRealizacija/Detalji?u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Detalji</a></td>
+        </tr>
+    </table>
+</center>

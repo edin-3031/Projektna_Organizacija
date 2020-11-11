@@ -2,15 +2,17 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @using WebApplication1.Models;
+@using WebApplication1.Models.VM;
 @{
     List<Korisnici> lista = (List<Korisnici>)ViewData["korisnik"];
+    uor id = (uor)ViewData["id"];
 }
 
 <center>
     <h1>Prikaz Korisnika</h1>
     <div id="dugmad">
         <div id="dodaj">
-            <a href="/Admin/Korisnik/Unos" class="btn btn-success">Dodaj novog</a>
+            <a href="/Admin/Korisnik/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-success">Dodaj novog</a>
         </div>
     </div>
     <table class="table">
@@ -39,7 +41,7 @@
                     <td>@x.Telefon</td>
                     <td>@x.Mail</td>
                     <td>@x.Lozinka</td>
-                    <td><a class="btn btn-danger" href="/Admin/Korisnik/Ukloni?id=@x.Korisnici_ID">Ukloni</a></td>
+                    <td><a class="btn btn-danger" href="/Admin/Korisnik/Ukloni?id=@x.Korisnici_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a></td>
                 </tr>
             }
         </tbody>

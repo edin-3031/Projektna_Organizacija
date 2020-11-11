@@ -132,19 +132,22 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         @*<li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </li>*@
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </li>*@
                         <li class="nav-item">
-                            <a style="color:black; background-color:cornflowerblue" title="share on facebook" id="fb">Share on facebook</a>
+                            <a class="btn" style="color:white; background-color:cornflowerblue" title="share on facebook" id="fb">Share on facebook</a>
                             <script>
                                 $("#fb").click(function () {
                                     document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + document.URL;
                                     //document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=www.google.com";
                                 });
                             </script>
+                        </li>
+                        <li class="nav-item">
+                            <a style="color:white; background-color:orangered" class="btn" title="Log out" id="logOut" href="/Auth/Index">Log out</a>
                         </li>
                     </ul>
                 </div>

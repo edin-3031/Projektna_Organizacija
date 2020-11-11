@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Models.VM;
 
 namespace WebApplication1.Areas.Admin.Controllers
 {
@@ -18,11 +19,16 @@ namespace WebApplication1.Areas.Admin.Controllers
         }
 
         [Area("Admin")]
-        public IActionResult Index()
+        public IActionResult Index(int u, int o, int r)
         {
+            uor model= new uor
+            {
+                organisationId = o,
+                roleId = r,
+                userId = u
+            };
 
-            return View();
+            return View(model);
         }
-
     }
 }
