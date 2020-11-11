@@ -6,7 +6,8 @@
 @{
     List<OrganizacionaJedinica> lista = (List<OrganizacionaJedinica>)ViewData["org_jed"];
 
-            uor id = (uor)ViewData["id"];
+    uor id = (uor)ViewData["id"];
+    Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
 }
 <center>
     <h1>Prikaz Organizacionih Jedinica</h1>

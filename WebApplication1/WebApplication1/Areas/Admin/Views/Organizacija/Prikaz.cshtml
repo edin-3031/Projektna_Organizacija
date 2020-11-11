@@ -4,6 +4,7 @@
 @using WebApplication1.Models;
 @{
     List<Organizacija> lista_organizacija = (List<Organizacija>)ViewData["organizacija"];
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
 }
 <center>
     <h1>Prikaz Organizacija</h1>

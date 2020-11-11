@@ -4,6 +4,7 @@
 @using WebApplication1.Models;
 @{
     List<Korisnici_OrganizacionaJedinica> lista = (List<Korisnici_OrganizacionaJedinica>)ViewData["kor_org_jed"];
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
 }
 <center>
     <h1>Prikaz Korisnika - Organizacione Jedinice</h1>

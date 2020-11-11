@@ -4,6 +4,7 @@
 @using WebApplication1.Models;
 @{
     List<ProjekatAktivnostRealizacija> lista = (List<ProjekatAktivnostRealizacija>)ViewData["lista_relizacija"];
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
 }
 
 <center>
@@ -25,7 +26,7 @@
         <thead>
         <th>ID</th>
         <th>Projekat aktivnost plan</th>
-        <th>Korisnik</th>
+        @*<th>Korisnik</th>*@
         <th>Datum</th>
         <th>Količina</th>
         <th>Opis</th>
@@ -37,7 +38,7 @@
                 <tr>
                     <td>@x.ProjekatAktivnostRealizacija_ID</td>
                     <td>@x.projekatAktivnostPlan.Naziv</td>
-                    <td>@(x.korisnici.Ime+" "+x.korisnici.Prezime)</td>
+                    @*<td>@(x.korisnici.Ime+" "+x.korisnici.Prezime)</td>*@
                     <td>@(x.Datum.Date.Day+"."+ x.Datum.Date.Month + "." + x.Datum.Date.Year + ".")</td>
                     <td>@x.Kolicina</td>
                     <td>@x.Opis</td>

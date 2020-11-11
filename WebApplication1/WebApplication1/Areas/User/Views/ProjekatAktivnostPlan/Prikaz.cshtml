@@ -5,6 +5,7 @@
 @using WebApplication1.Models.VM;
 @{
     List<ProjekatAktivnostPlan> lista = (List<ProjekatAktivnostPlan>)ViewData["pro_aktiv_plan"];
+    Layout = "~/Views/Shared/_Layout_user.cshtml";
 
     uor id = (uor)ViewData["id"];
 }

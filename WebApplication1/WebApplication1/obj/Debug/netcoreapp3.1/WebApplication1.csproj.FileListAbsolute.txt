@@ -141,9 +141,6 @@ D:\New Project\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplic
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\Select.Html.dep
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\appsettings.Development.json
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\appsettings.json
-D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
-D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
-D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.local.json
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\WebApplication1.StaticWebAssets.xml
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\WebApplication1.exe
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\bin\Debug\netcoreapp3.1\WebApplication1.deps.json
@@ -333,3 +330,8 @@ D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\UserReport\Views\ProjekatAktivnostRealizacija\Unos.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\UserReport\Views\ProjekatAktivnostRealizacija\Uredi.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\UserReport\Views\UserReport\Index.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\scopedcss\bundle\WebApplication1.styles.css
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_user.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_admin.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_user_report.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_admin_org.cshtml.g.cs

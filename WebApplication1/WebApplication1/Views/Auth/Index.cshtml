@@ -3,7 +3,9 @@
 *@
 @{
     Layout = null;
-    string? poruka = (string)TempData["poruka"];
+
+    string poruka = (string)TempData["poruka"];
+
 }
 
 <style>
@@ -31,20 +33,23 @@
     }
 </style>
 <center>
-    <span id="poruka"></span>
-    <script>
-        $("#poruka").hide();
 
-        if (@poruka!= null) {
-                document.getElementById("poruka").innerText = @poruka;
-                $("#poruka").slideDown().delay(1500).slideUp();
-        }
-    </script>
+    @if (poruka != null)
+    {
+        <br />
+        <center>
+            <span style="position:absolute;font-size:300%; background-color:orangered" id="msg">@poruka</span>
+        </center>
+        <script>
+            $("#msg").slideDown().delay(1000).slideUp();
+        </script>
+    }
+
     <form id="login" method="post" action="/Auth/AuthProces">
         <div style="position:relative; margin-top:10%;">
-            <label>Korisničko ime</label><br/>
+            <label>Korisničko ime</label><br />
             <input type="text" name="username"></input><br />
-            <label>Lozinka</label><br/>
+            <label>Lozinka</label><br />
             <input type="password" name="pass"></input><br /><br />
         </div>
         <button class="btn btn-danger" type="submit">Prijavi se</button>

@@ -66,6 +66,8 @@ namespace WebApplication1.Controllers
                             organizacaija_id = result[0].organizacaija_id
                         };
 
+                        ViewData["poruka"] = "";
+
                         if (x.Uloge_ID == 1)
                             return Redirect("/Admin/Admin/Index?u="+k_o.korisnik_id+"&o="+k_o.organizacaija_id+"&r="+1);
                         else if (x.Uloge_ID == 2)
@@ -77,7 +79,9 @@ namespace WebApplication1.Controllers
                     }
                 }
             }
-            return Redirect("/Home/Error");
+            string msg = "Niste unijeli ispravne podatke";
+            TempData["poruka"] = msg;
+            return Redirect("/Auth/index");
         }
     }
 }
