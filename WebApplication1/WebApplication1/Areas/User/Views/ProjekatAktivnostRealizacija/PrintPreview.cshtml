@@ -2,9 +2,11 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @using WebApplication1.Models;
+@using WebApplication1.Models.VM;
 @{
     @model WebApplication1.Models.VM.lista_DetaljiRealizacijaVM
 Layout = "~/Views/Shared/_Layout_user.cshtml";
+    uor id = (uor)ViewData["id"];
 }
 <div id="print_pdf"><a class="btn btn-info" id="etpdf">Export to PDF</a></div>
 <script>

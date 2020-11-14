@@ -50,12 +50,13 @@
             text-decoration:none;
             text-decoration-line:none;
         }
-        #kutijaZaMeni{
-            position:fixed;
-            height:100%;
-            width:17%;
-/*            background-color:green;*/
-            display:block;
+        #kutijaZaMeni {
+            position: fixed;
+            height: 100%;
+            width: 17%;
+            /*            background-color:green;*/
+            display: block;
+            margin-left: -17.8%;
         }
          #menu {
             position: fixed;
@@ -71,78 +72,63 @@
     </style>
 </head>
 <body>
-    <div id="kutijaZaMeni">
-        <div id="menu">
-            <br />
-            <a style="color:white; text-decoration-line:none; font-size:120%;" href="/AdminOrg/AdminOrg/Index">Projektna Organizacija</a><br /><br />
-            <ul>
-                <li id="sifarnik">Opšti šifarnik</li>
-                <ul id="o_s">
-                    
-                    <li><a href="/AdminOrg/OrganizacionaJedinica/Prikaz">Organizaciona jedinica</a></li>
-                </ul>
-                <li id="transakcije">Transakcije</li>
-                <ul id="tra">
-                    
-                    <li><a href="/AdminOrg/ProjekatAktivnostPlan/Prikaz">Aktivnosti</a></li>
-                </ul>
-                
-            </ul>
-        </div>
-    </div>
-    <script>
-        $(document.getElementsByTagName("li")).mousedown(function () {
-            this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-            this.style.width = "100%";
-            this.style.borderRadius = "0px 25px 25px 0px";
-        });
-
-        $(document.getElementsByTagName("li")).mouseleave(function () {
-            this.style.backgroundColor = "rgb(51, 51, 51)";
-            this.style.width = "100%";
-            this.style.borderRadius = "0px";
-        });
-
-        $(document.getElementsByTagName("a")).mousedown(function () {
-            this.style.color = "White";
-        });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-    </script>
+    
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="AdminOrg" asp-controller="AdminOrg" asp-action="Index">Projektna organizacija</a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        @*<li class="nav-item">
+                    <ul class="navbar-nav flex-grow-1" style="float:right">
+                        <li style="margin-top:0%;float:right;position:relative;"><a class="btn btn-danger" href="/Auth/Index">Log out</a></li>
+                        <li style="margin-top:0%;float:right;position:relative;"><a class="btn" id="fb" style="color:white; background-color:cornflowerblue;">Share on Facebook</a></li>
+                        <script>
+                            $("#fb").click(function () {
+                                document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + document.URL;
+                            });
+                        </script>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!--<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="AdminOrg" asp-controller="AdminOrg" asp-action="Index">Projektna organizacija</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <partial name="_LoginPartial" />
+                <ul class="navbar-nav flex-grow-1">-->
+        @*<li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </li>*@
-                        <li class="nav-item">
-                            <a class="btn" style="color:white; background-color:cornflowerblue" title="share on facebook" id="fb">Share on facebook</a>
-                            <script>
-                                $("#fb").click(function () {
-                                    document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + document.URL;
-                                    //document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=www.google.com";
-                                });
-                            </script>
-                        </li>
-                        <li class="nav-item">
-                            <a style="color:white; background-color:orangered" class="btn" title="Log out" id="logOut" href="/Auth/Index">Log out</a>
-                        </li>
-                    </ul>
-                </div>
+        <!--<li class="nav-item">
+                        <a class="btn" style="color:white; background-color:cornflowerblue" title="share on facebook" id="fb">Share on facebook</a>
+                        <script>
+                            $("#fb").click(function () {
+                                document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + document.URL;
+                                //document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=www.google.com";
+                            });
+                        </script>
+                    </li>
+                    <li class="nav-item">
+                        <a style="color:white; background-color:orangered" class="btn" title="Log out" id="logOut" href="/Auth/Index">Log out</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>-->
     </header>
     <div style="margin-left:17%; width:100%" class="container">
         <main role="main" class="pb-3">

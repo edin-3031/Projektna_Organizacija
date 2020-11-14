@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Models.VM;
 
 namespace WebApplication1.Areas.Admin.Controllers
 {
@@ -17,7 +18,7 @@ namespace WebApplication1.Areas.Admin.Controllers
             db = _db;
         }
         [Area("Admin")]
-        public IActionResult Obrisi(int id)
+        public IActionResult Obrisi(int id, int u, int o, int r)
         {
             Uloge temp = db.Uloge.Where(a => a.Uloge_ID == id).SingleOrDefault();
 
@@ -37,10 +38,19 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["prikazUloga"] = lista_uloga;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Prikaz()
+        public IActionResult Prikaz(int u, int o, int r)
         {
             List<Uloge> lista_uloga = db.Uloge.Select(x=>new Uloge
             {
@@ -52,15 +62,33 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["prikazUloga"] = lista_uloga;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Unos()
+        public IActionResult Unos(int u, int o, int r)
         {
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Unos");
         }
         [Area("Admin")]
-        public IActionResult UnosSnimi(int sifra, string naziv, string opis)
+        public IActionResult UnosSnimi(int u, int o, int r, int sifra, string naziv, string opis)
         {
             Uloge tmp = new Uloge
             {
@@ -82,6 +110,15 @@ namespace WebApplication1.Areas.Admin.Controllers
             }).ToList();
 
             ViewData["prikazUloga"] = lista_uloga;
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
 
             return View("Prikaz");
         }

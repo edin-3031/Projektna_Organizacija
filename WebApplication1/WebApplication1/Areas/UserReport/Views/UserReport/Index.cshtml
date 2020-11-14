@@ -6,6 +6,8 @@
 @model WebApplication1.Models.VM.uor;
 @{
     Layout = "~/Views/Shared/_Layout_user_report.cshtml";
+
+    uor id = (uor)ViewData["id"];
 }
 
 <style>
@@ -22,6 +24,102 @@
         text-align-last: center;
     }
 </style>
+<style>
+
+
+    li, ul {
+        list-style: none;
+        margin-top: 5%;
+    }
+
+    ul {
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+    }
+
+    #sifarnik, #transakcije, #izvjestaji, #admin {
+        font-weight: bold;
+    }
+
+    a {
+        color: white;
+        text-decoration-line: none;
+    }
+
+    #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
+        display: inline-block;
+        margin: 2%;
+    }
+
+    #print_preview, #print_excel, #print_pdf {
+        color: white;
+    }
+
+    #dugmad {
+        margin-bottom: 2%;
+        margin-top: 2%;
+    }
+
+    a:hover {
+        color: white;
+        text-decoration: none;
+        text-decoration-line: none;
+    }
+
+    #kutijaZaMeni {
+        position: fixed;
+        height: 100%;
+        width: 17%;
+        /*            background-color:green;*/
+        display: block;
+        margin-left: -17.8%;
+    }
+
+    #menu {
+        position: fixed;
+        /*height: 65%;*/
+        width: 15%;
+        margin-left: 0px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        top: 20%;
+        font-size: 1vw;
+        border-radius: 0px 25px 25px 0px;
+    }
+</style>
+<div id="kutijaZaMeni">
+    <div id="menu">
+        <br />
+        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/UserReport/UserReport/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
+        <ul>
+            <li id="izvjestaji">Izvještaji</li>
+            <ul id="izv">
+                <li><a href="/UserReport/ProjekatAktivnostRealizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Realizacija</a></li>
+            </ul>
+        </ul>
+    </div>
+</div>
+@*<script>
+    $(document.getElementsByTagName("li")).mousedown(function () {
+        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
+        this.style.width = "100%";
+        this.style.borderRadius = "0px 25px 25px 0px";
+    });
+
+    $(document.getElementsByTagName("li")).mouseleave(function () {
+        this.style.backgroundColor = "rgb(51, 51, 51)";
+        this.style.width = "100%";
+        this.style.borderRadius = "0px";
+    });
+
+    $(document.getElementsByTagName("a")).mousedown(function () {
+        this.style.color = "White";
+    });
+        //$(document.getElementsByTagName("li")).mouseup(function () {
+        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+        //});
+</script>*@
 <center>
 
     <h1>User_Report</h1><br />

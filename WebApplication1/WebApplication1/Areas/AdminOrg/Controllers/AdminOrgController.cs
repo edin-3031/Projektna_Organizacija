@@ -33,6 +33,5 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
 
             return View();
         }
-
     }
 }

@@ -8,7 +8,89 @@
 
     uor id = (uor)ViewData["id"]; Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
 }
+<style>
 
+
+    li, ul {
+        list-style: none;
+        margin-top: 5%;
+    }
+
+    ul {
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+    }
+
+    #sifarnik, #transakcije, #izvjestaji, #admin {
+        font-weight: bold;
+    }
+
+    a {
+        color: white;
+        text-decoration-line: none;
+    }
+
+    #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
+        display: inline-block;
+        margin: 2%;
+    }
+
+    #print_preview, #print_excel, #print_pdf {
+        color: white;
+    }
+
+    #dugmad {
+        margin-bottom: 2%;
+        margin-top: 2%;
+    }
+
+    a:hover {
+        color: white;
+        text-decoration: none;
+        text-decoration-line: none;
+    }
+
+    #kutijaZaMeni {
+        position: fixed;
+        height: 100%;
+        width: 17%;
+        /*            background-color:green;*/
+        display: block;
+        margin-left: -17.8%;
+    }
+
+    #menu {
+        position: fixed;
+        /*height: 65%;*/
+        width: 15%;
+        margin-left: 0px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        top: 20%;
+        font-size: 1vw;
+        border-radius: 0px 25px 25px 0px;
+    }
+</style>
+<div id="kutijaZaMeni">
+    <div id="menu">
+        <br />
+        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/AdminOrg/AdminOrg/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
+        <ul>
+            <li id="sifarnik">Opšti šifarnik</li>
+            <ul id="o_s">
+
+                <li><a href="/AdminOrg/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizaciona jedinica</a></li>
+            </ul>
+            <li id="transakcije">Transakcije</li>
+            <ul id="tra">
+
+                <li><a href="/AdminOrg/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
+            </ul>
+
+        </ul>
+    </div>
+</div>
 <center>
     <h1>Prikaz Projektnih aktivnosti</h1>
     <div id="dugmad">
@@ -19,7 +101,7 @@
     <table class="table">
         <thead>
         <th>ID</th>
-        @*<th>Projekat plan</th>*@
+        <th>Projekat plan</th>
         <th>Šifra</th>
         <th>Naziv</th>
         <th>Datum od</th>
@@ -33,7 +115,7 @@
             {
                 <tr>
                     <td>@x.ProjekatAktivnostPlan_ID</td>
-                    @*<td>@(x.projekatPlan.Naziv)</td>*@
+                    <td>@(x.projekatPlan.Naziv)</td>
                     <td>@x.Sifra</td>
                     <td>@x.Naziv</td>
                     <td>@(x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".")</td>

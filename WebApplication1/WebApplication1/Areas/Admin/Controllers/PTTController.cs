@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Models.VM;
 
 namespace WebApplication1.Areas.Admin.Controllers
 {
@@ -22,7 +23,7 @@ namespace WebApplication1.Areas.Admin.Controllers
             db = _db;
         }
         [Area("Admin")]
-        public IActionResult Prikaz()
+        public IActionResult Prikaz(int u, int o, int r)
         {
             List<PTT> lista_ptt = db.PTT.Select(x => new PTT
             {
@@ -33,15 +34,34 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["ptt"] = lista_ptt;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Unos()
+        public IActionResult Unos(int u, int o, int r)
         {
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Unos");
         }
         [Area("Admin")]
-        public IActionResult UnosSnimi(int sifra, string naziv)
+        public IActionResult UnosSnimi(int sifra, string naziv, int u, int o, int r)
         {
             PTT temp = new PTT
             {
@@ -61,10 +81,20 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["ptt"] = lista_ptt;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Ukloni(int id)
+        public IActionResult Ukloni(int id, int u, int o, int r)
         {
             PTT temp = db.PTT.Where(x => x.PTT_ID == id).SingleOrDefault();
 
@@ -80,6 +110,16 @@ namespace WebApplication1.Areas.Admin.Controllers
                 PTT_ID = x.PTT_ID,
                 Sifra = x.Sifra
             }).ToList();
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
 
             ViewData["ptt"] = lista_ptt;
             return View("Prikaz");

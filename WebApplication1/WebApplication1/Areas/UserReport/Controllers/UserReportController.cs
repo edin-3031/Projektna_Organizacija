@@ -27,6 +27,8 @@ namespace WebApplication1.Areas.UserReport.Controllers
                 organisationId = o,
                 userId = u
             };
+
+            ViewData["id"] = podaci;
             return View(podaci);
         }
 

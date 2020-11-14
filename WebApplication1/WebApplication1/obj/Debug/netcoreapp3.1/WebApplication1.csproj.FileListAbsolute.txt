@@ -283,7 +283,6 @@ D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Admin\Index.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\User\Index.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\_ViewStart.cshtml.g.cs
-D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.csprojAssemblyReference.cache
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Ajax\DetaljiRealizacija.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Drzava\Prikaz.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Drzava\Unos.cshtml.g.cs
@@ -335,3 +334,4 @@ D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_admin.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_user_report.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_admin_org.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.csprojAssemblyReference.cache

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Models.VM;
 
 namespace WebApplication1.Areas.Admin.Controllers
 {
@@ -17,7 +18,7 @@ namespace WebApplication1.Areas.Admin.Controllers
             db = _db;
         }
         [Area("Admin")]
-        public IActionResult Prikaz()
+        public IActionResult Prikaz(int u, int o, int r)
         {
             List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
             {
@@ -34,10 +35,19 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["org_jed"] = lista_org_jed;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View();
         }
         [Area("Admin")]
-        public IActionResult Unos()
+        public IActionResult Unos(int u, int o, int r)
         {
             List<Organizacija> lista_organizacija = db.Organizacija.Select(x => new Organizacija
             {
@@ -67,10 +77,19 @@ namespace WebApplication1.Areas.Admin.Controllers
             ViewData["ptt"] = lista_ptt;
             ViewData["drzava"] = lista_drzava;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Unos");
         }
         [Area("Admin")]
-        public IActionResult UnosSnimi(int organizacija, int ptt, int drzava, string naziv, string adresa)
+        public IActionResult UnosSnimi(int organizacija, int ptt, int drzava, string naziv, string adresa, int u, int o, int r)
         {
             OrganizacionaJedinica temp = new OrganizacionaJedinica
             {
@@ -99,10 +118,19 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["org_jed"] = lista_org_jed;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Ukloni(int id)
+        public IActionResult Ukloni(int id, int u, int o, int r)
         {
             OrganizacionaJedinica temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).SingleOrDefault();
 
@@ -126,6 +154,15 @@ namespace WebApplication1.Areas.Admin.Controllers
             }).ToList();
 
             ViewData["org_jed"] = lista_org_jed;
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
 
             return View("Prikaz");
         }

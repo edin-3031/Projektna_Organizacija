@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI.Common;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Models.VM;
 
 namespace WebApplication1.Areas.Admin.Controllers
 {
@@ -18,7 +19,7 @@ namespace WebApplication1.Areas.Admin.Controllers
             db = _db;
         }
         [Area("Admin")]
-        public IActionResult Prikaz()
+        public IActionResult Prikaz(int u, int o, int r)
         {
             List<Resursi> lista_resursa = db.Resursi.Select(x => new Resursi
             {
@@ -28,10 +29,19 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["resursi"] = lista_resursa;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Ukloni(int id)
+        public IActionResult Ukloni(int id, int u, int o, int r)
         {
             Resursi temp = db.Resursi.Where(x => x.Resursi_ID == id).SingleOrDefault();
 
@@ -49,15 +59,24 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["resursi"] = lista_resursa;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Unos()
+        public IActionResult Unos(int u, int o, int r)
         {
             return View("Unos");
         }
         [Area("Admin")]
-        public IActionResult UnosSnimi(string naziv)
+        public IActionResult UnosSnimi(string naziv, int u, int o, int r)
         {
             Resursi temp = new Resursi
             {
@@ -75,6 +94,15 @@ namespace WebApplication1.Areas.Admin.Controllers
                 Naziv=x.Naziv,
                 Resursi_ID=x.Resursi_ID
             }).ToList();
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
 
             ViewData["resursi"] = lista_resursa;
 

@@ -4,7 +4,8 @@
 @using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
-    List<Organizacija> lista_organicija = (List<Organizacija>)ViewData["organizacije"];
+    //List<Organizacija> lista_organicija = (List<Organizacija>)ViewData["organizacije"];
+    Organizacija organicija = (Organizacija)ViewData["organizacija"];
     List<PTT> lista_ptt = (List<PTT>)ViewData["ptt"];
     List<Drzava> lista_drzava = (List<Drzava>)ViewData["drzava"];
     Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
@@ -12,13 +13,97 @@
     uor id = (uor)ViewData["id"];
 }
 
+<style>
+
+
+    li, ul {
+        list-style: none;
+        margin-top: 5%;
+    }
+
+    ul {
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+    }
+
+    #sifarnik, #transakcije, #izvjestaji, #admin {
+        font-weight: bold;
+    }
+
+    a {
+        color: white;
+        text-decoration-line: none;
+    }
+
+    #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
+        display: inline-block;
+        margin: 2%;
+    }
+
+    #print_preview, #print_excel, #print_pdf {
+        color: white;
+    }
+
+    #dugmad {
+        margin-bottom: 2%;
+        margin-top: 2%;
+    }
+
+    a:hover {
+        color: white;
+        text-decoration: none;
+        text-decoration-line: none;
+    }
+
+    #kutijaZaMeni {
+        position: fixed;
+        height: 100%;
+        width: 17%;
+        /*            background-color:green;*/
+        display: block;
+        margin-left: -17.8%;
+    }
+
+    #menu {
+        position: fixed;
+        /*height: 65%;*/
+        width: 15%;
+        margin-left: 0px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        top: 20%;
+        font-size: 1vw;
+        border-radius: 0px 25px 25px 0px;
+    }
+</style>
+<div id="kutijaZaMeni">
+    <div id="menu">
+        <br />
+        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/AdminOrg/AdminOrg/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
+        <ul>
+            <li id="sifarnik">Opšti šifarnik</li>
+            <ul id="o_s">
+
+                <li><a href="/AdminOrg/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizaciona jedinica</a></li>
+            </ul>
+            <li id="transakcije">Transakcije</li>
+            <ul id="tra">
+
+                <li><a href="/AdminOrg/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
+            </ul>
+
+        </ul>
+    </div>
+</div>
+
 <center>
     <h1>Unos Organizacione jedinice</h1>
-    <form method="post" action="/AdminOrg/OrganizacionaJedinica/UnosSnimi">
+    <form method="post" action="/AdminOrg/OrganizacionaJedinica/UnosSnimi?">
 
-        <input hidden="hidden" name="u" value="@id.userId"/>
-        <input hidden="hidden" name="o" value="@id.organisationId"/>
-        <input hidden="hidden" name="r" value="@id.roleId"/>
+        <input hidden="hidden" name="u" value="@id.userId" />
+        <input hidden="hidden" name="o" value="@id.organisationId" />
+        <input hidden="hidden" name="r" value="@id.roleId" />
 
         <table>
             <tr>
@@ -28,13 +113,15 @@
                     </label>
                 </td>
                 <td>
-                    <select name="organizacija">
+                    <input readonly="readonly" value="@organicija.Naziv"/>
+                    <input hidden="hidden" name="organizacija" value="@organicija.Organizacija_ID"/>
+                    @*<select name="organizacija">
                         <option>---Odaberi---</option>
                         @foreach (var x in lista_organicija)
                         {
                             <option value="@x.Organizacija_ID">@x.Naziv</option>
                         }
-                    </select>
+                    </select>*@
                 </td>
             </tr>
             <tr>
@@ -76,7 +163,7 @@
                     </label>
                 </td>
                 <td>
-                    <input type="text" name="naziv" />
+                    <input type="text" name="naziv_org_jed" />
                 </td>
             </tr>
             <tr>

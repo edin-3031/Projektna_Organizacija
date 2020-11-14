@@ -28,6 +28,8 @@ namespace WebApplication1.Areas.User.Controllers
                 userId=u
             };
 
+            ViewData["id"] = podaci;
+
             return View(podaci);
         }
     }

@@ -154,7 +154,7 @@ namespace WebApplication1.Areas.Admin.Controllers
             }
         }
         [Area("Admin")]
-        public IActionResult PrintPreview()
+        public IActionResult PrintPreview(int u, int o, int r)
         {
             List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
 
@@ -182,10 +182,19 @@ namespace WebApplication1.Areas.Admin.Controllers
                 lista=_lista
             };
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View(model);
         }
         [Area("Admin")]
-        public IActionResult Detalji(int projekatId = 0, DateTime? OD=null, DateTime? DO=null, int traziDugme=0)
+        public IActionResult Detalji(int u, int o, int r, int projekatId = 0, DateTime? OD=null, DateTime? DO=null, int traziDugme=0)
         {
             //Dobavljanje liste projekata za birajuću listu
             List<ProjekatPlan> projekti = db.ProjekatPlan.Select(x => new ProjekatPlan
@@ -198,7 +207,14 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["projekti"] = projekti;
 
-            
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
 
             if (projekatId == 0 && (OD != null || DO != null))
             {
@@ -1134,7 +1150,7 @@ namespace WebApplication1.Areas.Admin.Controllers
             return View(model2);
         }
         [Area("Admin")]
-        public IActionResult Prikaz()
+        public IActionResult Prikaz(int u, int o, int r)
         {
             List<ProjekatAktivnostRealizacija> lista = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
             {
@@ -1149,10 +1165,21 @@ namespace WebApplication1.Areas.Admin.Controllers
             }).ToList();
             ViewData["lista_relizacija"] = lista;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+
             return View();
         }
+
         [Area("Admin")]
-        public IActionResult Unos()
+        public IActionResult Unos(int u, int o, int r)
         {
             List<ProjekatAktivnostPlan> lista_proj_aktiv_plan = db.ProjekatAktivnostPlan.Select(x => new ProjekatAktivnostPlan
             {
@@ -1169,10 +1196,19 @@ namespace WebApplication1.Areas.Admin.Controllers
             }).ToList();
             ViewData["lista_korisnici"] = lista_korisnici;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View();
         }
         [Area("Admin")]
-        public IActionResult UnosSnimi(int projekatAktivnostPlan, int korisnik, DateTime datum, float kolicina, string opis)
+        public IActionResult UnosSnimi(int projekatAktivnostPlan, int korisnik, DateTime datum, float kolicina, string opis, int u, int o, int r)
         {
             ProjekatAktivnostRealizacija temp = new ProjekatAktivnostRealizacija
             {
@@ -1199,10 +1235,19 @@ namespace WebApplication1.Areas.Admin.Controllers
             }).ToList();
             ViewData["lista_relizacija"] = lista;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Ukloni(int id)
+        public IActionResult Ukloni(int id, int o, int u, int r)
         {
             ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(x => x.ProjekatAktivnostRealizacija_ID == id).FirstOrDefault();
 
@@ -1225,10 +1270,19 @@ namespace WebApplication1.Areas.Admin.Controllers
             }).ToList();
             ViewData["lista_relizacija"] = lista;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Uredi(int id)
+        public IActionResult Uredi(int id, int u, int o, int r)
         {
             ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == id).FirstOrDefault();
 
@@ -1236,10 +1290,19 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["uredi"] = temp;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View();
         }
         [Area("Admin")]
-        public IActionResult UrediSnimi(int realizacijaId, int aktivnostId, string projekat, float kolicina, DateTime datum, string opis)
+        public IActionResult UrediSnimi(int realizacijaId, int aktivnostId, string projekat, float kolicina, DateTime datum, string opis, int o, int u, int r)
         {
             ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == realizacijaId).FirstOrDefault();
 
@@ -1262,6 +1325,15 @@ namespace WebApplication1.Areas.Admin.Controllers
                 ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
             }).ToList();
             ViewData["lista_relizacija"] = lista;
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
 
             return View("Prikaz");
         }

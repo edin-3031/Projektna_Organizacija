@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Models.VM;
 
 namespace WebApplication1.Areas.Admin.Controllers
 {
@@ -17,7 +18,7 @@ namespace WebApplication1.Areas.Admin.Controllers
             db = _db;
         }
         [Area("Admin")]
-        public IActionResult Prikaz()
+        public IActionResult Prikaz(int u, int o, int r)
         {
             List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = db.ProjekatAktivnostPlan.Select(x => new ProjekatAktivnostPlan
             {
@@ -34,10 +35,19 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["pro_aktiv_plan"] = lista_pro_aktiv_plan;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View();
         }
         [Area("Admin")]
-        public IActionResult Unos()
+        public IActionResult Unos(int u, int o, int r)
         {
             List<ProjekatPlan> lista_proj_plan = db.ProjekatPlan.Select(x => new ProjekatPlan
             {
@@ -47,10 +57,19 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["lista_proj_plan"] = lista_proj_plan;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View();
         }
         [Area("Admin")]
-        public IActionResult UnosSnimi(int projekatPlan, int sifra, string naziv, DateTime Od, DateTime Do, string jedinicaMjere, float kolicina)
+        public IActionResult UnosSnimi(int u, int o, int r,int projekatPlan, int sifra, string naziv, DateTime Od, DateTime Do, string jedinicaMjere, float kolicina)
         {
             ProjekatAktivnostPlan temp = new ProjekatAktivnostPlan
             {
@@ -81,10 +100,19 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             ViewData["pro_aktiv_plan"] = lista_pro_aktiv_plan;
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View("Prikaz");
         }
         [Area("Admin")]
-        public IActionResult Ukloni(int id)
+        public IActionResult Ukloni(int id, int u, int o, int r)
         {
             ProjekatAktivnostPlan temp = db.ProjekatAktivnostPlan.Where(x => x.ProjekatAktivnostPlan_ID == id).FirstOrDefault();
 
@@ -106,6 +134,15 @@ namespace WebApplication1.Areas.Admin.Controllers
                 projekatPlan = db.ProjekatPlan.Where(c => c.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
                 ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID
             }).ToList();
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
 
             ViewData["pro_aktiv_plan"] = lista_pro_aktiv_plan;
 

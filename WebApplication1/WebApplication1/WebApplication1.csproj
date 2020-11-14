@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Developer\" />
-    <Folder Include="Areas\User\Models\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -123,7 +123,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Pocetak" asp-action="Index">Projektna organizacija</a>
+                
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -138,6 +138,7 @@
             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </li>*@
                         <li class="nav-item">
+                            <a style="color:white; background-color:orangered" class="btn" title="Log out" id="logOut" href="/Auth/Index">Log out</a>
                             <a class="btn" style="color:white; background-color:cornflowerblue" title="share on facebook" id="fb">Share on facebook</a>
                             <script>
                                 $("#fb").click(function () {
@@ -147,7 +148,6 @@
                             </script>
                         </li>
                         <li class="nav-item">
-                            <a style="color:white; background-color:orangered" class="btn" title="Log out" id="logOut" href="/Auth/Index">Log out</a>
                         </li>
                     </ul>
                 </div>
