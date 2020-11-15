@@ -134,7 +134,7 @@
             <tr>
                 <td>@x.Korisnici_OrganizacionaJedinica_ID</td>
                 <td>@(x.korisnici.Ime + " " + x.korisnici.Prezime)</td>
-                @*<td>@x.organizacionaJedinica.Naziv</td>*@
+                <td>@x.organizacionaJedinica.Naziv</td>
                 <td><a class="btn btn-danger" href="/Admin/KorisnikOrg/Ukloni?id=@x.Korisnici_OrganizacionaJedinica_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a></td>
             </tr>
         }

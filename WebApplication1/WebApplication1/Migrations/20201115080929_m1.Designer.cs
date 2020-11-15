@@ -9,8 +9,8 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201108103825_m2")]
-    partial class m2
+    [Migration("20201115080929_m1")]
+    partial class m1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -117,6 +117,9 @@ namespace WebApplication1.Migrations
 
                     b.Property<int>("Sifra")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("Slika")
+                        .HasColumnType("varbinary(4000)");
 
                     b.HasKey("Organizacija_ID");
 

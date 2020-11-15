@@ -74,7 +74,8 @@ namespace WebApplication1.Migrations
                     Drzava_FK = table.Column<int>(nullable: false),
                     Sifra = table.Column<int>(nullable: false),
                     Naziv = table.Column<string>(nullable: true),
-                    Adresa = table.Column<string>(nullable: true)
+                    Adresa = table.Column<string>(nullable: true),
+                    Slika = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -101,6 +102,7 @@ namespace WebApplication1.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Uloge_FK = table.Column<int>(nullable: false),
                     Sifra = table.Column<int>(nullable: false),
+                    Korisnicko_Ime = table.Column<string>(nullable: true),
                     Ime = table.Column<string>(nullable: true),
                     Prezime = table.Column<string>(nullable: true),
                     Telefon = table.Column<string>(nullable: true),

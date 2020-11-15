@@ -60,21 +60,33 @@ namespace WebApplication1.Controllers
                             organizacaija_id = db.OrganizacionaJedinica.Where(q => q.OrganizacionaJedinica_ID == o.OrganizacionaJedinica_FK).Select(e => e.Organizacija_FK).FirstOrDefault()
                         }).ToList();
 
-                        korisnik_organizacija k_o = new korisnik_organizacija
+                        korisnik_organizacija k_o;
+
+                        //if (result.Count() == 0)
+                        //{
+                        k_o = new korisnik_organizacija
                         {
                             korisnik_id = id,
                             organizacaija_id = result[0].organizacaija_id
                         };
-
+                        //}
+                        //else
+                        //{
+                        //    k_o = new korisnik_organizacija
+                        //    {
+                        //        korisnik_id = id,
+                        //        organizacaija_id = 0
+                        //    };
+                        //}
                         ViewData["poruka"] = "";
 
                         if (x.Uloge_ID == 1)
                             return Redirect("/Admin/Admin/Index?u="+k_o.korisnik_id+"&o="+k_o.organizacaija_id+"&r="+1);
                         else if (x.Uloge_ID == 2)
-                            return Redirect("/User/User/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + 2);
-                        else if (x.Uloge_ID == 4)
                             return Redirect("/AdminOrg/AdminOrg/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + 4);
-                        else if (x.Uloge_ID == 5)
+                        else if (x.Uloge_ID == 3)
+                            return Redirect("/User/User/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + 2);
+                        else if (x.Uloge_ID == 7)
                             return Redirect("/UserReport/UserReport/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + 5);
                     }
                 }

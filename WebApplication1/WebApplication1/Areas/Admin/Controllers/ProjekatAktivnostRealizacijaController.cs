@@ -119,6 +119,7 @@ namespace WebApplication1.Areas.Admin.Controllers
         [Area("Admin")]
         public IActionResult Excel()
         {
+
             List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
 
             using(var workbook=new XLWorkbook())
@@ -149,7 +150,7 @@ namespace WebApplication1.Areas.Admin.Controllers
                 {
                     workbook.SaveAs(stream);
                     var content = stream.ToArray();
-                    return File(content,"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RealizacijaInfo.xlsx");
+                    return File(content,"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RealizacijaInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
                 }
             }
         }

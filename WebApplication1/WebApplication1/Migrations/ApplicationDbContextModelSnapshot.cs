@@ -116,6 +116,9 @@ namespace WebApplication1.Migrations
                     b.Property<int>("Sifra")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("Slika")
+                        .HasColumnType("varbinary(4000)");
+
                     b.HasKey("Organizacija_ID");
 
                     b.HasIndex("Drzava_FK");
