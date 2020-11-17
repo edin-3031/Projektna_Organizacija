@@ -21,5 +21,9 @@ namespace WebApplication1.Models.VM
     public class lista_realizacijaVM
     {
         public List<RealizacijaVM>? liste { get; set; }
+        public int projekatId { get; set; }
+        public int organizacijaId { get; set; }
+        public DateTime Od { get; set; }
+        public DateTime Do { get; set; }
     }
 }

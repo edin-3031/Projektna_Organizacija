@@ -15,8 +15,14 @@
     uor id = (uor)ViewData["id"];
 
     Layout = "~/Views/Shared/_Layout_user_report.cshtml";
+
+    lista_realizacijaVM t = Model;
 }
 <style>
+    #fb:hover {
+        cursor: pointer;
+    }
+
     #cb {
         width: 50%;
     }
@@ -39,7 +45,7 @@
         display: block;
     }
 
-    #dat2 {
+    #dat2, #dat1 {
         width: 100%;
     }
 </style>
@@ -149,7 +155,7 @@
             <tr>
                 <td><label>Projekat</label></td>
                 <td>
-                    <select name="projekatId">
+                    <select name="projekatId" id="proj_ID">
                         <option>---Odaberi---</option>
                         @foreach (var x in projekti)
                         {
@@ -160,7 +166,7 @@
             </tr>
             <tr>
                 <td><label>Datum od</label></td>
-                <td><input id="dat2" type="datetime-local" name="OD" /></td>
+                <td><input id="dat1" type="datetime-local" name="OD" /></td>
             </tr>
             <tr>
                 <td><label>Datum do</label></td>
@@ -177,10 +183,45 @@
     {
         @if (Model.liste.Count > 0)
         {
+            <div id="dugmad">
+                <div id="print_excel" style="display:inline;"><a href="/Report/Index2?uloga=@id.roleId&organizacijaId=@id.organisationId&projekatId=@Model.projekatId&OD=@Model.Od&DO=@Model.Do" class="btn btn-info">Export to Excel</a></div>
+                <li style=" margin:3%; position:relative;display:inline;"><a class="btn" id="fb" style="color:white; background-color:cornflowerblue;">Share on Facebook</a></li>
+                <script>
+                            $("#fb").click(function () {
+                                document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + "https://localhost:44343/Report/Index?uloga=@id.roleId&organizacijaId=@Model.organizacijaId&projekatId=@Model.projekatId&OD=@Model.Od&DO=@Model.Do";
+                            });
+                </script>
+            </div>
             <center>
                 <div id="podaci">
                     <br /><br />
                     <h3>Rezultati projekata</h3>
+
+                    <table class="table">
+                        @if (suma != null)
+                        {
+                            <tr>
+                                <hr />
+                                <td style="font-weight:bold;">Projekat</td>
+                                <td style="font-weight:bold;">Planirano</td>
+                                <td style="font-weight:bold;">Ostvareno</td>
+                                <td style="font-weight:bold;">Procentualno</td>
+                                <td style="font-weight:bold;">Grafički</td>
+                            </tr>
+                            <tr>
+                                <hr />
+                                <td>@suma.naziv_projekta</td>
+                                <td>@suma.planirano</td>
+                                <td>@suma.ostvareno</td>
+                                <td>@(Math.Round(suma.procenti) + "%")</td>
+                                <td>
+                                    <div id="progressBar" style="width:100%;">
+                                        <div style="width:@(Math.Round(suma.procenti))%;" id="vrijednost"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
 
                     <table style="border:5px solid black" class="table">
                         <thead>
@@ -220,29 +261,6 @@
                                             });
                                         });
                                         </script>
-                                    </td>
-                                </tr>
-                            }
-                            @if (suma != null)
-                            {
-                                <tr>
-                                    <hr />
-                                    <td style="font-weight:bold;">Projekat</td>
-                                    <td style="font-weight:bold;">Planirano</td>
-                                    <td style="font-weight:bold;">Ostvareno</td>
-                                    <td style="font-weight:bold;">Procentualno</td>
-                                    <td style="font-weight:bold;">Grafički</td>
-                                </tr>
-                                <tr>
-                                    <hr />
-                                    <td>@suma.naziv_projekta</td>
-                                    <td>@suma.planirano</td>
-                                    <td>@suma.ostvareno</td>
-                                    <td>@(Math.Round(suma.procenti) + "%")</td>
-                                    <td>
-                                        <div id="progressBar" style="width:100%;">
-                                            <div style="width:@(Math.Round(suma.procenti))%;" id="vrijednost"></div>
-                                        </div>
                                     </td>
                                 </tr>
                             }

@@ -42,6 +42,9 @@
     #dat2 {
         width: 100%;
     }
+    #fb:hover {
+        cursor: pointer;
+    }
 </style>
 
 <style>
@@ -153,6 +156,7 @@
 </script>*@
 <center>
     <h1>Detalji Realizacija</h1>
+
     <form method="post" action="/Admin/ProjekatAktivnostRealizacija/Detalji?u=@id.userId&o=@id.organisationId&r=@id.roleId">
 
         <table>
@@ -191,50 +195,20 @@
                 <div id="podaci">
                     <br /><br />
                     <h3>Rezultati projekata</h3>
-
-                    <table style="border:5px solid black" class="table">
-                        <thead>
-                        <th>Projekat</th>
-                        <th>Aktivnost</th>
-                        <th>Datum</th>
-                        <th>Planirano</th>
-                        <th>Ostvareno</th>
-                        <th>Procenti</th>
-                        <th>Grafički</th>
-                        <th>Detalji</th>
-                        </thead>
-                        <tbody>
-                            @foreach (var x in Model.liste)
-                            {
-                                <tr>
-                                    <td>@x.nazivProjekta</td>
-                                    <td>@x.naziv_aktivnosti</td>
-                                    <td>@(x.datum.Day + "." + x.datum.Month + "." + x.datum.Year + ".")</td>
-                                    <td>@x.planirano</td>
-                                    <td>@x.odradjeno</td>
-                                    <td>@(Math.Round((x.odradjeno / x.planirano) * 100))%</td>
-                                    <td>
-                                        <div id="progressBar" style="width:100%;">
-                                            <div style="width:@(Math.Round((x.odradjeno / x.planirano) * 100))%;" id="vrijednost"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-warning" id="Detalji__@x.aktivnostId">Detalji</a>
-                                        <script>
-                                        $("#Detalji__@x.aktivnostId").click(function (event) {
-                                            $.get("/Admin/Ajax/DetaljiRealizacija?idAktivnost=@x.aktivnostId&idProjekat=@x.projekatId&idRealizacija=@x.realizacijaId&korisnikId=@x.korisnikId", function (result) {
-                                                $("#box").show();
-                                                $("#glavni").show();
-                                                $("#box").html(result);
-                                                $("#glavni").css("border", "5px solid black");
-                                            });
-                                        });
-                                        </script>
-                                    </td>
-                                </tr>
-                            }
-                            @if (suma != null)
-                            {
+                    <div id="dugmad">
+                        <div id="print_excel" style="display:inline;">
+                            <a href="/Report/Index2?uloga=@id.roleId&organizacijaId=@id.organisationId&projekatId=@Model.projekatId&OD=@Model.Od&DO=@Model.Do" class="btn btn-info">Export to Excel</a>
+                        </div>
+                        <li style=" margin:3%; position:relative; display:inline;"><a class="btn" id="fb" style="color:white; background-color:cornflowerblue;">Share on Facebook</a></li>
+                        <script>
+                            $("#fb").click(function () {
+                                document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + "https://localhost:44343/Report/Index?uloga=@id.roleId&organizacijaId=@Model.organizacijaId&projekatId=@Model.projekatId&OD=@Model.Od&DO=@Model.Do";
+                            });
+                        </script>
+                    </div>
+                        @if (suma != null)
+                        {
+                            <table class="table">
                                 <tr>
                                     <hr />
                                     <td style="font-weight:bold;">Projekat</td>
@@ -255,12 +229,56 @@
                                         </div>
                                     </td>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </table>
+                        }
 
-                </div>
-            </center>
+                        <table style="border:5px solid black" class="table">
+                            <thead>
+                            <th>Projekat</th>
+                            <th>Aktivnost</th>
+                            <th>Datum</th>
+                            <th>Planirano</th>
+                            <th>Ostvareno</th>
+                            <th>Procenti</th>
+                            <th>Grafički</th>
+                            <th>Detalji</th>
+                            </thead>
+                            <tbody>
+                                @foreach (var x in Model.liste)
+                                {
+                                    <tr>
+                                        <td>@x.nazivProjekta</td>
+                                        <td>@x.naziv_aktivnosti</td>
+                                        <td>@(x.datum.Day + "." + x.datum.Month + "." + x.datum.Year + ".")</td>
+                                        <td>@x.planirano</td>
+                                        <td>@x.odradjeno</td>
+                                        <td>@(Math.Round((x.odradjeno / x.planirano) * 100))%</td>
+                                        <td>
+                                            <div id="progressBar" style="width:100%;">
+                                                <div style="width:@(Math.Round((x.odradjeno / x.planirano) * 100))%;" id="vrijednost"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-warning" id="Detalji__@x.aktivnostId">Detalji</a>
+                                            <script>
+                                        $("#Detalji__@x.aktivnostId").click(function (event) {
+                                            $.get("/Admin/Ajax/DetaljiRealizacija?idAktivnost=@x.aktivnostId&idProjekat=@x.projekatId&idRealizacija=@x.realizacijaId&korisnikId=@x.korisnikId", function (result) {
+                                                $("#box").show();
+                                                $("#glavni").show();
+                                                $("#box").html(result);
+                                                $("#glavni").css("border", "5px solid black");
+                                            });
+                                        });
+                                            </script>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+
+                    </div>
+</center>
         }
     }
 </center>

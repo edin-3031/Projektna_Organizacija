@@ -9,6 +9,28 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.VM;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Data;
+using WebApplication1.Models;
+using WebApplication1.Models.VM;
+using ClosedXML.Excel;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Data;
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Org.BouncyCastle.Asn1.Misc;
+using WebApplication1.Data;
+using WebApplication1.Models;
+using WebApplication1.Models.VM;
+using Microsoft.AspNetCore.Hosting;
+using SelectPdf;
+using Aspose.Pdf;
+using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace WebApplication1.Areas.Admin.Controllers
 {
@@ -20,6 +42,48 @@ namespace WebApplication1.Areas.Admin.Controllers
         {
             db = _db;
         }
+
+        [Area("Admin")]
+        public IActionResult Excel()
+        {
+
+            List<Korisnici> korisnik = db.Korisnici.ToList();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Korisnici");
+                var currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "Korisnik ID";
+                worksheet.Cell(currentRow, 2).Value = "Ime i prezime";
+                worksheet.Cell(currentRow, 3).Value = "Korisničko ime";
+                worksheet.Cell(currentRow, 4).Value = "Lozinka";
+                worksheet.Cell(currentRow, 5).Value = "Šifra";
+                worksheet.Cell(currentRow, 6).Value = "Mail";
+                worksheet.Cell(currentRow, 7).Value = "Telefon";
+                worksheet.Cell(currentRow, 8).Value = "Uloga";
+
+                foreach (var x in korisnik)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = x.Korisnici_ID;
+                    worksheet.Cell(currentRow, 2).Value = x.Ime.ToString() + " " + x.Prezime.ToString();
+                    worksheet.Cell(currentRow, 3).Value = x.Korisnicko_Ime;
+                    worksheet.Cell(currentRow, 4).Value = x.Lozinka;
+                    worksheet.Cell(currentRow, 5).Value = x.Sifra;
+                    worksheet.Cell(currentRow, 6).Value = x.Mail;
+                    worksheet.Cell(currentRow, 7).Value = x.Telefon;
+                    worksheet.Cell(currentRow, 8).Value = db.Uloge.Where(a=>a.Uloge_ID== x.Uloge_FK).Select(o=>o.Naziv).FirstOrDefault();
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "KorisniciInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                }
+            }
+        }
+
         [Area("Admin")]
         public IActionResult Prikaz(int u, int o, int r)
         {

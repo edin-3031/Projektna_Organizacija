@@ -13,6 +13,9 @@
     @RenderSection("Scripts", required: false)
     <style>
 
+        td, th, option{
+            text-align:center;
+        }
 
         li, ul {
             list-style: none;
@@ -84,12 +87,6 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1" style="float:right">
                         <li style="margin-top:0%;float:right;position:relative;"><a class="btn btn-danger" href="/Auth/Index">Log out</a></li>
-                        <li style="margin-top:0%;float:right;position:relative;"><a class="btn" id="fb" style="color:white; background-color:cornflowerblue;">Share on Facebook</a></li>
-                        <script>
-                            $("#fb").click(function () {
-                                document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + document.URL;
-                            });
-                        </script>
                     </ul>
                 </div>
             </div>

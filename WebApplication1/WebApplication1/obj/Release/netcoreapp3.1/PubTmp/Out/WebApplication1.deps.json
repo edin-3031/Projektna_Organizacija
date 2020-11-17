@@ -25,6 +25,7 @@
       "WebApplication1/1.0.0": {
         "dependencies": {
           "Aspose.PDF": "20.9.0",
+          "BCrypt.Net-Next": "4.0.0",
           "ClosedXML": "0.95.3",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "3.1.9",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "3.1.9",
@@ -324,6 +325,17 @@
         },
         "compile": {
           "lib/netstandard2.1/Aspose.PDF.dll": {}
+        }
+      },
+      "BCrypt.Net-Next/4.0.0": {
+        "runtime": {
+          "lib/netstandard2.1/BCrypt.Net-Next.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.1/BCrypt.Net-Next.dll": {}
         }
       },
       "BouncyCastle.NetCore/1.8.3": {
@@ -3854,6 +3866,13 @@
       "sha512": "sha512-QkACCIlFeTcIXmBGBMFkVQYge3Eq4y8o1J/QQqUgr9d0LbmK8B+zd+sIFfnjuOI849IBqMkDiUwQZmnuSJF0zA==",
       "path": "aspose.pdf/20.9.0",
       "hashPath": "aspose.pdf.20.9.0.nupkg.sha512"
+    },
+    "BCrypt.Net-Next/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1rjyVK+/YJnCElALjVNt/aUPIIRoFocFZzblsiFo2giA3WVYExk/E5UT6i4RqEHwIwEwoQHt02I1llaEIQ59eQ==",
+      "path": "bcrypt.net-next/4.0.0",
+      "hashPath": "bcrypt.net-next.4.0.0.nupkg.sha512"
     },
     "BouncyCastle.NetCore/1.8.3": {
       "type": "package",

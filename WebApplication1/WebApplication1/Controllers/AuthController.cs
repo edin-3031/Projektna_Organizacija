@@ -81,13 +81,13 @@ namespace WebApplication1.Controllers
                         ViewData["poruka"] = "";
 
                         if (x.Uloge_ID == 1)
-                            return Redirect("/Admin/Admin/Index?u="+k_o.korisnik_id+"&o="+k_o.organizacaija_id+"&r="+1);
+                            return Redirect("/Admin/Admin/Index?u="+k_o.korisnik_id+"&o="+k_o.organizacaija_id+"&r="+ x.Uloge_ID);
                         else if (x.Uloge_ID == 2)
-                            return Redirect("/AdminOrg/AdminOrg/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + 4);
+                            return Redirect("/AdminOrg/AdminOrg/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
                         else if (x.Uloge_ID == 3)
-                            return Redirect("/User/User/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + 2);
+                            return Redirect("/User/User/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
                         else if (x.Uloge_ID == 7)
-                            return Redirect("/UserReport/UserReport/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + 5);
+                            return Redirect("/UserReport/UserReport/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
                     }
                 }
             }

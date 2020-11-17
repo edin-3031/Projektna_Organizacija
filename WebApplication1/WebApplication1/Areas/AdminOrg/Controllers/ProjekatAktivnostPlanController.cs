@@ -123,7 +123,8 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                         p_p_final.Add(new ProjekatPlan
                         {
                             Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID
+                            ProjekatPlan_ID = x.ProjekatPlan_ID,
+                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
                         });
                     }
                 }

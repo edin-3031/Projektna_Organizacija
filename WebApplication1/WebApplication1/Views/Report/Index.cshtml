@@ -1,0 +1,39 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models.VM;
+@model WebApplication1.Models.VM.lista_realizacijaVM
+@{
+    lista_realizacijaVM temp = (lista_realizacijaVM)ViewData["data"];
+    Layout = null;
+}
+<style>
+    table, tr, td {
+        border: 1px solid black;
+        text-align: center;
+    }
+</style>
+<center>
+    <table class="table">
+        <thead>
+        <th>Projekat</th>
+        <th>Aktivnost</th>
+        <th>Datum</th>
+        <th>Planirano</th>
+        <th>Odrađeno</th>
+        <th>Procentualno</th>
+
+        </thead>
+        @foreach (var x in Model.liste)
+        {
+            <tr>
+                <td>@x.nazivProjekta</td>
+                <td>@x.naziv_aktivnosti</td>
+                <td>@x.datum</td>
+                <td>@x.planirano</td>
+                <td>@x.odradjeno</td>
+                <td>@(Math.Round(((x.odradjeno/x.planirano)*100)))%</td>
+            </tr>
+        }
+    </table>
+</center>

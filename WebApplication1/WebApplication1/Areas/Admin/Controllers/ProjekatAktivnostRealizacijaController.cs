@@ -323,7 +323,11 @@ namespace WebApplication1.Areas.Admin.Controllers
 
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
-                        liste = lista_final
+                        liste = lista_final,
+                        Do=DO.Value,
+                        Od=OD.Value,
+                        organizacijaId=o,
+                        projekatId=projekatId
                     };
 
                     return View(model);
@@ -417,7 +421,10 @@ namespace WebApplication1.Areas.Admin.Controllers
 
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
-                        liste = lista_final
+                        liste = lista_final,
+                        Do = DO.Value,
+                        organizacijaId = o,
+                        projekatId = projekatId
                     };
 
                     return View(model);
@@ -510,7 +517,10 @@ namespace WebApplication1.Areas.Admin.Controllers
 
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
-                        liste = lista_final
+                        liste = lista_final,
+                        Od = OD.Value,
+                        organizacijaId = o,
+                        projekatId = projekatId
                     };
 
                     return View(model);
@@ -615,7 +625,11 @@ namespace WebApplication1.Areas.Admin.Controllers
 
                 lista_realizacijaVM model = new lista_realizacijaVM
                 {
-                    liste = lista_final
+                    liste = lista_final,
+                    Do = DO.Value,
+                    Od = OD.Value,
+                    organizacijaId = o,
+                    projekatId = projekatId
                 };
 
                 ViewData["lista_projekata"] = lista;
@@ -740,7 +754,9 @@ namespace WebApplication1.Areas.Admin.Controllers
 
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
-                            liste = lista
+                            liste = lista,
+                            organizacijaId = o,
+                            projekatId = projekatId
                         };
 
                         foreach (var x in model.liste)
@@ -845,7 +861,11 @@ namespace WebApplication1.Areas.Admin.Controllers
 
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
-                            liste = lista_final
+                            liste = lista_final,
+                            Do = DO.Value,
+                            Od = OD.Value,
+                            organizacijaId = o,
+                            projekatId = projekatId
                         };
 
                         return View(model);
@@ -938,7 +958,11 @@ namespace WebApplication1.Areas.Admin.Controllers
 
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
-                            liste = lista_final
+                            liste = lista_final,
+                            Do = DO.Value,
+                            Od = OD.Value,
+                            organizacijaId = o,
+                            projekatId = projekatId
                         };
 
                         return View(model);
@@ -1033,7 +1057,11 @@ namespace WebApplication1.Areas.Admin.Controllers
 
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
-                            liste = lista_final
+                            liste = lista_final,
+                            Do = DO.Value,
+                            Od = OD.Value,
+                            organizacijaId = o,
+                            projekatId = projekatId
                         };
 
                         return View(model);
@@ -1138,7 +1166,9 @@ namespace WebApplication1.Areas.Admin.Controllers
 
                 lista_realizacijaVM model = new lista_realizacijaVM
                 {
-                    liste = lista_final
+                    liste = lista_final,
+                    organizacijaId = o,
+                    projekatId = projekatId
                 };
 
                 return View(model);
@@ -1185,7 +1215,8 @@ namespace WebApplication1.Areas.Admin.Controllers
             List<ProjekatAktivnostPlan> lista_proj_aktiv_plan = db.ProjekatAktivnostPlan.Select(x => new ProjekatAktivnostPlan
             {
                 ProjekatAktivnostPlan_ID=x.ProjekatAktivnostPlan_ID,
-                Naziv=x.Naziv
+                Naziv=x.Naziv,
+                projekatPlan=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID==x.ProjekatPlan_FK).FirstOrDefault()
             }).ToList();
             ViewData["lista_proj_aktiv_plan"] = lista_proj_aktiv_plan;
 

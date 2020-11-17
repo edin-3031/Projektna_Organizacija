@@ -120,7 +120,7 @@
 </script>*@
 <center>
     <h1>Unos Organizacije</h1>
-    <form action="/Admin/Organizacija/UnosSnimi">
+    <form action="/Admin/Organizacija/UnosSnimi" enctype="multipart/form-data" method="post">
         <input hidden="hidden" name="u" value="@id.userId"/>
         <input hidden="hidden" name="o" value="@id.organisationId"/>
         <input hidden="hidden" name="r" value="@id.roleId"/>
@@ -161,6 +161,13 @@
             <tr>
                 <td><label>Adresa</label></td>
                 <td><input name="adresa" type="text" /></td>
+            </tr>
+            <tr>
+                <td><label>Slika</label></td>
+                <td>
+                    @*<label style="border:15px solid green;" class="file-label">Browse...</label>*@
+                    <input style="border:0px;" class="form-control file-input" name="file" type="file"/>
+                </td>
             </tr>
         </table>
         <button type="submit" class="btn btn-primary">Spremi</button>

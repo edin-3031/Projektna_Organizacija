@@ -329,7 +329,8 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
             lista_DetaljiRealizacijaVM model = new lista_DetaljiRealizacijaVM
             {
-                lista = _lista
+                lista = _lista,
+                
             };
 
             return View(model);
@@ -338,6 +339,8 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult Detalji(int u, int o, int r, int projekatId = 0, DateTime? OD = null, DateTime? DO = null, int traziDugme = 0)
         {
+
+
             ////Dobavljanje liste projekata za birajuću listu
             //List<ProjekatPlan> projekti = db.ProjekatPlan.Select(x => new ProjekatPlan
             //{
@@ -512,7 +515,7 @@ namespace WebApplication1.Areas.UserReport.Controllers
                                 planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
                                 nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
                                 projekatId = x.ProjekatAktivnostPlan_FK,
-                                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                realizacijaId = x.ProjekatAktivnostRealizacija_ID,
                             });
                             lista_temp.Add(new RealizacijaVM
                             {
@@ -579,7 +582,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
-                        liste = lista_final
+                        liste = lista_final,
+                        Do=DO.Value,
+                        Od=OD.Value,
+                        organizacijaId=o,
+                        projekatId=projekatId
                     };
 
                     return View(model);
@@ -673,7 +680,10 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
-                        liste = lista_final
+                        liste = lista_final,
+                        Do=DO.Value,
+                        projekatId=projekatId,
+                        organizacijaId=o,
                     };
 
                     return View(model);
@@ -766,7 +776,10 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
-                        liste = lista_final
+                        liste = lista_final,
+                        Od=OD.Value,
+                        organizacijaId=o,
+                        projekatId=projekatId
                     };
 
                     return View(model);
@@ -960,7 +973,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
                 lista_realizacijaVM model = new lista_realizacijaVM
                 {
-                    liste = lista_final
+                    liste = lista_final,
+                    projekatId=projekatId,
+                    organizacijaId=o,
+                    Od=OD.Value,
+                    Do=DO.Value
                 };
 
                 ViewData["lista_projekata"] = lista;
@@ -1190,7 +1207,9 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
-                            liste = lista_final
+                            liste = lista_final,
+                            projekatId = projekatId,
+                            organizacijaId = o
                         };
 
                         foreach (var x in model.liste)
@@ -1295,7 +1314,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
-                            liste = lista_final
+                            liste = lista_final,
+                            projekatId = projekatId,
+                            organizacijaId = o,
+                            Od = OD.Value,
+                            Do = DO.Value
                         };
 
                         return View(model);
@@ -1388,7 +1411,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
-                            liste = lista_final
+                            liste = lista_final,
+                            projekatId = projekatId,
+                            organizacijaId = o,
+                            Od = OD.Value,
+                            Do = DO.Value
                         };
 
                         return View(model);
@@ -1483,7 +1510,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
-                            liste = lista_final
+                            liste = lista_final,
+                            projekatId = projekatId,
+                            organizacijaId = o,
+                            Od = OD.Value,
+                            Do = DO.Value
                         };
 
                         return View(model);
@@ -1667,7 +1698,8 @@ namespace WebApplication1.Areas.UserReport.Controllers
 
                 lista_realizacijaVM model = new lista_realizacijaVM
                 {
-                    liste = lista_final
+                    liste = lista_final,
+                    organizacijaId = o
                 };
 
                 return View(model);
