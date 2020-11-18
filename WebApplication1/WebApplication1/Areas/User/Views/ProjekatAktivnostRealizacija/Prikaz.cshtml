@@ -7,6 +7,12 @@
     List<ProjekatAktivnostRealizacija> lista = (List<ProjekatAktivnostRealizacija>)ViewData["lista_relizacija"];
     Layout = "~/Views/Shared/_Layout_user.cshtml";
     uor id = (uor)ViewData["id"];
+
+    byte[] pic = (byte[])ViewData["logo"];
+
+
+    var base64 = Convert.ToBase64String(pic);
+    var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
 <style>
 
@@ -110,7 +116,10 @@
         //});
 </script>*@
 <center>
-    <h1>Prikaz Realizacija</h1>
+    <div id="zaglavlje" style="width:100%">
+        <h1 style="position:relative; display:inline;">Prikaz Realizacija</h1>
+        <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
+    </div>
     <div id="dugmad">
         <div id="dodaj">
             <a class="btn btn-success" href="/User/ProjekatAktivnostRealizacija/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Unesi novu</a>

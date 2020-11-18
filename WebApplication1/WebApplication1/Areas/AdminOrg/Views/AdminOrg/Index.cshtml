@@ -6,6 +6,12 @@
 @{
     uor id = (uor)ViewData["id"];
     Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
+
+    byte[] pic = (byte[])ViewData["slika"];
+
+
+    var base64 = Convert.ToBase64String(pic);
+    var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
 
 <style>
@@ -109,42 +115,44 @@
 <center>
 
     @*<script>
-        $(document.getElementsByTagName("li")).mousedown(function () {
-            this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-            this.style.width = "100%";
-            this.style.borderRadius = "0px 25px 25px 0px";
-        });
+            $(document.getElementsByTagName("li")).mousedown(function () {
+                this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
+                this.style.width = "100%";
+                this.style.borderRadius = "0px 25px 25px 0px";
+            });
 
-        $(document.getElementsByTagName("li")).mouseleave(function () {
-            this.style.backgroundColor = "rgb(51, 51, 51)";
-            this.style.width = "100%";
-            this.style.borderRadius = "0px";
-        });
+            $(document.getElementsByTagName("li")).mouseleave(function () {
+                this.style.backgroundColor = "rgb(51, 51, 51)";
+                this.style.width = "100%";
+                this.style.borderRadius = "0px";
+            });
 
-        $(document.getElementsByTagName("a")).mousedown(function () {
-            this.style.color = "White";
-        });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-    </script>*@
+            $(document.getElementsByTagName("a")).mousedown(function () {
+                this.style.color = "White";
+            });
+            //$(document.getElementsByTagName("li")).mouseup(function () {
+            //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+            //});
+        </script>*@
 
-    <h1>Admin_Org</h1><br />
+    @*<h1>Admin_Org</h1><br />
 
-    <h1>Meni</h1>
-    <table>
+        <h1>Meni</h1>
+        <table>
 
-        <tr>
-            <td>Organizaciona Jedinica</td>
-            <td><a class="btn btn-primary" href="/AdminOrg/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Prikaz</a></td>
-            <td><a class="btn btn-success" href="/AdminOrg/OrganizacionaJedinica/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Unos</a></td>
-        </tr>
+            <tr>
+                <td>Organizaciona Jedinica</td>
+                <td><a class="btn btn-primary" href="/AdminOrg/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Prikaz</a></td>
+                <td><a class="btn btn-success" href="/AdminOrg/OrganizacionaJedinica/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Unos</a></td>
+            </tr>
 
-        <tr>
-            <td>Projekat Aktivnost Plan</td>
-            <td><a class="btn btn-primary" href="/AdminOrg/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Prikaz</a></td>
-            <td><a class="btn btn-success" href="/AdminOrg/ProjekatAktivnostPlan/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Unos</a></td>
-        </tr>
+            <tr>
+                <td>Projekat Aktivnost Plan</td>
+                <td><a class="btn btn-primary" href="/AdminOrg/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Prikaz</a></td>
+                <td><a class="btn btn-success" href="/AdminOrg/ProjekatAktivnostPlan/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Unos</a></td>
+            </tr>
 
-    </table>
+        </table>*@
+
+    <img style="height:45vw; width:81vw;" src="@imgsrc" />
 </center>

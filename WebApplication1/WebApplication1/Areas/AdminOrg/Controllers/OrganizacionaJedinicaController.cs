@@ -20,6 +20,10 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Prikaz(int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             List<OrganizacionaJedinica> lista_org_jed = new List<OrganizacionaJedinica>();
 
             List<OrganizacionaJedinica> org = db.OrganizacionaJedinica.Where(a=>a.Organizacija_FK==o).ToList();
@@ -72,7 +76,9 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Unos(int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
+            ViewData["logo"] = logo;
 
             //List<Organizacija> lista_organizacija = db.Organizacija.Select(x => new Organizacija
             //{
@@ -118,6 +124,10 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult UnosSnimi(int organizacija, int ptt, int drzava, string naziv_org_jed, string adresa, int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             OrganizacionaJedinica temp = new OrganizacionaJedinica
             {
                 Adresa = adresa,
@@ -198,6 +208,10 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Ukloni(int id, int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             OrganizacionaJedinica temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).SingleOrDefault();
 
             if (temp != null)

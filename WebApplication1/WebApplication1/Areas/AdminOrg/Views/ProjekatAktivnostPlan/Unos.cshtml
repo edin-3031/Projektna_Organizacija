@@ -7,6 +7,12 @@
     List<ProjekatPlan> lista_proj_plan = (List<ProjekatPlan>)ViewData["lista_proj_plan"];
     Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
     uor id = (uor)ViewData["id"];
+
+    byte[] pic = (byte[])ViewData["logo"];
+
+
+    var base64 = Convert.ToBase64String(pic);
+    var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
 <style>
 
@@ -91,7 +97,10 @@
     </div>
 </div>
 <center>
-    <h1>Unos Projektnih aktivnosti</h1>
+    <div id="zaglavlje" style="width:100%">
+        <h1 style="position:relative; display:inline;">Unos Projektnih aktivnosti</h1>
+        <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
+    </div>
     <form method="post" action="/AdminOrg/ProjekatAktivnostPlan/UnosSnimi">
         <input name="u" value="@id.userId" hidden="hidden" />
         <input name="o" value="@id.organisationId" hidden="hidden" />

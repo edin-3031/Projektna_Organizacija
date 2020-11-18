@@ -21,6 +21,8 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult Index(int u, int o, int r)
         {
+            ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Slika).FirstOrDefault();
+
             uor podaci = new uor
             {
                 roleId = r,

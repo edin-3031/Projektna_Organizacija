@@ -27,5 +27,7 @@ namespace WebApplication1.Models
         public string Adresa{ get; set; }
 
         public byte[] Slika { get; set; }
+
+        public byte[] Logo { get; set; }
     }
 }

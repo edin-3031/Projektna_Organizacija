@@ -90,6 +90,10 @@ namespace WebApplication1.Areas.User.Controllers
 
             ViewData["pro_aktiv_plan"] = temp_final;
 
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             uor podaci = new uor
             {
                 roleId = r,
@@ -134,6 +138,10 @@ namespace WebApplication1.Areas.User.Controllers
             }
 
             ViewData["lista_proj_plan"] = p_p_final;
+
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
 
             uor podaci = new uor
             {

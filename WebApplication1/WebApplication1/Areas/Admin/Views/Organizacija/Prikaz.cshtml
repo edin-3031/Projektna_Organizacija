@@ -1,7 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@using WebApplication1.Models;
+﻿@using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
     List<Organizacija> lista_organizacija = (List<Organizacija>)ViewData["organizacija"];
@@ -147,6 +144,7 @@
                     <td>@x.Sifra</td>
                     <td>@x.Naziv</td>
                     <td>@x.Adresa</td>
+                    <td><a href="/Admin/Organizacija/Uredi?id=@x.Organizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-primary">Uredi</a></td>
                     <td><a href="/Admin/Organizacija/Ukloni?id=@x.Organizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-danger">Ukloni</a></td>
                 </tr>
             }

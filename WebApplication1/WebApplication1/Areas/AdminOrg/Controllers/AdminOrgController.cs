@@ -31,6 +31,8 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
 
             ViewData["id"] = podaci;
 
+            ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Slika).FirstOrDefault();
+
             return View();
         }
     }

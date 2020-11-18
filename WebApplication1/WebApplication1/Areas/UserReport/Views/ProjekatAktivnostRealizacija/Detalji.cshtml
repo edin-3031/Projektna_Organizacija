@@ -17,6 +17,11 @@
     Layout = "~/Views/Shared/_Layout_user_report.cshtml";
 
     lista_realizacijaVM t = Model;
+
+    byte[] pic = (byte[])ViewData["logo"];
+
+    var base64 = Convert.ToBase64String(pic);
+    var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
 <style>
     #fb:hover {
@@ -146,7 +151,10 @@
     //});
 </script>*@
 <center>
-    <h1>Detalji Realizacija</h1>
+    <div id="zaglavlje" style="width:100%">
+        <h1 style="position:relative; display:inline;">Detalji Realizacija</h1>
+        <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
+    </div>
     <form method="post" action="/UserReport/ProjekatAktivnostRealizacija/Detalji?u=@id.userId&o=@id.organisationId&r=@id.roleId">
         <input hidden="hidden" name="u" value="@id.userId" />
         <input hidden="hidden" name="o" value="@id.organisationId" />

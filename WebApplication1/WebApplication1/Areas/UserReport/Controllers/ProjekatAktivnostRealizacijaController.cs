@@ -339,7 +339,9 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult Detalji(int u, int o, int r, int projekatId = 0, DateTime? OD = null, DateTime? DO = null, int traziDugme = 0)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
+            ViewData["logo"] = logo;
 
             ////Dobavljanje liste projekata za birajuću listu
             //List<ProjekatPlan> projekti = db.ProjekatPlan.Select(x => new ProjekatPlan
@@ -1715,6 +1717,10 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult Prikaz(int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             //List<ProjekatAktivnostRealizacija> lista = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
             //{
             //    Datum=x.Datum,
@@ -1823,6 +1829,10 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult Unos(int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             //List<ProjekatAktivnostPlan> lista_proj_aktiv_plan = db.ProjekatAktivnostPlan.Select(x => new ProjekatAktivnostPlan
             //{
             //    ProjekatAktivnostPlan_ID=x.ProjekatAktivnostPlan_ID,
@@ -1970,6 +1980,10 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult UnosSnimi(int projekatAktivnostPlan, int korisnik, DateTime datum, float kolicina, string opis, int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             ProjekatAktivnostRealizacija temp_2 = new ProjekatAktivnostRealizacija
             {
                 Datum = datum,
@@ -2088,6 +2102,10 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult Ukloni(int id, int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             ProjekatAktivnostRealizacija temp_2 = db.ProjekatAktivnostRealizacija.Where(x => x.ProjekatAktivnostRealizacija_ID == id).FirstOrDefault();
 
             if (temp_2 != null)
@@ -2202,6 +2220,10 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult Uredi(int id, int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == id).FirstOrDefault();
 
             temp.projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == temp.ProjekatAktivnostPlan_FK).FirstOrDefault();
@@ -2222,6 +2244,10 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult UrediSnimi(int realizacijaId, int aktivnostId, string projekat, float kolicina, DateTime datum, string opis, int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             ProjekatAktivnostRealizacija temp_2 = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == realizacijaId).FirstOrDefault();
 
             temp_2.Kolicina = kolicina;

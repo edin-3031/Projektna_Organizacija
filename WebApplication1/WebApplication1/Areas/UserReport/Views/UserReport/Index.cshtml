@@ -8,6 +8,12 @@
     Layout = "~/Views/Shared/_Layout_user_report.cshtml";
 
     uor id = (uor)ViewData["id"];
+
+    byte[] pic = (byte[])ViewData["slika"];
+
+
+    var base64 = Convert.ToBase64String(pic);
+    var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
 
 <style>
@@ -122,15 +128,17 @@
 </script>*@
 <center>
 
-    <h1>User_Report</h1><br />
+    <!--<h1>User_Report</h1><br />
 
     <h1>Meni</h1>
     <table>
         <tr>
             <td>Projekat Aktivnost Realizacija</td>
-            <td><a class="btn btn-primary" href="/UserReport/ProjekatAktivnostRealizacija/Prikaz?u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Prikaz</a></td>
-            @*<td><a class="btn btn-success" href="/UserReport/ProjekatAktivnostRealizacija/Unos">Unos</a></td>*@
-            <td><a class="btn btn-warning" href="/UserReport/ProjekatAktivnostRealizacija/Detalji?u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Detalji</a></td>
+            <td><a class="btn btn-primary" href="/UserReport/ProjekatAktivnostRealizacija/Prikaz?u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Prikaz</a></td>-->
+    @*<td><a class="btn btn-success" href="/UserReport/ProjekatAktivnostRealizacija/Unos">Unos</a></td>*@
+    <!--<td><a class="btn btn-warning" href="/UserReport/ProjekatAktivnostRealizacija/Detalji?u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Detalji</a></td>
         </tr>
-    </table>
+    </table>-->
+
+    <img style="height:45vw; width:81vw;" src="@imgsrc" />
 </center>

@@ -20,6 +20,10 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Prikaz(int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
 
             List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
@@ -103,6 +107,10 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Unos(int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             //List<ProjekatPlan> lista_proj_plan = db.ProjekatPlan.Select(x => new ProjekatPlan
             //{
             //    Naziv=x.Naziv,
@@ -146,6 +154,10 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult UnosSnimi(int projekatPlan, int sifra, string naziv, DateTime Od, DateTime Do, string jedinicaMjere, float kolicina, int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             ProjekatAktivnostPlan temp = new ProjekatAktivnostPlan
             {
                 DatumDo=Do,
@@ -244,6 +256,10 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Ukloni(int id, int u, int o, int r)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             ProjekatAktivnostPlan temp = db.ProjekatAktivnostPlan.Where(x => x.ProjekatAktivnostPlan_ID == id).FirstOrDefault();
 
             if (temp != null)

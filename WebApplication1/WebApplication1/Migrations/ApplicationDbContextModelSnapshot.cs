@@ -107,6 +107,9 @@ namespace WebApplication1.Migrations
                     b.Property<int>("Drzava_FK")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("Logo")
+                        .HasColumnType("varbinary(4000)");
+
                     b.Property<string>("Naziv")
                         .HasColumnType("text");
 
