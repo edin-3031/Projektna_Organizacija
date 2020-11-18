@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models; 
+@using WebApplication1.Models.VM; 
+@{
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+
+    uor id = (uor)ViewData["id"];
+    Drzava drzava = (Drzava)ViewData["uredi_drzava"];
+}
+<center>
+    <h1>Uredi PTT</h1>
+    <form method="post" action="/Admin/Drzava/UrediSnimi">
+
+        <input hidden="hidden" name="u" value="@id.userId" />
+        <input hidden="hidden" name="o" value ="@id.organisationId" />
+        <input hidden="hidden" name="r" value="@id.roleId" />
+        
+        <input hidden="hidden" name="id_drzava" value="@drzava.Drazava_ID" />
+        <table>
+            <tr>
+                <td><label>Naziv</label></td>
+                <td><input type="text" name="naziv" value="@drzava.Naziv" /></td>
+            </tr>
+            <tr>
+                <td><label>Šifra</label></td>
+                <td><input type="text" name="sifra" value="@drzava.Sifra" /></td>
+            </tr>
+        </table>
+        <button type="submit" class="btn btn-primary">Snimi</button>
+    </form>
+</center>

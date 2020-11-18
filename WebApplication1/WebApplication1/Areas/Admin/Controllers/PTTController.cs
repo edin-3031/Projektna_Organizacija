@@ -12,16 +12,68 @@ namespace WebApplication1.Areas.Admin.Controllers
     public class PTTController : Controller
     {
         private readonly ApplicationDbContext db;
+
+        public PTTController(ApplicationDbContext _db)
+        {
+            db = _db;
+        }
+
         [Area("Admin")]
         public IActionResult Index()
         {
             return View();
         }
 
-        public PTTController(ApplicationDbContext _db)
+        [Area("Admin")]
+        public IActionResult UrediSnimi(int id_ptt, int u, int o, int r, string naziv, int sifra)
         {
-            db = _db;
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+            PTT t = db.PTT.Where(a => a.PTT_ID == id_ptt).FirstOrDefault();
+
+            t.Naziv = naziv;
+            t.Sifra = sifra;
+
+            db.SaveChanges();
+
+            List<PTT> lista_ptt = db.PTT.Select(x => new PTT
+            {
+                Naziv = x.Naziv,
+                PTT_ID = x.PTT_ID,
+                Sifra = x.Sifra
+            }).ToList();
+
+            ViewData["ptt"] = lista_ptt;
+
+            return View("Prikaz");
         }
+
+        [Area("Admin")]
+        public IActionResult Uredi(int id, int u, int o, int r)
+        {
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+            PTT tmp = db.PTT.Where(a => a.PTT_ID == id).FirstOrDefault();
+
+            ViewData["uredi_ptt"] = tmp;
+
+            return View();
+        }
+
         [Area("Admin")]
         public IActionResult Prikaz(int u, int o, int r)
         {

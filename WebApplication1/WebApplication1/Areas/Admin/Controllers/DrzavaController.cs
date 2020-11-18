@@ -22,6 +22,50 @@ namespace WebApplication1.Areas.Admin.Controllers
         public uor podaci;
 
         [Area("Admin")]
+        public IActionResult UrediSnimi(int id_drzava, int u, int o, int r, string naziv, int sifra)
+        {
+            uor model = new uor
+            {
+                organisationId = o,
+                roleId = r,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+            Drzava t = db.Drzava.Where(a => a.Drazava_ID == id_drzava).FirstOrDefault();
+
+            t.Naziv = naziv;
+            t.Sifra = sifra;
+
+            db.SaveChanges();
+
+            List<Drzava> lista_drzava = db.Drzava.ToList();
+
+            ViewData["drzave"] = lista_drzava;
+
+            return View("Prikaz",model);
+        }
+
+        [Area("Admin")]
+        public IActionResult Uredi(int id, int u, int o, int r)
+        {
+            podaci = new uor();
+
+            podaci.userId = u;
+            podaci.organisationId = o;
+            podaci.roleId = r;
+
+            ViewData["id"] = podaci;
+
+            Drzava tmp = db.Drzava.Where(a => a.Drazava_ID == id).FirstOrDefault();
+
+            ViewData["uredi_drzava"] = tmp;
+
+            return View();
+        }
+
+        [Area("Admin")]
         public IActionResult Prikaz(int u, int o, int r)
         {
             podaci = new uor();

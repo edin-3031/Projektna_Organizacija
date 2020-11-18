@@ -148,7 +148,10 @@
                     <td>@x.drzava.Naziv</td>
                     <td>@x.Naziv</td>
                     <td>@x.Adresa</td>
-                    <td><a href="/Admin/OrganizacionaJedinica/Ukloni?id=@x.OrganizacionaJedinica_ID&?u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-danger">Ukloni</a></td>
+                    <td>
+                        <a href="/Admin/OrganizacionaJedinica/Uredi?id=@x.OrganizacionaJedinica_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-primary">Uredi</a>
+                        <a href="/Admin/OrganizacionaJedinica/Ukloni?id=@x.OrganizacionaJedinica_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-danger">Ukloni</a>
+                    </td>
                 </tr>
             }
         </tbody>

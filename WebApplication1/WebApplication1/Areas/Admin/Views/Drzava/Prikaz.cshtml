@@ -126,6 +126,7 @@
         <th>ID</th>
         <th>Šifra</th>
         <th>Naziv</th>
+        <th>Akcija</th>
         </thead>
         <tbody>
             @foreach (var x in lista)
@@ -134,7 +135,8 @@
                     <td>@x.Drazava_ID</td>
                     <td>@x.Sifra</td>
                     <td>@x.Naziv</td>
-                    <td><a class="btn btn-danger" href="/Admin/Drzava/Ukloni?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Ukloni</a></td>
+                    <td><a class="btn btn-primary" href="/Admin/Drzava/Uredi?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Uredi</a>
+                    <a class="btn btn-danger" href="/Admin/Drzava/Ukloni?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Ukloni</a></td>
                 </tr>
             }
         </tbody>

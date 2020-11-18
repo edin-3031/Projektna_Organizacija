@@ -162,6 +162,66 @@ namespace WebApplication1.Areas.Admin.Controllers
 
             return View("Prikaz");
         }
+
+        [Area("Admin")]
+        public IActionResult Uredi(int id, int u, int o, int r)
+        {
+            Korisnici_OrganizacionaJedinica temp = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_OrganizacionaJedinica_ID == id).FirstOrDefault();
+            temp.korisnici = db.Korisnici.Where(a => a.Korisnici_ID == temp.Korisnici_FK).FirstOrDefault();
+            temp.organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == temp.OrganizacionaJedinica_FK).FirstOrDefault();
+            ViewData["kor_oj"] = temp;
+
+            List<Korisnici> k = db.Korisnici.ToList();
+            ViewData["korisnici"] = k;
+
+            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.ToList();
+            ViewData["OrganizacionaJedinice"] = org_jed;
+
+            uor podaci = new uor
+            {
+                organisationId = o,
+                roleId = r,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+            return View();
+        }
+
+        [Area("Admin")]
+        public IActionResult UrediSnimi(int k_o_id, int u, int o, int r, int korisnik, int org_jed)
+        {
+            Korisnici_OrganizacionaJedinica t = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_OrganizacionaJedinica_ID == k_o_id).FirstOrDefault();
+
+            t.Korisnici_FK = korisnik;
+            t.OrganizacionaJedinica_FK = org_jed;
+
+            db.SaveChanges();
+
+            List<Korisnici_OrganizacionaJedinica> lista_kor_org = db.Korisnici_OrganizacionaJedinica.Select(x => new Korisnici_OrganizacionaJedinica
+            {
+                korisnici = db.Korisnici.Where(c => c.Korisnici_ID == x.Korisnici_FK).SingleOrDefault(),
+                Korisnici_FK = x.Korisnici_FK,
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(v => v.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).SingleOrDefault(),
+                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID
+            }).ToList();
+
+            ViewData["kor_org_jed"] = lista_kor_org;
+
+            uor podaci = new uor
+            {
+                organisationId = o,
+                roleId = r,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+            return View("Prikaz");
+        }
+
         [Area("Admin")]
         public IActionResult Ukloni(int id, int u, int o, int r)
         {

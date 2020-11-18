@@ -41,6 +41,8 @@ namespace WebApplication1.Areas.Admin.Controllers
             db = _db;
         }
 
+
+
         [Area("Admin")]
         public IActionResult Excel()
         {
@@ -83,15 +85,15 @@ namespace WebApplication1.Areas.Admin.Controllers
         {
             List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
             {
-                Adresa=x.Adresa,
-                drzava=db.Drzava.Where(c=>c.Drazava_ID==x.Drzava_FK).SingleOrDefault(),
-                Drzava_FK=x.Drzava_FK,
-                Naziv=x.Naziv,
-                organizacija=db.Organizacija.Where(v=>v.Organizacija_ID==x.Organizacija_FK).SingleOrDefault(),
-                Organizacija_FK=x.Organizacija_FK,
-                OrganizacionaJedinica_ID=x.OrganizacionaJedinica_ID,
-                ptt=db.PTT.Where(b=>b.PTT_ID==x.PTT_FK).SingleOrDefault(),
-                PTT_FK=x.PTT_FK
+                Adresa = x.Adresa,
+                drzava = db.Drzava.Where(c => c.Drazava_ID == x.Drzava_FK).SingleOrDefault(),
+                Drzava_FK = x.Drzava_FK,
+                Naziv = x.Naziv,
+                organizacija = db.Organizacija.Where(v => v.Organizacija_ID == x.Organizacija_FK).SingleOrDefault(),
+                Organizacija_FK = x.Organizacija_FK,
+                OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
+                ptt = db.PTT.Where(b => b.PTT_ID == x.PTT_FK).SingleOrDefault(),
+                PTT_FK = x.PTT_FK
             }).ToList();
 
             ViewData["org_jed"] = lista_org_jed;
@@ -112,26 +114,26 @@ namespace WebApplication1.Areas.Admin.Controllers
         {
             List<Organizacija> lista_organizacija = db.Organizacija.Select(x => new Organizacija
             {
-                Adresa=x.Adresa,
-                Naziv=x.Naziv,
-                Organizacija_ID=x.Organizacija_ID,
-                Sifra=x.Sifra
+                Adresa = x.Adresa,
+                Naziv = x.Naziv,
+                Organizacija_ID = x.Organizacija_ID,
+                Sifra = x.Sifra
             }).ToList();
 
 
             List<PTT> lista_ptt = db.PTT.Select(x => new PTT
             {
-                Naziv=x.Naziv,
-                Sifra=x.Sifra,
-                PTT_ID=x.PTT_ID
+                Naziv = x.Naziv,
+                Sifra = x.Sifra,
+                PTT_ID = x.PTT_ID
             }).ToList();
 
 
             List<Drzava> lista_drzava = db.Drzava.Select(x => new Drzava
-            { 
-              Drazava_ID=x.Drazava_ID,
-              Sifra=x.Sifra,
-              Naziv=x.Naziv
+            {
+                Drazava_ID = x.Drazava_ID,
+                Sifra = x.Sifra,
+                Naziv = x.Naziv
             }).ToList();
 
             ViewData["organizacije"] = lista_organizacija;
@@ -200,6 +202,79 @@ namespace WebApplication1.Areas.Admin.Controllers
                 db.OrganizacionaJedinica.Remove(temp);
                 db.SaveChanges();
             }
+
+            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
+            {
+                Adresa = x.Adresa,
+                drzava = db.Drzava.Where(c => c.Drazava_ID == x.Drzava_FK).SingleOrDefault(),
+                Drzava_FK = x.Drzava_FK,
+                Naziv = x.Naziv,
+                organizacija = db.Organizacija.Where(v => v.Organizacija_ID == x.Organizacija_FK).SingleOrDefault(),
+                Organizacija_FK = x.Organizacija_FK,
+                OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
+                ptt = db.PTT.Where(b => b.PTT_ID == x.PTT_FK).SingleOrDefault(),
+                PTT_FK = x.PTT_FK
+            }).ToList();
+
+            ViewData["org_jed"] = lista_org_jed;
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+            return View("Prikaz");
+        }
+
+        [Area("Admin")]
+        public IActionResult Uredi(int id, int u, int o, int r)
+        {
+            OrganizacionaJedinica temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).SingleOrDefault();
+
+            temp.drzava = db.Drzava.Where(a => a.Drazava_ID == temp.Drzava_FK).FirstOrDefault();
+            temp.organizacija = db.Organizacija.Where(a => a.Organizacija_ID == temp.Organizacija_FK).FirstOrDefault();
+            temp.ptt = db.PTT.Where(a => a.PTT_ID == temp.PTT_FK).FirstOrDefault();
+
+            ViewData["org_jed"] = temp;
+
+            List<PTT> ptt_lista = db.PTT.ToList();
+            ViewData["ptt"] = ptt_lista;
+
+            List<Drzava> drzava_lista = db.Drzava.ToList();
+            ViewData["drzava"] = drzava_lista;
+
+            List<Organizacija> organizacija_lista = db.Organizacija.ToList();
+            ViewData["organizacija"] = organizacija_lista;
+
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+            return View();
+        }
+
+        [Area("Admin")]
+        public IActionResult UrediSnimi(int id_org_jed, int u, int o, int r, string naziv, int organizacija, string adresa, int drzava, int ptt)
+        {
+            OrganizacionaJedinica t = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID== id_org_jed).FirstOrDefault();
+
+            t.Naziv = naziv;
+            t.Adresa = adresa;
+            t.Drzava_FK = drzava;
+            t.Organizacija_FK = organizacija;
+            t.PTT_FK = ptt;
+
+            db.SaveChanges();
 
             List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
             {
