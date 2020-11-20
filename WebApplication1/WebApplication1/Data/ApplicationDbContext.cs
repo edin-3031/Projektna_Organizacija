@@ -30,7 +30,5 @@ namespace WebApplication1.Data
         public DbSet<ProjekatAktivnostPlan> ProjekatAktivnostPlan { get; set; }
         public DbSet<ProjekatAktivnostRealizacija> ProjekatAktivnostRealizacija { get; set; }
         public DbSet<Resursi> Resursi { get; set; }
-
-
     }
 }

@@ -1,0 +1,198 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using WebApplication1.Models;
+@using WebApplication1.Models.VM;
+@{
+    Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
+
+    uor id = (uor)ViewData["id"];
+    ProjekatAktivnostPlan pap = (ProjekatAktivnostPlan)ViewData["projekatAktivnostPlan"];
+    List<ProjekatPlan> lista_pp = (List<ProjekatPlan>)ViewData["lista_proj_plan"];
+
+    byte[] pic = (byte[])ViewData["logo"];
+    var base64 = Convert.ToBase64String(pic);
+    var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+}
+<style>
+
+
+    li, ul {
+        list-style: none;
+        margin-top: 5%;
+    }
+
+    ul {
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+    }
+
+    #sifarnik, #transakcije, #izvjestaji, #admin {
+        font-weight: bold;
+    }
+
+    a {
+        color: white;
+        text-decoration-line: none;
+    }
+
+    #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
+        display: inline-block;
+        margin: 2%;
+    }
+
+    #print_preview, #print_excel, #print_pdf {
+        color: white;
+    }
+
+    #dugmad {
+        margin-bottom: 2%;
+        margin-top: 2%;
+    }
+
+    a:hover {
+        color: white;
+        text-decoration: none;
+        text-decoration-line: none;
+    }
+
+    #kutijaZaMeni {
+        position: fixed;
+        height: 100%;
+        width: 17%;
+        /*            background-color:green;*/
+        display: block;
+        margin-left: -17.8%;
+    }
+
+    #menu {
+        position: fixed;
+        /*height: 65%;*/
+        width: 15%;
+        margin-left: 0px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        top: 20%;
+        font-size: 1vw;
+        border-radius: 0px 25px 25px 0px;
+    }
+    option{
+        text-align:center;
+    }
+</style>
+<div id="kutijaZaMeni">
+    <div id="menu">
+        <br />
+        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/AdminOrg/AdminOrg/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
+        <ul>
+            <li id="sifarnik">Opšti šifarnik</li>
+            <ul id="o_s">
+                <li><a href="/AdminOrg/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizaciona jedinica</a></li>
+                <li><a href="/AdminOrg/KorisnikOrg/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnik-Organizaciona jedinica</a></li>
+            </ul>
+            <li id="transakcije">Transakcije</li>
+            <ul id="tra">
+                <li><a href="/AdminOrg/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
+                <li><a href="/AdminOrg/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
+            </ul>
+            <li id="admin">Admin</li>
+            <ul id="adm">
+                <li><a href="/AdminOrg/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
+            </ul>
+        </ul>
+    </div>
+</div>
+<center>
+    <div id="zaglavlje" style="width:100%">
+        <h1 style="position:relative; display:inline;">Uređivanje Projektne Aktivnosti</h1>
+        <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
+    </div>
+    <form method="post" action="/AdminOrg/ProjekatAktivnostPlan/UrediSnimi">
+        <input hidden="hidden" name="u" value="@id.userId" />
+        <input hidden="hidden" name="o" value="@id.organisationId" />
+        <input hidden="hidden" name="r" value="@id.roleId" />
+        <input hidden="hidden" name="id" value="@pap.ProjekatAktivnostPlan_ID" />
+
+        <table>
+            <tr>
+                <td>
+                    <label>
+                        Naziv
+                    </label>
+                </td>
+                <td>
+                    <input name="naziv" value="@pap.Naziv" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Šifra
+                    </label>
+                </td>
+                <td>
+                    <input name="sifra" value="@pap.Sifra" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Projekat
+                    </label>
+                </td>
+                <td>
+                    <select name="projekatPlan_id">
+                        <option value="@pap.ProjekatPlan_FK">@pap.projekatPlan.Naziv</option>
+                        @foreach (var x in lista_pp)
+                        {
+                            <option value="@x.ProjekatPlan_ID">@x.Naziv (@x.organizacionaJedinica.Naziv)</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Količina
+                    </label>
+                </td>
+                <td>
+                    <input name="kolicina" value="@pap.Kolicina" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Jedinica mjere
+                    </label>
+                </td>
+                <td>
+                    <input name="jedinicaMjere" value="@pap.JedinicaMjere" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Datum od
+                    </label>
+                </td>
+                <td>
+                    <input name="OD" type="datetime" value="@pap.DatumOd" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Datum do
+                    </label>
+                </td>
+                <td>
+                    <input name="DO" type="datetime" value="@pap.DatumDo" />
+                </td>
+            </tr>
+        </table>
+
+        <button type="submit" class="btn btn-primary">Snimi</button>
+    </form>
+</center>

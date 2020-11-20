@@ -6,11 +6,10 @@
 @{
     List<ProjekatAktivnostPlan> lista = (List<ProjekatAktivnostPlan>)ViewData["pro_aktiv_plan"];
 
-    uor id = (uor)ViewData["id"]; Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
+    uor id = (uor)ViewData["id"]; 
+    Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
 
     byte[] pic = (byte[])ViewData["logo"];
-
-
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
@@ -85,15 +84,18 @@
         <ul>
             <li id="sifarnik">Opšti šifarnik</li>
             <ul id="o_s">
-
                 <li><a href="/AdminOrg/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizaciona jedinica</a></li>
+                <li><a href="/AdminOrg/KorisnikOrg/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnik-Organizaciona jedinica</a></li>
             </ul>
             <li id="transakcije">Transakcije</li>
             <ul id="tra">
-
+                <li><a href="/AdminOrg/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
                 <li><a href="/AdminOrg/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
             </ul>
-
+            <li id="admin">Admin</li>
+            <ul id="adm">
+                <li><a href="/AdminOrg/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
+            </ul>
         </ul>
     </div>
 </div>
@@ -134,7 +136,8 @@
                     <td>@(x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".")</td>
                     <td>@x.JedinicaMjere</td>
                     <td>@x.Kolicina</td>
-                    <td><a class="btn btn-danger" href="/AdminOrg/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a></td>
+                    <td><a class="btn btn-primary" href="/AdminOrg/ProjekatAktivnostPlan/Uredi?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
+                    <a class="btn btn-danger" href="/AdminOrg/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a></td>
                 </tr>
             }
         </tbody>

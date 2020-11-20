@@ -10,8 +10,6 @@
     Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
 
     byte[] pic = (byte[])ViewData["logo"];
-
-
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
@@ -86,15 +84,18 @@
         <ul>
             <li id="sifarnik">Opšti šifarnik</li>
             <ul id="o_s">
-
                 <li><a href="/AdminOrg/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizaciona jedinica</a></li>
+                <li><a href="/AdminOrg/KorisnikOrg/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnik-Organizaciona jedinica</a></li>
             </ul>
             <li id="transakcije">Transakcije</li>
             <ul id="tra">
-
+                <li><a href="/AdminOrg/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
                 <li><a href="/AdminOrg/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
             </ul>
-
+            <li id="admin">Admin</li>
+            <ul id="adm">
+                <li><a href="/AdminOrg/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
+            </ul>
         </ul>
     </div>
 </div>
@@ -131,7 +132,8 @@
                     <td>@x.drzava.Naziv</td>
                     <td>@x.Naziv</td>
                     <td>@x.Adresa</td>
-                    <td><a href="/AdminOrg/OrganizacionaJedinica/Ukloni?id=@x.OrganizacionaJedinica_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-danger">Ukloni</a></td>
+                    <td><a href="/AdminOrg/OrganizacionaJedinica/Uredi?id=@x.OrganizacionaJedinica_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-primary">Uredi</a>
+                    <a href="/AdminOrg/OrganizacionaJedinica/Ukloni?id=@x.OrganizacionaJedinica_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-danger">Ukloni</a></td>
                 </tr>
             }
         </tbody>

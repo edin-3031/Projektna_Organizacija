@@ -36,14 +36,14 @@
 
     #progressBar {
         border: 1px solid black;
-        background-color: dimgray;
+        background-color: rgb(255, 62, 62);
         height: 25px;
         width: 100%;
     }
 
     #vrijednost {
         position: relative;
-        background-color: dodgerblue;
+        background-color: rgb(5, 230, 0);
         height: 100%;
         display: block;
     }
@@ -168,7 +168,7 @@
                         <option>---Odaberi---</option>
                         @foreach (var x in projekti)
                         {
-                            <option value="@x.ProjekatPlan_ID">@x.Naziv</option>
+                            <option value="@x.ProjekatPlan_ID">@x.Naziv (@x.organizacionaJedinica.Naziv)</option>
                         }
                     </select>
                 </td>
@@ -213,6 +213,7 @@
                             <tr>
                                 <hr />
                                 <td style="font-weight:bold;">Projekat</td>
+                                <td style="font-weight:bold;">Organizaciona jedinica</td>
                                 <td style="font-weight:bold;">Planirano</td>
                                 <td style="font-weight:bold;">Ostvareno</td>
                                 <td style="font-weight:bold;">Procentualno</td>
@@ -221,6 +222,7 @@
                             <tr>
                                 <hr />
                                 <td>@suma.naziv_projekta</td>
+                                <td>@suma.organizacionaJedinica</td>
                                 <td>@suma.planirano</td>
                                 <td>@suma.ostvareno</td>
                                 <td>@(Math.Round(suma.procenti) + "%")</td>

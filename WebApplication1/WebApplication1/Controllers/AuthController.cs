@@ -62,32 +62,31 @@ namespace WebApplication1.Controllers
 
                         korisnik_organizacija k_o;
 
-                        //if (result.Count() == 0)
-                        //{
                         k_o = new korisnik_organizacija
                         {
                             korisnik_id = id,
                             organizacaija_id = result[0].organizacaija_id
                         };
-                        //}
-                        //else
-                        //{
-                        //    k_o = new korisnik_organizacija
-                        //    {
-                        //        korisnik_id = id,
-                        //        organizacaija_id = 0
-                        //    };
-                        //}
+
                         ViewData["poruka"] = "";
 
-                        if (x.Uloge_ID == 1)
-                            return Redirect("/Admin/Admin/Index?u="+k_o.korisnik_id+"&o="+k_o.organizacaija_id+"&r="+ x.Uloge_ID);
-                        else if (x.Uloge_ID == 2)
-                            return Redirect("/AdminOrg/AdminOrg/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
-                        else if (x.Uloge_ID == 3)
-                            return Redirect("/User/User/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
-                        else if (x.Uloge_ID == 7)
-                            return Redirect("/UserReport/UserReport/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
+                        switch (x.Uloge_ID)
+                        {
+                            case 1: return Redirect("/SuperAdmin/SuperAdmin/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);break;
+                            case 2: return Redirect("/AdminOrg/AdminOrg/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID); break;
+                            case 3: return Redirect("/User/User/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID); break;
+                            case 7: return Redirect("/UserReport/UserReport/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID); break;
+                            case 9: return Redirect("/AdminOrgJed/AdminOrgJed/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID); break;
+                        }
+
+                        //if (x.Uloge_ID == 1)
+                        //    return Redirect("/Admin/Admin/Index?u="+k_o.korisnik_id+"&o="+k_o.organizacaija_id+"&r="+ x.Uloge_ID);
+                        //else if (x.Uloge_ID == 2)
+                        //    return Redirect("/AdminOrg/AdminOrg/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
+                        //else if (x.Uloge_ID == 3)
+                        //    return Redirect("/User/User/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
+                        //else if (x.Uloge_ID == 7)
+                        //    return Redirect("/UserReport/UserReport/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
                     }
                 }
             }

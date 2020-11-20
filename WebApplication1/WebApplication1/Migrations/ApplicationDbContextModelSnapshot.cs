@@ -271,9 +271,14 @@ namespace WebApplication1.Migrations
                     b.Property<int>("Sifra")
                         .HasColumnType("int");
 
+                    b.Property<int>("Status_FK")
+                        .HasColumnType("int");
+
                     b.HasKey("ProjekatPlan_ID");
 
                     b.HasIndex("OrganizacionaJedinica_FK");
+
+                    b.HasIndex("Status_FK");
 
                     b.ToTable("ProjekatPlan");
                 });
@@ -290,6 +295,23 @@ namespace WebApplication1.Migrations
                     b.HasKey("Resursi_ID");
 
                     b.ToTable("Resursi");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Status", b =>
+                {
+                    b.Property<int>("StatusID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Naziv")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Sifra")
+                        .HasColumnType("int");
+
+                    b.HasKey("StatusID");
+
+                    b.ToTable("Status");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Uloge", b =>
@@ -395,6 +417,12 @@ namespace WebApplication1.Migrations
                     b.HasOne("WebApplication1.Models.OrganizacionaJedinica", "organizacionaJedinica")
                         .WithMany()
                         .HasForeignKey("OrganizacionaJedinica_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication1.Models.Status", "status")
+                        .WithMany()
+                        .HasForeignKey("Status_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

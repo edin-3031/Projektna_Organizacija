@@ -47,19 +47,6 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                 }
             }
 
-            //List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
-            //{
-            //    Adresa=x.Adresa,
-            //    drzava=db.Drzava.Where(c=>c.Drazava_ID==x.Drzava_FK).SingleOrDefault(),
-            //    Drzava_FK=x.Drzava_FK,
-            //    Naziv=x.Naziv,
-            //    organizacija=db.Organizacija.Where(v=>v.Organizacija_ID==x.Organizacija_FK).SingleOrDefault(),
-            //    Organizacija_FK=x.Organizacija_FK,
-            //    OrganizacionaJedinica_ID=x.OrganizacionaJedinica_ID,
-            //    ptt=db.PTT.Where(b=>b.PTT_ID==x.PTT_FK).SingleOrDefault(),
-            //    PTT_FK=x.PTT_FK
-            //}).ToList();
-
             ViewData["org_jed"] = org;
 
             uor podaci = new uor
@@ -258,6 +245,91 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             }
 
             ViewData["org_jed"] = org;
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+            return View("Prikaz");
+        }
+
+        [Area("AdminOrg")]
+        public IActionResult Uredi(int id, int u, int o, int r)
+        {
+            OrganizacionaJedinica o_j = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).FirstOrDefault();
+            o_j.organizacija = db.Organizacija.Where(a => a.Organizacija_ID == o_j.Organizacija_FK).FirstOrDefault();
+            o_j.drzava = db.Drzava.Where(a => a.Drazava_ID== o_j.Drzava_FK).FirstOrDefault();
+            o_j.ptt= db.PTT.Where(a => a.PTT_ID == o_j.PTT_FK).FirstOrDefault();
+            ViewData["org_jed"] = o_j;
+
+            List<Drzava> drzave = db.Drzava.ToList();
+            ViewData["drzave"] = drzave;
+
+            List<PTT> ptt = db.PTT.ToList();
+            ViewData["ptt"] = ptt;
+
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+            return View();
+        }
+
+        [Area("AdminOrg")]
+        public IActionResult UrediSnimi(int id, int u, int o, int r, string adresa, int drzava, string naziv, int organizacija, int ptt)
+        {
+            OrganizacionaJedinica o_j = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).FirstOrDefault();
+
+            o_j.Adresa = adresa;
+            o_j.Drzava_FK = drzava;
+            o_j.Naziv = naziv;
+            o_j.Organizacija_FK = organizacija;
+            o_j.PTT_FK = ptt;
+
+            db.SaveChanges();
+
+            List<OrganizacionaJedinica> lista_org_jed = new List<OrganizacionaJedinica>();
+
+            List<OrganizacionaJedinica> org = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
+
+            foreach (var x in org)
+            {
+                if (x.Organizacija_FK == o)
+                {
+                    lista_org_jed.Add(new OrganizacionaJedinica
+                    {
+                        Adresa = x.Adresa,
+                        drzava = db.Drzava.Where(a => a.Drazava_ID == x.Drzava_FK).FirstOrDefault(),
+                        Drzava_FK = x.Drzava_FK,
+                        Naziv = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).Select(p => p.Naziv).FirstOrDefault(),
+                        organizacija = db.Organizacija.Where(a => a.Organizacija_ID == o).FirstOrDefault(),
+                        Organizacija_FK = x.Organizacija_FK,
+                        OrganizacionaJedinica_ID = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).Select(p => p.OrganizacionaJedinica_ID).FirstOrDefault(),
+                        ptt = db.PTT.Where(a => a.PTT_ID == x.PTT_FK).FirstOrDefault(),
+                        PTT_FK = db.PTT.Where(a => a.PTT_ID == x.PTT_FK).Select(p => p.PTT_ID).FirstOrDefault()
+                    });
+                }
+            }
+
+            ViewData["org_jed"] = org;
+
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
 
             uor podaci = new uor
             {

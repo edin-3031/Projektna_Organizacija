@@ -12,5 +12,7 @@ namespace WebApplication1.Models
         public float planirano { get; set; }
         public float ostvareno { get; set; }
         public float procenti { get; set; }
+        public int organizacionaJedinicaId { get; set; }
+        public string organizacionaJedinica { get; set; }
     }
 }

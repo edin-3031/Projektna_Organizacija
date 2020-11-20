@@ -17,6 +17,7 @@ namespace WebApplication1.Models.VM
         public int idUser{ get; set; }
         public string korisnik{ get; set; }
         public string opis{ get; set; }
+        public string organizacionaJedinica { get; set; }
     }
 
     public class lista_DetaljiRealizacijaVM
