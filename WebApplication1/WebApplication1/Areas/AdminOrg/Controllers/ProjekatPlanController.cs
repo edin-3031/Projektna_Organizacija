@@ -76,22 +76,20 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             {
                 var worksheet = workbook.Worksheets.Add("Projekat_Plan");
                 var currentRow = 1;
-                worksheet.Cell(currentRow, 1).Value = "Projekat Plan ID";
+                worksheet.Cell(currentRow, 1).Value = "Šifra";
                 worksheet.Cell(currentRow, 2).Value = "Naziv";
-                worksheet.Cell(currentRow, 3).Value = "Šifra";
+                worksheet.Cell(currentRow, 3).Value = "Organizaciona Jedinica";
                 worksheet.Cell(currentRow, 4).Value = "Datum od";
                 worksheet.Cell(currentRow, 5).Value = "Datum do";
-                worksheet.Cell(currentRow, 6).Value = "Organizaciona Jedinica";
 
                 foreach (var x in pp_final)
                 {
                     currentRow++;
-                    worksheet.Cell(currentRow, 1).Value = x.ProjekatPlan_ID;
+                    worksheet.Cell(currentRow, 1).Value = x.Sifra;
                     worksheet.Cell(currentRow, 2).Value = x.Naziv;
-                    worksheet.Cell(currentRow, 3).Value = x.Sifra;
+                    worksheet.Cell(currentRow, 3).Value = x.organizacionaJedinica.Naziv;
                     worksheet.Cell(currentRow, 4).Value = x.DatumOd;
                     worksheet.Cell(currentRow, 5).Value = x.DatumDo;
-                    worksheet.Cell(currentRow, 6).Value = x.organizacionaJedinica.Naziv;
                 }
 
                 using (var stream = new MemoryStream())

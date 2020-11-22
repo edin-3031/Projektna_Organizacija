@@ -4,7 +4,7 @@
 @using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
-    List<Korisnici_OrganizacionaJedinica> lista = (List<Korisnici_OrganizacionaJedinica>)ViewData["kor_org_jed"];
+    List<adminOrg_kor_orgJed_VM> lista = (List<adminOrg_kor_orgJed_VM>)ViewData["kor_org_jed"];
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
     uor id = (uor)ViewData["id"];
 }
@@ -129,18 +129,18 @@
         <thead>
         <th>ID</th>
         <th>Korisnik</th>
-        @*<th>Organizaciona jedinica</th>*@
+        <th>Organizaciona jedinica</th>
         <th>Akcija</th>
         </thead>
         @foreach (var x in lista)
         {
             <tr>
-                <td>@x.Korisnici_OrganizacionaJedinica_ID</td>
-                <td>@(x.korisnici.Ime + " " + x.korisnici.Prezime)</td>
-                @*<td>@x.organizacionaJedinica.Naziv</td>*@
+                <td>@x.K_O_ID</td>
+                <td>@x.korisnik</td>
+                <td>@x.o_j</td>
                 <td>
-                    <a class="btn btn-primary" href="/SuperAdmin/KorisnikOrg/Uredi?id=@x.Korisnici_OrganizacionaJedinica_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
-                    <a class="btn btn-danger" href="/SuperAdmin/KorisnikOrg/Ukloni?id=@x.Korisnici_OrganizacionaJedinica_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a>
+                    <a class="btn btn-primary" href="/SuperAdmin/KorisnikOrg/Uredi?id=@x.K_O_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
+                    <a class="btn btn-danger" href="/SuperAdmin/KorisnikOrg/Ukloni?id=@x.K_O_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a>
                 </td>
             </tr>
         }

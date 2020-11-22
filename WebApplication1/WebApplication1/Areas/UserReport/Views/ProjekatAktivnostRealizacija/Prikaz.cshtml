@@ -4,7 +4,7 @@
 @using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
-    List<ProjekatAktivnostRealizacija> lista = (List<ProjekatAktivnostRealizacija>)ViewData["lista_relizacija"];
+    List<par_final_VM> lista = (List<par_final_VM>)ViewData["lista_relizacija"];
 
     uor id = (uor)ViewData["id"];
     Layout = "~/Views/Shared/_Layout_user_report.cshtml";
@@ -130,21 +130,23 @@
     </div>
     <table class="table">
         <thead>
-        <th>ID</th>
-        <th>Projekat aktivnost plan</th>
-        @*<th>Korisnik</th>*@
-        <th>Datum</th>
-        <th>Količina</th>
-        <th>Opis</th>
-        @*<th>Akcija</th>*@
+            <th>Projekat plan</th>
+            <th>Projekat aktivnost plan</th>
+            <th>Organizaciona jedinica</th>
+            <th>Korisnik</th>
+            <th>Datum</th>
+            <th>Količina</th>
+            <th>Opis</th>
+            @*<th>Akcija</th>*@
         </thead>
         <tbody>
             @foreach (var x in lista)
             {
                 <tr>
-                    <td>@x.ProjekatAktivnostRealizacija_ID</td>
-                    <td>@x.projekatAktivnostPlan.Naziv</td>
-                    @*<td>@(x.korisnici.Ime+" "+x.korisnici.Prezime)</td>*@
+                    <td>@x.proj_plan.Naziv</td>
+                    <td>@x.ProjekatAktivnostPlan_all.Naziv</td>
+                    <td>@x.OrgJed.Naziv</td>
+                    <td>@(x.Korisnici.Ime+" "+x.Korisnici.Prezime)</td>
                     <td>@(x.Datum.Date.Day+"."+ x.Datum.Date.Month + "." + x.Datum.Date.Year + ".")</td>
                     <td>@x.Kolicina</td>
                     <td>@x.Opis</td>

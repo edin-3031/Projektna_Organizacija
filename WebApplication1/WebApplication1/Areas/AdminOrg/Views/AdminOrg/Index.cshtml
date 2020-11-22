@@ -108,6 +108,10 @@
                 <li><a href="/AdminOrg/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
                 <li><a href="/AdminOrg/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
             </ul>
+            <li id="izvjestaji">Izvještaji</li>
+            <ul id="izv">
+                <li><a href="/AdminOrg/ProjekatAktivnostRealizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Realizacija</a></li>
+            </ul>
             <li id="admin">Admin</li>
             <ul id="adm">
                 <li><a href="/AdminOrg/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
@@ -115,7 +119,6 @@
         </ul>
     </div>
 </div>
-<center>
 
     @*<script>
             $(document.getElementsByTagName("li")).mousedown(function () {

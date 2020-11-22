@@ -401,3 +401,9 @@ D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrg\Views\ProjekatPlan\Prikaz.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrg\Views\ProjekatPlan\Unos.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrg\Views\ProjekatPlan\Uredi.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrg\Views\ProjekatAktivnostRealizacija\Detalji.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrg\Views\ProjekatAktivnostRealizacija\Prikaz.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrg\Views\ProjekatAktivnostRealizacija\PrintPreview.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrg\Views\ProjekatAktivnostRealizacija\Unos.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrg\Views\ProjekatAktivnostRealizacija\Uredi.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrg\Views\Ajax\DetaljiRealizacija.cshtml.g.cs

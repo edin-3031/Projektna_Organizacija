@@ -75,13 +75,13 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         [Area("SuperAdmin")]
         public IActionResult Prikaz(int u, int o, int r)
         {
-            List<Korisnici_OrganizacionaJedinica> lista_kor_org = db.Korisnici_OrganizacionaJedinica.Select(x => new Korisnici_OrganizacionaJedinica
+            List<adminOrg_kor_orgJed_VM> lista_kor_org = db.Korisnici_OrganizacionaJedinica.Select(x => new adminOrg_kor_orgJed_VM
             {
-                korisnici=db.Korisnici.Where(c=>c.Korisnici_ID==x.Korisnici_FK).SingleOrDefault(),
-                Korisnici_FK=x.Korisnici_FK,
-                organizacionaJedinica=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                OrganizacionaJedinica_FK=x.OrganizacionaJedinica_FK,
-                Korisnici_OrganizacionaJedinica_ID=x.Korisnici_OrganizacionaJedinica_ID
+                
+                korisnik=db.Korisnici.Where(a=>a.Korisnici_ID==x.Korisnici_FK).Select(o=>o.Ime.ToString()+" "+o.Prezime.ToString()).FirstOrDefault(),
+                K_O_ID=x.Korisnici_OrganizacionaJedinica_ID,
+                o_j=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).Select(o=>o.Naziv).FirstOrDefault()
+
             }).ToList();
 
             ViewData["kor_org_jed"]=lista_kor_org;
@@ -140,13 +140,13 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             db.Korisnici_OrganizacionaJedinica.Add(temp);
             db.SaveChanges();
 
-            List<Korisnici_OrganizacionaJedinica> lista_kor_org = db.Korisnici_OrganizacionaJedinica.Select(x => new Korisnici_OrganizacionaJedinica
+            List<adminOrg_kor_orgJed_VM> lista_kor_org = db.Korisnici_OrganizacionaJedinica.Select(x => new adminOrg_kor_orgJed_VM
             {
-                korisnici = db.Korisnici.Where(c => c.Korisnici_ID == x.Korisnici_FK).SingleOrDefault(),
-                Korisnici_FK = x.Korisnici_FK,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(v => v.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).SingleOrDefault(),
-                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID
+
+                korisnik = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Ime.ToString() + " " + o.Prezime.ToString()).FirstOrDefault(),
+                K_O_ID = x.Korisnici_OrganizacionaJedinica_ID,
+                o_j = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).Select(o => o.Naziv).FirstOrDefault()
+
             }).ToList();
 
             ViewData["kor_org_jed"] = lista_kor_org;
@@ -199,13 +199,13 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
 
             db.SaveChanges();
 
-            List<Korisnici_OrganizacionaJedinica> lista_kor_org = db.Korisnici_OrganizacionaJedinica.Select(x => new Korisnici_OrganizacionaJedinica
+            List<adminOrg_kor_orgJed_VM> lista_kor_org = db.Korisnici_OrganizacionaJedinica.Select(x => new adminOrg_kor_orgJed_VM
             {
-                korisnici = db.Korisnici.Where(c => c.Korisnici_ID == x.Korisnici_FK).SingleOrDefault(),
-                Korisnici_FK = x.Korisnici_FK,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(v => v.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).SingleOrDefault(),
-                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID
+
+                korisnik = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Ime.ToString() + " " + o.Prezime.ToString()).FirstOrDefault(),
+                K_O_ID = x.Korisnici_OrganizacionaJedinica_ID,
+                o_j = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).Select(o => o.Naziv).FirstOrDefault()
+
             }).ToList();
 
             ViewData["kor_org_jed"] = lista_kor_org;
@@ -233,13 +233,13 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 db.SaveChanges();
             }
 
-            List<Korisnici_OrganizacionaJedinica> lista_kor_org = db.Korisnici_OrganizacionaJedinica.Select(x => new Korisnici_OrganizacionaJedinica
+            List<adminOrg_kor_orgJed_VM> lista_kor_org = db.Korisnici_OrganizacionaJedinica.Select(x => new adminOrg_kor_orgJed_VM
             {
-                korisnici = db.Korisnici.Where(c => c.Korisnici_ID == x.Korisnici_FK).SingleOrDefault(),
-                Korisnici_FK = x.Korisnici_FK,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(v => v.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).SingleOrDefault(),
-                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID
+
+                korisnik = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Ime.ToString() + " " + o.Prezime.ToString()).FirstOrDefault(),
+                K_O_ID = x.Korisnici_OrganizacionaJedinica_ID,
+                o_j = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).Select(o => o.Naziv).FirstOrDefault()
+
             }).ToList();
 
             ViewData["kor_org_jed"] = lista_kor_org;
