@@ -4,13 +4,12 @@
 @using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
-    List<ProjekatAktivnostRealizacija> lista = (List<ProjekatAktivnostRealizacija>)ViewData["lista_relizacija"];
-    Layout = "~/Views/Shared/_Layout_user.cshtml";
+    List<par_final_VM> lista = (List<par_final_VM>)ViewData["lista_relizacija"];
+
     uor id = (uor)ViewData["id"];
+    Layout = "~/Views/Shared/_Layout_user.cshtml";
 
     byte[] pic = (byte[])ViewData["logo"];
-
-
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
@@ -85,6 +84,7 @@
         <ul>
             <li id="transakcije">Transakcije</li>
             <ul id="tra">
+                <li><a href="/User/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
                 <li><a href="/User/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
             </ul>
             <li id="izvjestaji">Izvještaji</li>
@@ -111,15 +111,16 @@
         $(document.getElementsByTagName("a")).mousedown(function () {
             this.style.color = "White";
         });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
+            //$(document.getElementsByTagName("li")).mouseup(function () {
+            //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+            //});
+    </script>*@
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Prikaz Realizacija</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
+
     <div id="dugmad">
         <div id="dodaj">
             <a class="btn btn-success" href="/User/ProjekatAktivnostRealizacija/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Unesi novu</a>
@@ -128,16 +129,16 @@
             <a class="btn btn-warning" href="/User/ProjekatAktivnostRealizacija/Detalji?u=@id.userId&o=@id.organisationId&r=@id.roleId">Detalji</a>
         </div>
         @*<div id="print_preview"><a href="/ProjekatAktivnostRealizacija/PrintPreview" class="btn btn-info">Export to PDF</a></div>*@
-        <div id="print_preview"><a href="/User/ProjekatAktivnostRealizacija/Pdf" class="btn btn-info">Export to PDF</a></div>
-        <div id="print_excel"><a href="/User/ProjekatAktivnostRealizacija/Excel?u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-info">Export to Excel</a></div>
+        @*<div id="print_preview"><a href="/AdminOrg/ProjekatAktivnostRealizacija/Pdf" class="btn btn-info">Export to PDF</a></div>*@
+        <div id="print_excel"><a href="/User/ProjekatAktivnostRealizacija/Excel?u=@id.userId" class="btn btn-info">Export to Excel</a></div>
         <div></div>
         <div></div>
     </div>
     <table class="table">
         <thead>
-        <th>ID</th>
+        <th>Projekat plan</th>
         <th>Projekat aktivnost plan</th>
-        @*<th>Korisnik</th>*@
+        <th>Korisnik</th>
         <th>Datum</th>
         <th>Količina</th>
         <th>Opis</th>
@@ -147,14 +148,16 @@
             @foreach (var x in lista)
             {
                 <tr>
-                    <td>@x.ProjekatAktivnostRealizacija_ID</td>
-                    <td>@x.projekatAktivnostPlan.Naziv</td>
-                    @*<td>@(x.korisnici.Ime+" "+x.korisnici.Prezime)</td>*@
+                    <td>@x.proj_plan.Naziv</td>
+                    <td>@x.ProjekatAktivnostPlan_all.Naziv</td>
+                    <td>@(x.Korisnici.Ime+" "+x.Korisnici.Prezime)</td>
                     <td>@(x.Datum.Date.Day+"."+ x.Datum.Date.Month + "." + x.Datum.Date.Year + ".")</td>
                     <td>@x.Kolicina</td>
                     <td>@x.Opis</td>
-                    <td><a class="btn btn-primary" href="/User/ProjekatAktivnostRealizacija/Uredi?id=@x.ProjekatAktivnostRealizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
-                    <a class="btn btn-danger" href="/User/ProjekatAktivnostRealizacija/Ukloni?id=@x.ProjekatAktivnostRealizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a></td>
+                    <td>
+                        <a class="btn btn-primary" href="/User/ProjekatAktivnostRealizacija/Uredi?id=@x.ProjekatAktivnostRealizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
+                        <a class="btn btn-danger" href="/User/ProjekatAktivnostRealizacija/Ukloni?id=@x.ProjekatAktivnostRealizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a>
+                    </td>
                 </tr>
             }
         </tbody>

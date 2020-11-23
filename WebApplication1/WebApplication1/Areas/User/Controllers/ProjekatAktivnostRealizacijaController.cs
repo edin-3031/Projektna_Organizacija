@@ -29,8 +29,12 @@ namespace WebApplication1.Areas.User.Controllers
 
         }
         [Area("User")]
-        public IActionResult Pdf()
+        public IActionResult Pdf(int o)
         {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
             var document = new Document
             {
                 PageInfo = new PageInfo
@@ -47,8 +51,12 @@ namespace WebApplication1.Areas.User.Controllers
                 DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Color.Black),
             };
 
-            DataTable GetRecord()
+            DataTable GetRecord(int o)
             {
+                byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+                ViewData["logo"] = logo;
+
                 //List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
 
                 //List<DetaljiRealizacijaVM> _lista = new List<DetaljiRealizacijaVM>();
@@ -87,7 +95,7 @@ namespace WebApplication1.Areas.User.Controllers
                 
             }
 
-            DataTable dt = GetRecord();
+            DataTable dt = GetRecord(o);
             table.ImportDataTable(dt,true,0,0);
             document.Pages[1].Paragraphs.Add(table);
 
@@ -116,109 +124,1139 @@ namespace WebApplication1.Areas.User.Controllers
         //        "Realizacija.pdf"
         //        );
         //}
-        [Area("User")]
-        public IActionResult Excel(int u, int o, int r)
+
+        public lista_realizacijaVM dobaviPodatke(int uloga, int u, int organizacijaId, int projekatId, DateTime? OD, DateTime? DO, int traziDugme = 10)
         {
-            //List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
+            if (OD.Value.Year == 1)
+                OD = null;
+            if (DO.Value.Year == 1)
+                DO = null;
 
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
+            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
 
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
+            if (projekatId == 0 && (OD != null || DO != null))
             {
-                foreach (var y in org_jed)
+                int id_org_jed_par = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed_par).ToList();
+
+                List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
+                List<ProjekatAktivnostPlan> pap_temp_2_par = new List<ProjekatAktivnostPlan>();
+
+                foreach (var x in pap_temp_par)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    foreach (var y in pp_temp)
                     {
-                        p_p_final.Add(new ProjekatPlan
+                        if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                         {
-                            DatumDo = x.DatumDo,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd = x.DatumOd,
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
+                            pap_temp_2_par.Add(new ProjekatAktivnostPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                ProjekatPlan_FK = x.ProjekatPlan_FK,
+                                DatumOd = x.DatumOd,
+                                JedinicaMjere = x.JedinicaMjere,
+                                Kolicina = x.Kolicina,
+                                Naziv = x.Naziv,
+                                ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                                Sifra = x.Sifra,
+                                projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
+                            });
+                        }
+                    }
+                }
+
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
+
+                foreach (var x in par_temp)
+                {
+                    foreach (var y in pap_temp_2_par)
+                    {
+                        if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
+                        {
+                            par_temp_2_par.Add(new par_final_VM
+                            {
+                                Datum = x.Datum,
+                                Kolicina = x.Kolicina,
+                                Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                                Korisnici_FK = x.Korisnici_FK,
+                                Opis = x.Opis,
+                                ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                                ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                                ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                                proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+                                OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                            });
+                        }
+                    }
+                }
+                List<ProjekatAktivnostRealizacija> par = new List<ProjekatAktivnostRealizacija>();
+                foreach (var t in par_temp_2_par)
+                {
+                    par.Add(new ProjekatAktivnostRealizacija
+                    {
+                        Datum = t.Datum,
+                        Kolicina = t.Kolicina,
+                        korisnici = t.Korisnici,
+                        Korisnici_FK = t.Korisnici_FK,
+                        Opis = t.Opis,
+                        projekatAktivnostPlan = t.ProjekatAktivnostPlan_all,
+                        ProjekatAktivnostPlan_FK = t.ProjekatAktivnostPlan_FK,
+                        ProjekatAktivnostRealizacija_ID = t.ProjekatAktivnostRealizacija_ID
+                    });
+                }
+
+
+                if (OD != null && DO != null)
+                {
+
+                    List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                    List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+                    List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+                    foreach (var x in par)
+                    {
+                        bool povecan = false;
+
+                        if (lista.Count == 0)
+                        {
+                            lista.Add(new RealizacijaVM
+                            {
+                                aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                datum = x.Datum,
+                                korisnikId = x.Korisnici_FK,
+                                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                odradjeno = x.Kolicina,
+                                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                projekatId = x.ProjekatAktivnostPlan_FK,
+                                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                            });
+                            lista_temp.Add(new RealizacijaVM
+                            {
+                                aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                datum = x.Datum,
+                                korisnikId = x.Korisnici_FK,
+                                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                odradjeno = x.Kolicina,
+                                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                projekatId = x.ProjekatAktivnostPlan_FK,
+                                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                            });
+                        }
+                        else
+                        {
+                            foreach (var t in lista)
+                            {
+                                if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+                                {
+                                    t.odradjeno += x.Kolicina;
+                                    povecan = true;
+                                    break;
+                                }
+                            }
+                            if (!povecan)
+                            {
+                                lista.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                            }
+                        }
+                    }
+
+                    foreach (var x in lista)
+                    {
+                        if ((x.datum.Year <= DO.Value.Year && x.datum.Year >= OD.Value.Year) ||
+                            ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month <= DO.Value.Month && x.datum.Month >= OD.Value.Month)) ||
+                            ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month == DO.Value.Month && x.datum.Month == OD.Value.Month) && (x.datum.Day <= DO.Value.Day && x.datum.Day >= OD.Value.Day)))
+                        {
+                            lista_final.Add(new RealizacijaVM
+                            {
+                                datum = x.datum,
+                                aktivnostId = x.aktivnostId,
+                                korisnikId = x.korisnikId,
+                                nazivProjekta = x.nazivProjekta,
+                                naziv_aktivnosti = x.naziv_aktivnosti,
+                                odradjeno = x.odradjeno,
+                                planirano = x.planirano,
+                                projekatId = x.projekatId,
+                                realizacijaId = x.realizacijaId
+                            });
+                        }
+                    }
+
+                    lista_realizacijaVM model = new lista_realizacijaVM
+                    {
+                        liste = lista_final,
+                        Do = DO.Value,
+                        Od = OD.Value,
+                        organizacijaId = organizacijaId,
+                        projekatId = projekatId
+                    };
+
+                    return model;
+                }
+                else if (DO != null)
+                {
+
+
+                    List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                    List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+                    List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+                    foreach (var x in par)
+                    {
+                        bool povecan = false;
+
+                        if (lista.Count == 0)
+                        {
+                            lista.Add(new RealizacijaVM
+                            {
+                                aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                datum = x.Datum,
+                                korisnikId = x.Korisnici_FK,
+                                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                odradjeno = x.Kolicina,
+                                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                projekatId = x.ProjekatAktivnostPlan_FK,
+                                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                            });
+                            lista_temp.Add(new RealizacijaVM
+                            {
+                                aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                datum = x.Datum,
+                                korisnikId = x.Korisnici_FK,
+                                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                odradjeno = x.Kolicina,
+                                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                projekatId = x.ProjekatAktivnostPlan_FK,
+                                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                            });
+                        }
+                        else
+                        {
+                            foreach (var t in lista)
+                            {
+                                if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+                                {
+                                    t.odradjeno += x.Kolicina;
+                                    povecan = true;
+                                    break;
+                                }
+                            }
+                            if (!povecan)
+                            {
+                                lista.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                            }
+                        }
+                    }
+
+                    foreach (var x in lista)
+                    {
+                        if (x.datum.Year <= DO.Value.Year && x.datum.Month <= DO.Value.Month && x.datum.Day <= DO.Value.Day)
+                        {
+                            lista_final.Add(new RealizacijaVM
+                            {
+                                datum = x.datum,
+                                aktivnostId = x.aktivnostId,
+                                korisnikId = x.korisnikId,
+                                nazivProjekta = x.nazivProjekta,
+                                naziv_aktivnosti = x.naziv_aktivnosti,
+                                odradjeno = x.odradjeno,
+                                planirano = x.planirano,
+                                projekatId = x.projekatId,
+                                realizacijaId = x.realizacijaId
+                            });
+                        }
+                    }
+
+                    lista_realizacijaVM model = new lista_realizacijaVM
+                    {
+                        liste = lista_final,
+                        Do = DO.Value,
+                        organizacijaId = organizacijaId,
+                        projekatId = projekatId
+                    };
+
+                    return model;
+                }
+                else if (OD != null)
+                {
+
+                    List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                    List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+                    List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+                    foreach (var x in par)
+                    {
+                        bool povecan = false;
+
+                        if (lista.Count == 0)
+                        {
+                            lista.Add(new RealizacijaVM
+                            {
+                                aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                datum = x.Datum,
+                                korisnikId = x.Korisnici_FK,
+                                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                odradjeno = x.Kolicina,
+                                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                projekatId = x.ProjekatAktivnostPlan_FK,
+                                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                            });
+                            lista_temp.Add(new RealizacijaVM
+                            {
+                                aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                datum = x.Datum,
+                                korisnikId = x.Korisnici_FK,
+                                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                odradjeno = x.Kolicina,
+                                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                projekatId = x.ProjekatAktivnostPlan_FK,
+                                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                            });
+                        }
+                        else
+                        {
+                            foreach (var t in lista)
+                            {
+                                if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+                                {
+                                    t.odradjeno += x.Kolicina;
+                                    povecan = true;
+                                    break;
+                                }
+                            }
+                            if (!povecan)
+                            {
+                                lista.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                            }
+                        }
+                    }
+
+                    foreach (var x in lista)
+                    {
+                        if (x.datum.Year >= OD.Value.Year && x.datum.Month >= OD.Value.Month && x.datum.Day >= OD.Value.Day)
+                        {
+                            lista_final.Add(new RealizacijaVM
+                            {
+                                datum = x.datum,
+                                aktivnostId = x.aktivnostId,
+                                korisnikId = x.korisnikId,
+                                nazivProjekta = x.nazivProjekta,
+                                naziv_aktivnosti = x.naziv_aktivnosti,
+                                odradjeno = x.odradjeno,
+                                planirano = x.planirano,
+                                projekatId = x.projekatId,
+                                realizacijaId = x.realizacijaId
+                            });
+                        }
+                    }
+
+                    lista_realizacijaVM model = new lista_realizacijaVM
+                    {
+                        liste = lista_final,
+                        Od = OD.Value,
+                        organizacijaId = organizacijaId,
+                        projekatId = projekatId
+                    };
+
+                    return model;
+                }
+            }
+
+            else if (projekatId == 0 && (OD != null && DO != null))
+            {
+                List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
+                {
+                    Datum = x.Datum,
+                    Kolicina = x.Kolicina,
+                    korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                    Korisnici_FK = x.Korisnici_FK,
+                    Opis = x.Opis,
+                    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                }).ToList();
+
+                List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+                List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+                foreach (var x in par)
+                {
+                    bool povecan = false;
+
+                    if (lista.Count == 0)
+                    {
+                        lista.Add(new RealizacijaVM
+                        {
+                            aktivnostId = x.ProjekatAktivnostPlan_FK,
+                            datum = x.Datum,
+                            korisnikId = x.Korisnici_FK,
+                            naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                            odradjeno = x.Kolicina,
+                            planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                            nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                            projekatId = x.ProjekatAktivnostPlan_FK,
+                            realizacijaId = x.ProjekatAktivnostRealizacija_ID
                         });
+                        lista_temp.Add(new RealizacijaVM
+                        {
+                            aktivnostId = x.ProjekatAktivnostPlan_FK,
+                            datum = x.Datum,
+                            korisnikId = x.Korisnici_FK,
+                            naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                            odradjeno = x.Kolicina,
+                            planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                            nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                            projekatId = x.ProjekatAktivnostPlan_FK,
+                            realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                        });
+                    }
+                    else
+                    {
+                        foreach (var t in lista)
+                        {
+                            if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+                            {
+                                t.odradjeno += x.Kolicina;
+                                povecan = true;
+                                break;
+                            }
+                        }
+                        if (!povecan)
+                        {
+                            lista.Add(new RealizacijaVM
+                            {
+                                aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                datum = x.Datum,
+                                korisnikId = x.Korisnici_FK,
+                                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                odradjeno = x.Kolicina,
+                                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                projekatId = x.ProjekatAktivnostPlan_FK,
+                                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                            });
+                        }
+                    }
+                }
+
+                foreach (var x in lista)
+                {
+
+                    lista_final.Add(new RealizacijaVM
+                    {
+                        datum = x.datum,
+                        aktivnostId = x.aktivnostId,
+                        korisnikId = x.korisnikId,
+                        nazivProjekta = x.nazivProjekta,
+                        naziv_aktivnosti = x.naziv_aktivnosti,
+                        odradjeno = x.odradjeno,
+                        planirano = x.planirano,
+                        projekatId = x.projekatId,
+                        realizacijaId = x.realizacijaId
+                    });
+
+                }
+
+                lista_realizacijaVM model = new lista_realizacijaVM
+                {
+                    liste = lista_final,
+                    Do = DO.Value,
+                    Od = OD.Value,
+                    organizacijaId = organizacijaId,
+                    projekatId = projekatId
+                };
+
+                ViewData["lista_projekata"] = lista;
+                return model;
+            }
+
+            else if (projekatId >= 1)
+            {
+                ProjekatPlan p_temp = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == projekatId).FirstOrDefault();
+                OrganizacionaJedinica o_j_temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == p_temp.OrganizacionaJedinica_FK).FirstOrDefault();
+
+                RealizacijaDetaljiSuma suma = new RealizacijaDetaljiSuma
+                {
+                    naziv_projekta = db.ProjekatPlan.Where(x => x.ProjekatPlan_ID == projekatId).Select(o => o.Naziv).FirstOrDefault(),
+                    ostvareno = 0,
+                    planirano = 0,
+                    procenti = 0,
+                    ProjekatId = projekatId,
+                    organizacionaJedinica = o_j_temp.Naziv,
+                    organizacionaJedinicaId = o_j_temp.OrganizacionaJedinica_ID
+                };
+
+                List<ProjekatAktivnostPlan> pap = db.ProjekatAktivnostPlan.Where(y => y.ProjekatPlan_FK == projekatId).Select(x => new ProjekatAktivnostPlan
+                {
+                    DatumDo = x.DatumDo,
+                    DatumOd = x.DatumOd,
+                    JedinicaMjere = x.JedinicaMjere,
+                    Kolicina = x.Kolicina,
+                    Naziv = x.Naziv,
+                    ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                    projekatPlan = db.ProjekatPlan.Where(v => v.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
+                    ProjekatPlan_FK = x.ProjekatPlan_FK,
+                    Sifra = x.Sifra
+                }).ToList();
+
+                List<ProjekatAktivnostRealizacija> lista_par = db.ProjekatAktivnostRealizacija.ToList();
+                List<ProjekatAktivnostRealizacija> par = new List<ProjekatAktivnostRealizacija>();
+
+                foreach (var x in pap)
+                {
+                    foreach (var y in lista_par)
+                    {
+                        if (x.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK)
+                        {
+                            par.Add(new ProjekatAktivnostRealizacija
+                            {
+                                Datum = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == y.ProjekatAktivnostRealizacija_ID).Select(o => o.Datum).FirstOrDefault(),
+                                Kolicina = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == y.ProjekatAktivnostRealizacija_ID).Select(o => o.Kolicina).FirstOrDefault(),
+                                Opis = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == y.ProjekatAktivnostRealizacija_ID).Select(o => o.Opis).FirstOrDefault(),
+                                ProjekatAktivnostRealizacija_ID = y.ProjekatAktivnostRealizacija_ID,
+                                ProjekatAktivnostPlan_FK = y.ProjekatAktivnostPlan_FK,
+                                projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                                Korisnici_FK = y.Korisnici_FK,
+                                korisnici = db.Korisnici.Where(a => a.Korisnici_ID == y.Korisnici_FK).FirstOrDefault()
+                            });
+                        }
+                    }
+                }
+
+                if (pap != null)
+                {
+                    int brojac = db.ProjekatAktivnostPlan.Where(s => s.ProjekatPlan_FK == projekatId).Count();
+
+                    if (OD == null && DO == null)
+                    {
+                        List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                        List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+                        foreach (var x in par)
+                        {
+                            bool povecan = false;
+
+                            if (lista.Count == 0)
+                            {
+                                lista.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                                lista_temp.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                            }
+                            else
+                            {
+                                foreach (var t in lista)
+                                {
+                                    if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+                                    {
+                                        t.odradjeno += x.Kolicina;
+                                        povecan = true;
+                                        break;
+                                    }
+                                }
+                                if (!povecan)
+                                {
+                                    lista.Add(new RealizacijaVM
+                                    {
+                                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                        datum = x.Datum,
+                                        korisnikId = x.Korisnici_FK,
+                                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                        odradjeno = x.Kolicina,
+                                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                        projekatId = x.ProjekatAktivnostPlan_FK,
+                                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                    });
+                                }
+                            }
+                        }
+
+                        lista_realizacijaVM model = new lista_realizacijaVM
+                        {
+                            liste = lista,
+                            organizacijaId = organizacijaId,
+                            projekatId = projekatId
+                        };
+
+                        foreach (var x in model.liste)
+                        {
+                            suma.ostvareno += x.odradjeno;
+                            suma.planirano += x.planirano;
+                            suma.procenti += (x.odradjeno / x.planirano) * 100;
+                        }
+
+                        suma.procenti /= model.liste.Count();
+
+                        ViewData["suma"] = suma;
+
+                        return model;
+                    }
+
+                    else if (OD != null && DO == null)
+                    {
+
+                        List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                        List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+                        List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+                        foreach (var x in par)
+                        {
+                            bool povecan = false;
+
+                            if (lista.Count == 0)
+                            {
+                                lista.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                                lista_temp.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                            }
+                            else
+                            {
+                                foreach (var t in lista)
+                                {
+                                    if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+                                    {
+                                        t.odradjeno += x.Kolicina;
+                                        povecan = true;
+                                        break;
+                                    }
+                                }
+                                if (!povecan)
+                                {
+                                    lista.Add(new RealizacijaVM
+                                    {
+                                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                        datum = x.Datum,
+                                        korisnikId = x.Korisnici_FK,
+                                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                        odradjeno = x.Kolicina,
+                                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                        projekatId = x.ProjekatAktivnostPlan_FK,
+                                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                    });
+                                }
+                            }
+                        }
+
+                        foreach (var x in lista)
+                        {
+                            if (x.datum.Year >= OD.Value.Year && x.datum.Month >= OD.Value.Month && x.datum.Day >= OD.Value.Day)
+                            {
+                                lista_final.Add(new RealizacijaVM
+                                {
+                                    datum = x.datum,
+                                    aktivnostId = x.aktivnostId,
+                                    korisnikId = x.korisnikId,
+                                    nazivProjekta = x.nazivProjekta,
+                                    naziv_aktivnosti = x.naziv_aktivnosti,
+                                    odradjeno = x.odradjeno,
+                                    planirano = x.planirano,
+                                    projekatId = x.projekatId,
+                                    realizacijaId = x.realizacijaId
+                                });
+                            }
+                        }
+
+                        lista_realizacijaVM model = new lista_realizacijaVM
+                        {
+                            liste = lista_final,
+                            Od = OD.Value,
+                            organizacijaId = organizacijaId,
+                            projekatId = projekatId
+                        };
+
+                        return model;
+                    }
+
+                    else if (DO != null && OD == null)
+                    {
+                        List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                        List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+                        List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+                        foreach (var x in par)
+                        {
+                            bool povecan = false;
+
+                            if (lista.Count == 0)
+                            {
+                                lista.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                                lista_temp.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                            }
+                            else
+                            {
+                                foreach (var t in lista)
+                                {
+                                    if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+                                    {
+                                        t.odradjeno += x.Kolicina;
+                                        povecan = true;
+                                        break;
+                                    }
+                                }
+                                if (!povecan)
+                                {
+                                    lista.Add(new RealizacijaVM
+                                    {
+                                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                        datum = x.Datum,
+                                        korisnikId = x.Korisnici_FK,
+                                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                        odradjeno = x.Kolicina,
+                                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                        projekatId = x.ProjekatAktivnostPlan_FK,
+                                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                    });
+                                }
+                            }
+                        }
+
+                        foreach (var x in lista)
+                        {
+                            if (x.datum.Year <= DO.Value.Year && x.datum.Month <= DO.Value.Month && x.datum.Day <= DO.Value.Day)
+                            {
+                                lista_final.Add(new RealizacijaVM
+                                {
+                                    datum = x.datum,
+                                    aktivnostId = x.aktivnostId,
+                                    korisnikId = x.korisnikId,
+                                    nazivProjekta = x.nazivProjekta,
+                                    naziv_aktivnosti = x.naziv_aktivnosti,
+                                    odradjeno = x.odradjeno,
+                                    planirano = x.planirano,
+                                    projekatId = x.projekatId,
+                                    realizacijaId = x.realizacijaId
+                                });
+                            }
+                        }
+
+                        lista_realizacijaVM model = new lista_realizacijaVM
+                        {
+                            liste = lista_final,
+                            Do = DO.Value,
+                            organizacijaId = organizacijaId,
+                            projekatId = projekatId
+                        };
+
+                        return model;
+                    }
+
+                    else
+                    {
+                        List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                        List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+                        List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+                        foreach (var x in par)
+                        {
+                            bool povecan = false;
+
+                            if (lista.Count == 0)
+                            {
+                                lista.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                                lista_temp.Add(new RealizacijaVM
+                                {
+                                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                    datum = x.Datum,
+                                    korisnikId = x.Korisnici_FK,
+                                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                    odradjeno = x.Kolicina,
+                                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                    projekatId = x.ProjekatAktivnostPlan_FK,
+                                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                });
+                            }
+                            else
+                            {
+                                foreach (var t in lista)
+                                {
+                                    if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+                                    {
+                                        t.odradjeno += x.Kolicina;
+                                        povecan = true;
+                                        break;
+                                    }
+                                }
+                                if (!povecan)
+                                {
+                                    lista.Add(new RealizacijaVM
+                                    {
+                                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                        datum = x.Datum,
+                                        korisnikId = x.Korisnici_FK,
+                                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                        odradjeno = x.Kolicina,
+                                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                        projekatId = x.ProjekatAktivnostPlan_FK,
+                                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                                    });
+                                }
+                            }
+                        }
+
+                        foreach (var x in lista)
+                        {
+                            if ((x.datum.Year <= DO.Value.Year && x.datum.Year >= OD.Value.Year) ||
+                                ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month <= DO.Value.Month && x.datum.Month >= OD.Value.Month)) ||
+                                ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month == DO.Value.Month && x.datum.Month == OD.Value.Month) && (x.datum.Day <= DO.Value.Day && x.datum.Day >= OD.Value.Day)))
+                            {
+                                lista_final.Add(new RealizacijaVM
+                                {
+                                    datum = x.datum,
+                                    aktivnostId = x.aktivnostId,
+                                    korisnikId = x.korisnikId,
+                                    nazivProjekta = x.nazivProjekta,
+                                    naziv_aktivnosti = x.naziv_aktivnosti,
+                                    odradjeno = x.odradjeno,
+                                    planirano = x.planirano,
+                                    projekatId = x.projekatId,
+                                    realizacijaId = x.realizacijaId
+                                });
+                            }
+                        }
+
+                        lista_realizacijaVM model = new lista_realizacijaVM
+                        {
+                            liste = lista_final,
+                            Do = DO.Value,
+                            Od = OD.Value,
+                            organizacijaId = organizacijaId,
+                            projekatId = projekatId
+                        };
+
+                        return model;
                     }
                 }
             }
 
-
-            List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
-
-            foreach (var x in temp)
+            if (traziDugme == 10 && projekatId == 0 && OD == null && DO == null)
             {
-                foreach (var y in p_p_final)
+                //List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
+                //{
+                //    Datum = x.Datum,
+                //    Kolicina = x.Kolicina,
+                //    korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                //    Korisnici_FK = x.Korisnici_FK,
+                //    Opis = x.Opis,
+                //    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                //    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                //    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                //}).ToList();
+
+                int id_org_jed_par = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed_par).ToList();
+
+                List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
+                List<ProjekatAktivnostPlan> pap_temp_2_par = new List<ProjekatAktivnostPlan>();
+
+                foreach (var x in pap_temp_par)
                 {
-                    if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+                    foreach (var y in pp_temp)
                     {
-                        temp_final.Add(new ProjekatAktivnostPlan
+                        if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                         {
-                            DatumDo = x.DatumDo,
-                            DatumOd = x.DatumOd,
-                            JedinicaMjere = x.JedinicaMjere,
-                            Naziv = x.Naziv,
-                            Kolicina = x.Kolicina,
-                            ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK = x.ProjekatPlan_FK,
-                            Sifra = x.Sifra
-                        });
+                            pap_temp_2_par.Add(new ProjekatAktivnostPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                ProjekatPlan_FK = x.ProjekatPlan_FK,
+                                DatumOd = x.DatumOd,
+                                JedinicaMjere = x.JedinicaMjere,
+                                Kolicina = x.Kolicina,
+                                Naziv = x.Naziv,
+                                ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                                Sifra = x.Sifra,
+                                projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
+                            });
+                        }
                     }
                 }
-            }
 
-            List<ProjekatAktivnostRealizacija> realizacija_temp = db.ProjekatAktivnostRealizacija.ToList();
-            List<excelRealizacija> realizacija_final = new List<excelRealizacija>();
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
 
-            foreach (var x in temp_final)
-            {
-                foreach (var y in realizacija_temp)
+                foreach (var x in par_temp)
                 {
-                    if (y.ProjekatAktivnostPlan_FK == x.ProjekatAktivnostPlan_ID)
+                    foreach (var y in pap_temp_2_par)
                     {
-                        realizacija_final.Add(new excelRealizacija
+                        if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
                         {
-                            aktivnost_naziv = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
-                            datum = y.Datum.Date,
-                            kolicina = y.Kolicina,
-                            korisnik_ime = db.Korisnici.Where(a => a.Korisnici_ID == y.Korisnici_FK).Select(o => o.Ime.ToString() + " " + o.Prezime.ToString()).FirstOrDefault(),
-                            opis = y.Opis,
-                            projekat_naziv = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == db.ProjekatAktivnostPlan.Where(b => b.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK).Select(p => p.ProjekatPlan_FK).FirstOrDefault()).Select(t => t.Naziv).FirstOrDefault()
-                        });
+                            par_temp_2_par.Add(new par_final_VM
+                            {
+                                Datum = x.Datum,
+                                Kolicina = x.Kolicina,
+                                Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                                Korisnici_FK = x.Korisnici_FK,
+                                Opis = x.Opis,
+                                ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                                ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                                ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                                proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+                                OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                            });
+                        }
                     }
                 }
+                List<ProjekatAktivnostRealizacija> par = new List<ProjekatAktivnostRealizacija>();
+                foreach (var t in par_temp_2_par)
+                {
+                    par.Add(new ProjekatAktivnostRealizacija
+                    {
+                        Datum = t.Datum,
+                        Kolicina = t.Kolicina,
+                        korisnici = t.Korisnici,
+                        Korisnici_FK = t.Korisnici_FK,
+                        Opis = t.Opis,
+                        projekatAktivnostPlan = t.ProjekatAktivnostPlan_all,
+                        ProjekatAktivnostPlan_FK = t.ProjekatAktivnostPlan_FK,
+                        ProjekatAktivnostRealizacija_ID = t.ProjekatAktivnostRealizacija_ID
+                    });
+                }
+
+                List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+                List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+                foreach (var x in par)
+                {
+                    bool povecan = false;
+
+                    if (lista.Count == 0)
+                    {
+                        lista.Add(new RealizacijaVM
+                        {
+                            aktivnostId = x.ProjekatAktivnostPlan_FK,
+                            datum = x.Datum,
+                            korisnikId = x.Korisnici_FK,
+                            naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                            odradjeno = x.Kolicina,
+                            planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                            nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                            projekatId = x.ProjekatAktivnostPlan_FK,
+                            realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                        });
+                        lista_temp.Add(new RealizacijaVM
+                        {
+                            aktivnostId = x.ProjekatAktivnostPlan_FK,
+                            datum = x.Datum,
+                            korisnikId = x.Korisnici_FK,
+                            naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                            odradjeno = x.Kolicina,
+                            planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                            nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                            projekatId = x.ProjekatAktivnostPlan_FK,
+                            realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                        });
+                    }
+                    else
+                    {
+                        foreach (var t in lista)
+                        {
+                            if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+                            {
+                                t.odradjeno += x.Kolicina;
+                                povecan = true;
+                                break;
+                            }
+                        }
+                        if (!povecan)
+                        {
+                            lista.Add(new RealizacijaVM
+                            {
+                                aktivnostId = x.ProjekatAktivnostPlan_FK,
+                                datum = x.Datum,
+                                korisnikId = x.Korisnici_FK,
+                                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+                                odradjeno = x.Kolicina,
+                                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+                                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+                                projekatId = x.ProjekatAktivnostPlan_FK,
+                                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+                            });
+                        }
+                    }
+                }
+
+                foreach (var x in lista)
+                {
+
+                    lista_final.Add(new RealizacijaVM
+                    {
+                        datum = x.datum,
+                        aktivnostId = x.aktivnostId,
+                        korisnikId = x.korisnikId,
+                        nazivProjekta = x.nazivProjekta,
+                        naziv_aktivnosti = x.naziv_aktivnosti,
+                        odradjeno = x.odradjeno,
+                        planirano = x.planirano,
+                        projekatId = x.projekatId,
+                        realizacijaId = x.realizacijaId
+                    });
+                }
+
+                lista_realizacijaVM model = new lista_realizacijaVM
+                {
+                    liste = lista_final,
+                    organizacijaId = organizacijaId,
+                    projekatId = projekatId
+                };
+
+                return model;
             }
+
+            lista_realizacijaVM model2 = new lista_realizacijaVM()
+            {
+                liste = null
+            };
+            return model2;
+        }
+
+        [Area("User")]
+        public IActionResult Excel2(int uloga, int u, int organizacijaId, int projekatId, DateTime OD, DateTime DO)
+        {
+            lista_realizacijaVM m_final=dobaviPodatke(uloga,u,organizacijaId,projekatId,OD,DO);
 
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("Realizacija");
                 var currentRow = 1;
-                worksheet.Cell(currentRow, 1).Value = "Projekat";
-                worksheet.Cell(currentRow, 2).Value = "Aktivnost";
-                worksheet.Cell(currentRow, 3).Value = "Korisnik";
-                worksheet.Cell(currentRow, 4).Value = "Datum";
-                worksheet.Cell(currentRow, 5).Value = "Količina";
-                worksheet.Cell(currentRow, 6).Value = "Opis";
+                worksheet.Cell(currentRow, 1).Value = "Projekat Plan";
+                worksheet.Cell(currentRow, 2).Value = "Projekat Aktivnost Plan";
+                worksheet.Cell(currentRow, 3).Value = "Datum";
+                worksheet.Cell(currentRow, 4).Value = "Planirano";
+                worksheet.Cell(currentRow, 5).Value = "Ostvareno";
+                worksheet.Cell(currentRow, 6).Value = "Precntualno";
 
-                foreach (var x in realizacija_final)
+                foreach (var x in m_final.liste)
                 {
                     currentRow++;
-                    worksheet.Cell(currentRow, 1).Value = x.projekat_naziv;
-                    worksheet.Cell(currentRow, 2).Value = x.aktivnost_naziv;
-                    worksheet.Cell(currentRow, 3).Value = x.korisnik_ime;
-                    worksheet.Cell(currentRow, 4).Value = x.datum;
-                    worksheet.Cell(currentRow, 5).Value = x.kolicina;
-                    worksheet.Cell(currentRow, 6).Value = x.opis;
+                    worksheet.Cell(currentRow, 1).Value = x.nazivProjekta.ToString();
+                    worksheet.Cell(currentRow, 2).Value = x.naziv_aktivnosti.ToString();
+                    worksheet.Cell(currentRow, 3).Value = x.datum.Date.Day + "." + x.datum.Date.Month + "." + x.datum.Date.Year + ".";
+                    worksheet.Cell(currentRow, 4).Value = x.planirano;
+                    worksheet.Cell(currentRow, 5).Value = x.odradjeno;
+                    worksheet.Cell(currentRow, 6).Value = Math.Round((x.odradjeno / x.planirano) * 100);
                 }
 
-                using (var stream=new MemoryStream())
+                using (var stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);
                     var content = stream.ToArray();
@@ -226,90 +1264,104 @@ namespace WebApplication1.Areas.User.Controllers
                 }
             }
         }
+
         [Area("User")]
-        public IActionResult PrintPreview(int u, int o, int r)
+        public IActionResult Excel(int u)
         {
-            //List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
+            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
 
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
+            List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
+            List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
-
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
+            foreach (var x in pap_temp)
             {
-                foreach (var y in org_jed)
-                {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
-                    {
-                        p_p_final.Add(new ProjekatPlan
-                        {
-                            DatumDo = x.DatumDo,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd = x.DatumOd,
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
-                        });
-                    }
-                }
-            }
-
-
-            List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
-
-            foreach (var x in temp)
-            {
-                foreach (var y in p_p_final)
+                foreach (var y in pp_temp)
                 {
                     if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                     {
-                        temp_final.Add(new ProjekatAktivnostPlan
+                        pap_temp_2.Add(new ProjekatAktivnostPlan
                         {
                             DatumDo = x.DatumDo,
+                            ProjekatPlan_FK = x.ProjekatPlan_FK,
                             DatumOd = x.DatumOd,
                             JedinicaMjere = x.JedinicaMjere,
-                            Naziv = x.Naziv,
                             Kolicina = x.Kolicina,
+                            Naziv = x.Naziv,
                             ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK = x.ProjekatPlan_FK,
-                            Sifra = x.Sifra
+                            Sifra = x.Sifra,
+                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
                         });
                     }
                 }
             }
 
-            List<ProjekatAktivnostRealizacija> realizacija_temp = db.ProjekatAktivnostRealizacija.ToList();
-            List<ProjekatAktivnostRealizacija> realizacija_final = new List<ProjekatAktivnostRealizacija>();
+            List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+            List<par_final_VM> par_temp_2 = new List<par_final_VM>();
 
-            foreach (var x in temp_final)
+            foreach (var x in par_temp)
             {
-                foreach (var y in realizacija_temp)
+                foreach (var y in pap_temp_2)
                 {
-                    if (y.ProjekatAktivnostPlan_FK == x.ProjekatAktivnostPlan_ID)
+                    if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
                     {
-                        realizacija_final.Add(new ProjekatAktivnostRealizacija
+                        par_temp_2.Add(new par_final_VM
                         {
-                            Datum = y.Datum,
-                            ProjekatAktivnostPlan_FK = y.ProjekatAktivnostPlan_FK,
-                            Kolicina = y.Kolicina,
-                            Korisnici_FK = y.Korisnici_FK,
-                            korisnici = db.Korisnici.Where(a => a.Korisnici_ID == y.Korisnici_FK).FirstOrDefault(),
-                            Opis = y.Opis,
-                            projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                            ProjekatAktivnostRealizacija_ID=y.ProjekatAktivnostRealizacija_ID
+                            Datum = x.Datum,
+                            Kolicina = x.Kolicina,
+                            Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                            Korisnici_FK = x.Korisnici_FK,
+                            Opis = x.Opis,
+                            ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                            ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                            ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                            proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
                         });
                     }
                 }
             }
+
+            using (var workbook=new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Realizacija");
+                var currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "Projekat Plan";
+                worksheet.Cell(currentRow, 2).Value = "Projekat Aktivnost Plan";
+                worksheet.Cell(currentRow, 3).Value = "Korisnik";
+                worksheet.Cell(currentRow, 4).Value = "Datum";
+                worksheet.Cell(currentRow, 5).Value = "Količina";
+                worksheet.Cell(currentRow, 6).Value = "Opis";
+
+                foreach(var x in par_temp_2)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = x.proj_plan.Naziv.ToString();
+                    worksheet.Cell(currentRow, 2).Value = x.ProjekatAktivnostPlan_all.Naziv.ToString();
+                    worksheet.Cell(currentRow, 3).Value = x.Korisnici.Ime.ToString() + " " + x.Korisnici.Prezime.ToString();
+                    worksheet.Cell(currentRow, 4).Value = x.Datum.Date.Day + "." + x.Datum.Date.Month+"."+ x.Datum.Date.Year+".";
+                    worksheet.Cell(currentRow, 5).Value = x.Kolicina;
+                    worksheet.Cell(currentRow, 6).Value = x.Opis;
+                }
+
+                using (var stream=new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return File(content,"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RealizacijaInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                }
+            }
+        }
+        [Area("User")]
+        public IActionResult PrintPreview(int u, int o, int r)
+        {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+            List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
 
             List<DetaljiRealizacijaVM> _lista = new List<DetaljiRealizacijaVM>();
-            foreach(var x in realizacija_final)
+            foreach(var x in _real)
             {
                 _lista.Add(new DetaljiRealizacijaVM
                 {
@@ -332,27 +1384,29 @@ namespace WebApplication1.Areas.User.Controllers
                 lista=_lista
             };
 
+            uor podaci = new uor
+            {
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
             return View(model);
         }
 
         [Area("User")]
-        public IActionResult Detalji(int u, int o, int r,int projekatId = 0, DateTime? OD=null, DateTime? DO=null, int traziDugme=0)
+        public IActionResult Detalji(int u, int o, int r, int projekatId = 0, DateTime? OD=null, DateTime? DO=null, int traziDugme=0)
         {
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
             ViewData["logo"] = logo;
 
-            //Dobavljanje liste projekata za birajuću listu
-            List<ProjekatPlan> projekti = db.ProjekatPlan.Select(x => new ProjekatPlan
-            {
-                //DatumDo = x.DatumDo,
-                //DatumOd = x.DatumOd,
-                Naziv = x.Naziv,
-                ProjekatPlan_ID = x.ProjekatPlan_ID,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
-            }).ToList();
+            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
 
-            ViewData["projekti"] = projekti;
+            ViewData["projekti"] = pp_temp;
 
             uor podaci = new uor
             {
@@ -365,19 +1419,75 @@ namespace WebApplication1.Areas.User.Controllers
 
             if (projekatId == 0 && (OD != null || DO != null))
             {
-                List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
-                {
-                    Datum=x.Datum,
-                    Kolicina=x.Kolicina,
-                    korisnici=db.Korisnici.Where(a=>a.Korisnici_ID==x.Korisnici_FK).FirstOrDefault(),
-                    Korisnici_FK=x.Korisnici_FK,
-                    Opis=x.Opis,
-                    projekatAktivnostPlan=db.ProjekatAktivnostPlan.Where(a=>a.ProjekatAktivnostPlan_ID==x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                    ProjekatAktivnostPlan_FK=x.ProjekatAktivnostPlan_FK,
-                    ProjekatAktivnostRealizacija_ID=x.ProjekatAktivnostRealizacija_ID
-                }).ToList();
+                int id_org_jed_par = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed_par).ToList();
 
-                //List<RealizacijaVM> lista = new List<RealizacijaVM>();
+                List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
+                List<ProjekatAktivnostPlan> pap_temp_2_par = new List<ProjekatAktivnostPlan>();
+
+                foreach (var x in pap_temp_par)
+                {
+                    foreach (var y in pp_temp)
+                    {
+                        if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+                        {
+                            pap_temp_2_par.Add(new ProjekatAktivnostPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                ProjekatPlan_FK = x.ProjekatPlan_FK,
+                                DatumOd = x.DatumOd,
+                                JedinicaMjere = x.JedinicaMjere,
+                                Kolicina = x.Kolicina,
+                                Naziv = x.Naziv,
+                                ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                                Sifra = x.Sifra,
+                                projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
+                            });
+                        }
+                    }
+                }
+
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
+
+                foreach (var x in par_temp)
+                {
+                    foreach (var y in pap_temp_2_par)
+                    {
+                        if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
+                        {
+                            par_temp_2_par.Add(new par_final_VM
+                            {
+                                Datum = x.Datum,
+                                Kolicina = x.Kolicina,
+                                Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                                Korisnici_FK = x.Korisnici_FK,
+                                Opis = x.Opis,
+                                ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                                ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                                ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                                proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+                                OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                            });
+                        }
+                    }
+                }
+                List<ProjekatAktivnostRealizacija> par = new List<ProjekatAktivnostRealizacija>();
+                foreach (var t in par_temp_2_par)
+                {
+                    par.Add(new ProjekatAktivnostRealizacija
+                    {
+                        Datum=t.Datum,
+                        Kolicina=t.Kolicina,
+                        korisnici=t.Korisnici,
+                        Korisnici_FK=t.Korisnici_FK,
+                        Opis=t.Opis,
+                        projekatAktivnostPlan=t.ProjekatAktivnostPlan_all,
+                        ProjekatAktivnostPlan_FK=t.ProjekatAktivnostPlan_FK,
+                        ProjekatAktivnostRealizacija_ID=t.ProjekatAktivnostRealizacija_ID
+                    });
+                }
+
 
                 if (OD != null && DO!=null)
                 {
@@ -1220,17 +2330,86 @@ namespace WebApplication1.Areas.User.Controllers
 
             if (traziDugme == 10 && projekatId==0 && OD==null && DO==null)
             {
-                List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
+                //List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
+                //{
+                //    Datum = x.Datum,
+                //    Kolicina = x.Kolicina,
+                //    korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                //    Korisnici_FK = x.Korisnici_FK,
+                //    Opis = x.Opis,
+                //    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                //    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                //    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                //}).ToList();
+
+                int id_org_jed_par = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed_par).ToList();
+
+                List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
+                List<ProjekatAktivnostPlan> pap_temp_2_par = new List<ProjekatAktivnostPlan>();
+
+                foreach (var x in pap_temp_par)
                 {
-                    Datum = x.Datum,
-                    Kolicina = x.Kolicina,
-                    korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-                    Korisnici_FK = x.Korisnici_FK,
-                    Opis = x.Opis,
-                    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
-                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
-                }).ToList();
+                    foreach (var y in pp_temp)
+                    {
+                        if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+                        {
+                            pap_temp_2_par.Add(new ProjekatAktivnostPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                ProjekatPlan_FK = x.ProjekatPlan_FK,
+                                DatumOd = x.DatumOd,
+                                JedinicaMjere = x.JedinicaMjere,
+                                Kolicina = x.Kolicina,
+                                Naziv = x.Naziv,
+                                ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                                Sifra = x.Sifra,
+                                projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
+                            });
+                        }
+                    }
+                }
+
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
+
+                foreach (var x in par_temp)
+                {
+                    foreach (var y in pap_temp_2_par)
+                    {
+                        if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
+                        {
+                            par_temp_2_par.Add(new par_final_VM
+                            {
+                                Datum = x.Datum,
+                                Kolicina = x.Kolicina,
+                                Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                                Korisnici_FK = x.Korisnici_FK,
+                                Opis = x.Opis,
+                                ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                                ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                                ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                                proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+                                OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                            });
+                        }
+                    }
+                }
+                List<ProjekatAktivnostRealizacija> par = new List<ProjekatAktivnostRealizacija>();
+                foreach (var t in par_temp_2_par)
+                {
+                    par.Add(new ProjekatAktivnostRealizacija
+                    {
+                        Datum = t.Datum,
+                        Kolicina = t.Kolicina,
+                        korisnici = t.Korisnici,
+                        Korisnici_FK = t.Korisnici_FK,
+                        Opis = t.Opis,
+                        projekatAktivnostPlan = t.ProjekatAktivnostPlan_all,
+                        ProjekatAktivnostPlan_FK = t.ProjekatAktivnostPlan_FK,
+                        ProjekatAktivnostRealizacija_ID = t.ProjekatAktivnostRealizacija_ID
+                    });
+                }
 
                 List<RealizacijaVM> lista = new List<RealizacijaVM>();
                 List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
@@ -1328,244 +2507,134 @@ namespace WebApplication1.Areas.User.Controllers
                 liste = null
             };
             return View(model2);
-
         }
-
         [Area("User")]
         public IActionResult Prikaz(int u, int o, int r)
         {
-
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
             ViewData["logo"] = logo;
 
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
+            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
+            List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
+            List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
 
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
+            foreach(var x in pap_temp)
             {
-                foreach (var y in org_jed)
-                {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
-                    {
-                        p_p_final.Add(new ProjekatPlan
-                        {
-                            DatumDo = x.DatumDo,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd = x.DatumOd,
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
-                        });
-                    }
-                }
-            }
-
-
-            List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
-
-            foreach (var x in temp)
-            {
-                foreach (var y in p_p_final)
+                foreach(var y in pp_temp)
                 {
                     if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                     {
-                        temp_final.Add(new ProjekatAktivnostPlan
-                        {
-                            DatumDo = x.DatumDo,
-                            DatumOd = x.DatumOd,
-                            JedinicaMjere = x.JedinicaMjere,
-                            Naziv = x.Naziv,
-                            Kolicina = x.Kolicina,
-                            ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK = x.ProjekatPlan_FK,
-                            Sifra = x.Sifra
-                        });
-                    }
-                }
-            }
-
-            List<ProjekatAktivnostRealizacija> realizacija_temp = db.ProjekatAktivnostRealizacija.ToList();
-            List<ProjekatAktivnostRealizacija> realizacija_final = new List<ProjekatAktivnostRealizacija>();
-
-            foreach(var x in temp_final)
-            {
-                foreach(var y in realizacija_temp)
-                {
-                    if (y.ProjekatAktivnostPlan_FK == x.ProjekatAktivnostPlan_ID)
-                    {
-                        realizacija_final.Add(new ProjekatAktivnostRealizacija
-                        {
-                            Datum=y.Datum,
-                            ProjekatAktivnostPlan_FK=y.ProjekatAktivnostPlan_FK,
-                            Kolicina=y.Kolicina,
-                            Korisnici_FK=y.Korisnici_FK,
-                            korisnici=db.Korisnici.Where(a=>a.Korisnici_ID==y.Korisnici_FK).FirstOrDefault(),
-                            Opis=y.Opis,
-                            projekatAktivnostPlan=db.ProjekatAktivnostPlan.Where(a=>a.ProjekatAktivnostPlan_ID==y.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                            ProjekatAktivnostRealizacija_ID=y.ProjekatAktivnostRealizacija_ID
-                        });
-                    }
-                }
-            }
-
-            ViewData["lista_relizacija"] = realizacija_final;
-
-            uor podaci = new uor
-            {
-                organisationId=o,
-                roleId=r,
-                userId=u
-            };
-
-            ViewData["id"] = podaci;
-
-            return View();
-        }
-        
-        [Area("User")]
-        public IActionResult Unos(int u, int o, int r)
-        {
-            //List<ProjekatAktivnostPlan> lista_proj_aktiv_plan = db.ProjekatAktivnostPlan.Select(x => new ProjekatAktivnostPlan
-            //{
-            //    ProjekatAktivnostPlan_ID=x.ProjekatAktivnostPlan_ID,
-            //    Naziv=x.Naziv
-            //}).ToList();
-            //ViewData["lista_proj_aktiv_plan"] = lista_proj_aktiv_plan;
-
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
-
-            ViewData["logo"] = logo;
-
-            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
-            List<ProjekatPlan> lista_proj_plan_temp = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> lista_proj_plan = new List<ProjekatPlan>();
-
-            foreach(var x in lista_proj_plan_temp)
-            {
-                foreach(var y in lista_org_jed)
-                {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
-                    {
-                        lista_proj_plan.Add(new ProjekatPlan
+                        pap_temp_2.Add(new ProjekatAktivnostPlan
                         {
                             DatumDo=x.DatumDo,
-                            DatumOd=x.DatumOd,
-                            Naziv=x.Naziv,
-                            OrganizacionaJedinica_FK=x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            ProjekatPlan_ID=x.ProjekatPlan_ID,
-                            Sifra=x.Sifra
-                        });
-                    }
-                }
-            }
-            List<ProjekatAktivnostPlan> lista_proj_aktiv_plan_temp = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> lista_proj_aktiv_plan = new List<ProjekatAktivnostPlan>();
-
-            foreach(var x in lista_proj_aktiv_plan_temp)
-            {
-                foreach(var y in lista_proj_plan)
-                {
-                    if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
-                    {
-                        lista_proj_aktiv_plan.Add(new ProjekatAktivnostPlan
-                        {
-                            DatumDo=y.DatumDo,
                             ProjekatPlan_FK=x.ProjekatPlan_FK,
                             DatumOd=x.DatumOd,
                             JedinicaMjere=x.JedinicaMjere,
                             Kolicina=x.Kolicina,
                             Naziv=x.Naziv,
                             ProjekatAktivnostPlan_ID=x.ProjekatAktivnostPlan_ID,
-                            projekatPlan=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID==x.ProjekatPlan_FK).FirstOrDefault(),
-                            Sifra=x.Sifra
+                            Sifra=x.Sifra,
+                            projekatPlan=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID==x.ProjekatPlan_FK).FirstOrDefault()
                         });
                     }
                 }
             }
 
-            ViewData["lista_proj_aktiv_plan"] = lista_proj_aktiv_plan;
+            List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+            List<par_final_VM> par_temp_2 = new List<par_final_VM>();
 
-            //List<Korisnici> lista_korisnici = db.Korisnici.Select(x => new Korisnici
-            //{
-            //    Korisnici_ID=x.Korisnici_ID,
-            //    Ime=x.Ime,
-            //    Prezime=x.Prezime
-            //}).ToList();
-            //ViewData["lista_korisnici"] = lista_korisnici;
-
-            List<Korisnici_OrganizacionaJedinica> lista_kor_org_jed_temp = db.Korisnici_OrganizacionaJedinica.ToList();
-            List<Korisnici_OrganizacionaJedinica> lista_kor_org_jed = new List<Korisnici_OrganizacionaJedinica>();
-            List<OrganizacionaJedinica> lista_org_jed_2 = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
-
-            foreach (var x in lista_kor_org_jed_temp)
+            foreach(var x in par_temp)
             {
-                foreach(var y in lista_org_jed_2)
+                foreach(var y in pap_temp_2)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
                     {
-                        lista_kor_org_jed.Add(new Korisnici_OrganizacionaJedinica
+                        par_temp_2.Add(new par_final_VM
                         {
+                            Datum=x.Datum,
+                            Kolicina=x.Kolicina,
+                            Korisnici= db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
                             Korisnici_FK=x.Korisnici_FK,
-                            korisnici=db.Korisnici.Where(a=>a.Korisnici_ID==x.Korisnici_FK).FirstOrDefault(),
-                            Korisnici_OrganizacionaJedinica_ID=x.Korisnici_OrganizacionaJedinica_ID,
-                            organizacionaJedinica=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            OrganizacionaJedinica_FK=x.OrganizacionaJedinica_FK
+                            Opis=x.Opis,
+                            ProjekatAktivnostPlan_FK=x.ProjekatAktivnostPlan_FK,
+                            ProjekatAktivnostPlan_all= db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                            ProjekatAktivnostRealizacija_ID=x.ProjekatAktivnostRealizacija_ID,
+                            proj_plan=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID==y.ProjekatPlan_FK).FirstOrDefault(),
+                            OrgJed=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==id_org_jed).FirstOrDefault()
                         });
                     }
                 }
             }
 
-            List<Korisnici> lista_kor_temp = db.Korisnici.ToList();
-            List<Korisnici> lista_kor = new List<Korisnici>();
-            bool postoji = false;
-            foreach(var x in lista_kor_temp)
+            ViewData["lista_relizacija"] = par_temp_2;
+
+            uor podaci = new uor
             {
-                foreach(var y in lista_kor_org_jed)
+                roleId = r,
+                organisationId = o,
+                userId = u
+            };
+
+            ViewData["id"] = podaci;
+
+
+            return View();
+        }
+        [Area("User")]
+        public IActionResult Unos(int u, int o, int r)
+        {
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
+            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
+            List<dropdownAdminOrgUnosRealVM> pap_final = new List<dropdownAdminOrgUnosRealVM>();
+
+            foreach (var x in pap_temp)
+            {
+                foreach (var y in pp_temp)
+                {
+                    if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+                    {
+                        pap_final.Add(new dropdownAdminOrgUnosRealVM
+                        {
+                            aktivnostId= x.ProjekatAktivnostPlan_ID,
+                            aktivnost=db.ProjekatAktivnostPlan.Where(a=>a.ProjekatAktivnostPlan_ID==x.ProjekatAktivnostPlan_ID).Select(o=>o.Naziv).FirstOrDefault(),
+                            projekat=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID== x.ProjekatPlan_FK).Select(o=>o.Naziv).FirstOrDefault()
+                        });
+                    }
+                }
+            }
+
+            ViewData["lista_proj_aktiv_plan"] = pap_final;
+
+            List<Korisnici_OrganizacionaJedinica> ko_temp = db.Korisnici_OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<Korisnici> korisnici_temp = db.Korisnici.ToList();
+            List<Korisnici> korisnici_final = new List<Korisnici>();
+
+            foreach(var x in korisnici_temp)
+            {
+                foreach(var y in ko_temp)
                 {
                     if (x.Korisnici_ID == y.Korisnici_FK)
                     {
-                        postoji = false;
-
-                        if (lista_kor.Count == 0)
+                        korisnici_final.Add(new Korisnici
                         {
-                            lista_kor.Add(new Korisnici
-                            {
-                                Ime = x.Ime,
-                                Prezime = x.Prezime,
-                                Korisnici_ID = x.Korisnici_ID
-                            });
-                        }
-                        else
-                        {
-                            foreach(var z in lista_kor)
-                            {
-                                if (z.Korisnici_ID == x.Korisnici_ID)
-                                    postoji = true;
-                            }
-                            if (!postoji)
-                            {
-                                lista_kor.Add(new Korisnici
-                                {
-                                    Ime = x.Ime,
-                                    Prezime = x.Prezime,
-                                    Korisnici_ID = x.Korisnici_ID
-                                });
-                            }
-                        }
+                            Korisnici_ID=x.Korisnici_ID,
+                            Ime=x.Ime,
+                            Prezime=x.Prezime
+                        });
                     }
                 }
             }
 
-            ViewData["lista_korisnici"] = lista_kor;
+            ViewData["lista_korisnici"] = korisnici_final;
 
             uor podaci = new uor
             {
@@ -1578,17 +2647,13 @@ namespace WebApplication1.Areas.User.Controllers
 
             return View();
         }
-
-
-
         [Area("User")]
         public IActionResult UnosSnimi(int projekatAktivnostPlan, int korisnik, DateTime datum, float kolicina, string opis, int u, int o, int r)
         {
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
             ViewData["logo"] = logo;
-
-            ProjekatAktivnostRealizacija temp_2 = new ProjekatAktivnostRealizacija
+            ProjekatAktivnostRealizacija temp = new ProjekatAktivnostRealizacija
             {
                 Datum = datum,
                 Kolicina = kolicina,
@@ -1597,87 +2662,8 @@ namespace WebApplication1.Areas.User.Controllers
                 ProjekatAktivnostPlan_FK = projekatAktivnostPlan
             };
 
-            db.ProjekatAktivnostRealizacija.Add(temp_2);
+            db.ProjekatAktivnostRealizacija.Add(temp);
             db.SaveChanges();
-
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
-
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
-            {
-                foreach (var y in org_jed)
-                {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
-                    {
-                        p_p_final.Add(new ProjekatPlan
-                        {
-                            DatumDo = x.DatumDo,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd = x.DatumOd,
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
-                        });
-                    }
-                }
-            }
-
-
-            List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
-
-            foreach (var x in temp)
-            {
-                foreach (var y in p_p_final)
-                {
-                    if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
-                    {
-                        temp_final.Add(new ProjekatAktivnostPlan
-                        {
-                            DatumDo = x.DatumDo,
-                            DatumOd = x.DatumOd,
-                            JedinicaMjere = x.JedinicaMjere,
-                            Naziv = x.Naziv,
-                            Kolicina = x.Kolicina,
-                            ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK = x.ProjekatPlan_FK,
-                            Sifra = x.Sifra
-                        });
-                    }
-                }
-            }
-
-            List<ProjekatAktivnostRealizacija> realizacija_temp = db.ProjekatAktivnostRealizacija.ToList();
-            List<ProjekatAktivnostRealizacija> realizacija_final = new List<ProjekatAktivnostRealizacija>();
-
-            foreach (var x in temp_final)
-            {
-                foreach (var y in realizacija_temp)
-                {
-                    if (y.ProjekatAktivnostPlan_FK == x.ProjekatAktivnostPlan_ID)
-                    {
-                        realizacija_final.Add(new ProjekatAktivnostRealizacija
-                        {
-                            Datum = y.Datum,
-                            ProjekatAktivnostPlan_FK = y.ProjekatAktivnostPlan_FK,
-                            Kolicina = y.Kolicina,
-                            Korisnici_FK = y.Korisnici_FK,
-                            korisnici = db.Korisnici.Where(a => a.Korisnici_ID == y.Korisnici_FK).FirstOrDefault(),
-                            Opis = y.Opis,
-                            projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                            ProjekatAktivnostRealizacija_ID = y.ProjekatAktivnostRealizacija_ID
-                        });
-                    }
-                }
-            }
-
-            ViewData["lista_relizacija"] = realizacija_final;
 
             //List<ProjekatAktivnostRealizacija> lista = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
             //{
@@ -1692,6 +2678,63 @@ namespace WebApplication1.Areas.User.Controllers
             //}).ToList();
             //ViewData["lista_relizacija"] = lista;
 
+            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+
+            List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
+            List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
+
+            foreach (var x in pap_temp)
+            {
+                foreach (var y in pp_temp)
+                {
+                    if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+                    {
+                        pap_temp_2.Add(new ProjekatAktivnostPlan
+                        {
+                            DatumDo = x.DatumDo,
+                            ProjekatPlan_FK = x.ProjekatPlan_FK,
+                            DatumOd = x.DatumOd,
+                            JedinicaMjere = x.JedinicaMjere,
+                            Kolicina = x.Kolicina,
+                            Naziv = x.Naziv,
+                            ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                            Sifra = x.Sifra,
+                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
+                        });
+                    }
+                }
+            }
+
+            List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+            List<par_final_VM> par_temp_2 = new List<par_final_VM>();
+
+            foreach (var x in par_temp)
+            {
+                foreach (var y in pap_temp_2)
+                {
+                    if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
+                    {
+                        par_temp_2.Add(new par_final_VM
+                        {
+                            Datum = x.Datum,
+                            Kolicina = x.Kolicina,
+                            Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                            Korisnici_FK = x.Korisnici_FK,
+                            Opis = x.Opis,
+                            ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                            ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                            ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                            proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                        });
+                    }
+                }
+            }
+
+            ViewData["lista_relizacija"] = par_temp_2;
+
             uor podaci = new uor
             {
                 roleId = r,
@@ -1704,17 +2747,16 @@ namespace WebApplication1.Areas.User.Controllers
             return View("Prikaz");
         }
         [Area("User")]
-        public IActionResult Ukloni(int id, int u, int o, int r)
+        public IActionResult Ukloni(int id, int o, int u, int r)
         {
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
             ViewData["logo"] = logo;
+            ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(x => x.ProjekatAktivnostRealizacija_ID == id).FirstOrDefault();
 
-            ProjekatAktivnostRealizacija temp_2 = db.ProjekatAktivnostRealizacija.Where(x => x.ProjekatAktivnostRealizacija_ID == id).FirstOrDefault();
-
-            if (temp_2 != null)
+            if (temp != null)
             {
-                db.ProjekatAktivnostRealizacija.Remove(temp_2);
+                db.ProjekatAktivnostRealizacija.Remove(temp);
                 db.SaveChanges();
             }
 
@@ -1731,84 +2773,61 @@ namespace WebApplication1.Areas.User.Controllers
             //}).ToList();
             //ViewData["lista_relizacija"] = lista;
 
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
+            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
+            List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
+            List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
 
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
+            foreach (var x in pap_temp)
             {
-                foreach (var y in org_jed)
-                {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
-                    {
-                        p_p_final.Add(new ProjekatPlan
-                        {
-                            DatumDo = x.DatumDo,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd = x.DatumOd,
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
-                        });
-                    }
-                }
-            }
-
-
-            List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
-
-            foreach (var x in temp)
-            {
-                foreach (var y in p_p_final)
+                foreach (var y in pp_temp)
                 {
                     if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                     {
-                        temp_final.Add(new ProjekatAktivnostPlan
+                        pap_temp_2.Add(new ProjekatAktivnostPlan
                         {
                             DatumDo = x.DatumDo,
+                            ProjekatPlan_FK = x.ProjekatPlan_FK,
                             DatumOd = x.DatumOd,
                             JedinicaMjere = x.JedinicaMjere,
-                            Naziv = x.Naziv,
                             Kolicina = x.Kolicina,
+                            Naziv = x.Naziv,
                             ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK = x.ProjekatPlan_FK,
-                            Sifra = x.Sifra
+                            Sifra = x.Sifra,
+                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
                         });
                     }
                 }
             }
 
-            List<ProjekatAktivnostRealizacija> realizacija_temp = db.ProjekatAktivnostRealizacija.ToList();
-            List<ProjekatAktivnostRealizacija> realizacija_final = new List<ProjekatAktivnostRealizacija>();
+            List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+            List<par_final_VM> par_temp_2 = new List<par_final_VM>();
 
-            foreach (var x in temp_final)
+            foreach (var x in par_temp)
             {
-                foreach (var y in realizacija_temp)
+                foreach (var y in pap_temp_2)
                 {
-                    if (y.ProjekatAktivnostPlan_FK == x.ProjekatAktivnostPlan_ID)
+                    if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
                     {
-                        realizacija_final.Add(new ProjekatAktivnostRealizacija
+                        par_temp_2.Add(new par_final_VM
                         {
-                            Datum = y.Datum,
-                            ProjekatAktivnostPlan_FK = y.ProjekatAktivnostPlan_FK,
-                            Kolicina = y.Kolicina,
-                            Korisnici_FK = y.Korisnici_FK,
-                            korisnici = db.Korisnici.Where(a => a.Korisnici_ID == y.Korisnici_FK).FirstOrDefault(),
-                            Opis = y.Opis,
-                            projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                            ProjekatAktivnostRealizacija_ID = y.ProjekatAktivnostRealizacija_ID
+                            Datum = x.Datum,
+                            Kolicina = x.Kolicina,
+                            Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                            Korisnici_FK = x.Korisnici_FK,
+                            Opis = x.Opis,
+                            ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                            ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                            ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                            proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
                         });
                     }
                 }
             }
 
-            ViewData["lista_relizacija"] = realizacija_final;
+            ViewData["lista_relizacija"] = par_temp_2;
 
             uor podaci = new uor
             {
@@ -1827,7 +2846,6 @@ namespace WebApplication1.Areas.User.Controllers
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
             ViewData["logo"] = logo;
-
             ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == id).FirstOrDefault();
 
             temp.projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == temp.ProjekatAktivnostPlan_FK).FirstOrDefault();
@@ -1846,112 +2864,75 @@ namespace WebApplication1.Areas.User.Controllers
             return View();
         }
         [Area("User")]
-        public IActionResult UrediSnimi(int realizacijaId, int aktivnostId, string projekat, float kolicina, DateTime datum, string opis, int u, int o, int r)
+        public IActionResult UrediSnimi(int realizacijaId, int aktivnostId, string projekat, float kolicina, DateTime datum, string opis, int o, int u, int r)
         {
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
             ViewData["logo"] = logo;
+            ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == realizacijaId).FirstOrDefault();
 
-            ProjekatAktivnostRealizacija temp_2 = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == realizacijaId).FirstOrDefault();
+            temp.Kolicina = kolicina;
+            temp.Opis = opis;
+            temp.Datum = datum;
 
-            temp_2.Kolicina = kolicina;
-            temp_2.Opis = opis;
-            temp_2.Datum = datum;
-
-            db.Update(temp_2);
+            db.Update(temp);
             db.SaveChanges();
 
-            //List<ProjekatAktivnostRealizacija> lista = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
-            //{
-            //    Datum = x.Datum,
-            //    Kolicina = x.Kolicina,
-            //    korisnici = db.Korisnici.Where(c => c.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-            //    Korisnici_FK = x.Korisnici_FK,
-            //    Opis = x.Opis,
-            //    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(c => c.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-            //    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
-            //    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
-            //}).ToList();
-            //ViewData["lista_relizacija"] = lista;
+            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
 
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
+            List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
+            List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
-
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
+            foreach (var x in pap_temp)
             {
-                foreach (var y in org_jed)
-                {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
-                    {
-                        p_p_final.Add(new ProjekatPlan
-                        {
-                            DatumDo = x.DatumDo,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd = x.DatumOd,
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
-                        });
-                    }
-                }
-            }
-
-
-            List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
-
-            foreach (var x in temp)
-            {
-                foreach (var y in p_p_final)
+                foreach (var y in pp_temp)
                 {
                     if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                     {
-                        temp_final.Add(new ProjekatAktivnostPlan
+                        pap_temp_2.Add(new ProjekatAktivnostPlan
                         {
                             DatumDo = x.DatumDo,
+                            ProjekatPlan_FK = x.ProjekatPlan_FK,
                             DatumOd = x.DatumOd,
                             JedinicaMjere = x.JedinicaMjere,
-                            Naziv = x.Naziv,
                             Kolicina = x.Kolicina,
+                            Naziv = x.Naziv,
                             ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK = x.ProjekatPlan_FK,
-                            Sifra = x.Sifra
+                            Sifra = x.Sifra,
+                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
                         });
                     }
                 }
             }
 
-            List<ProjekatAktivnostRealizacija> realizacija_temp = db.ProjekatAktivnostRealizacija.ToList();
-            List<ProjekatAktivnostRealizacija> realizacija_final = new List<ProjekatAktivnostRealizacija>();
+            List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+            List<par_final_VM> par_temp_2 = new List<par_final_VM>();
 
-            foreach (var x in temp_final)
+            foreach (var x in par_temp)
             {
-                foreach (var y in realizacija_temp)
+                foreach (var y in pap_temp_2)
                 {
-                    if (y.ProjekatAktivnostPlan_FK == x.ProjekatAktivnostPlan_ID)
+                    if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
                     {
-                        realizacija_final.Add(new ProjekatAktivnostRealizacija
+                        par_temp_2.Add(new par_final_VM
                         {
-                            Datum = y.Datum,
-                            ProjekatAktivnostPlan_FK = y.ProjekatAktivnostPlan_FK,
-                            Kolicina = y.Kolicina,
-                            Korisnici_FK = y.Korisnici_FK,
-                            korisnici = db.Korisnici.Where(a => a.Korisnici_ID == y.Korisnici_FK).FirstOrDefault(),
-                            Opis = y.Opis,
-                            projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                            ProjekatAktivnostRealizacija_ID = y.ProjekatAktivnostRealizacija_ID
+                            Datum = x.Datum,
+                            Kolicina = x.Kolicina,
+                            Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                            Korisnici_FK = x.Korisnici_FK,
+                            Opis = x.Opis,
+                            ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                            ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+                            ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                            proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
                         });
                     }
                 }
             }
 
-            ViewData["lista_relizacija"] = realizacija_final;
+            ViewData["lista_relizacija"] = par_temp_2;
 
             uor podaci = new uor
             {

@@ -10,8 +10,6 @@
     Layout = "~/Views/Shared/_Layout_user.cshtml";
 
     byte[] pic = (byte[])ViewData["logo"];
-
-
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
@@ -86,6 +84,7 @@
         <ul>
             <li id="transakcije">Transakcije</li>
             <ul id="tra">
+                <li><a href="/User/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
                 <li><a href="/User/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
             </ul>
             <li id="izvjestaji">Izvještaji</li>
@@ -112,15 +111,16 @@
         $(document.getElementsByTagName("a")).mousedown(function () {
             this.style.color = "White";
         });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
+            //$(document.getElementsByTagName("li")).mouseup(function () {
+            //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+            //});
+    </script>*@
 <center>
     <div id="zaglavlje" style="width:100%">
-        <h1 style="position:relative; display:inline;">Uređivanje Realizacija</h1>
+        <h1 style="position:relative; display:inline;">Uređivanje realizacije</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
+
     <form method="post" action="/User/ProjekatAktivnostRealizacija/UrediSnimi">
         <input hidden="hidden" name="u" value="@id.userId" />
         <input hidden="hidden" name="o" value="@id.organisationId" />

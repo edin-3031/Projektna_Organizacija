@@ -87,6 +87,7 @@
         <ul>
             <li id="transakcije">Transakcije</li>
             <ul id="tra">
+                <li><a href="/User/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
                 <li><a href="/User/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
             </ul>
             <li id="izvjestaji">Izvještaji</li>
@@ -97,26 +98,7 @@
         </ul>
     </div>
 </div>
-@*<script>
-            $(document.getElementsByTagName("li")).mousedown(function () {
-                this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-                this.style.width = "100%";
-                this.style.borderRadius = "0px 25px 25px 0px";
-            });
 
-            $(document.getElementsByTagName("li")).mouseleave(function () {
-                this.style.backgroundColor = "rgb(51, 51, 51)";
-                this.style.width = "100%";
-                this.style.borderRadius = "0px";
-            });
-
-            $(document.getElementsByTagName("a")).mousedown(function () {
-                this.style.color = "White";
-            });
-            //$(document.getElementsByTagName("li")).mouseup(function () {
-            //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-            //});
-    </script>*@
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Prikaz Projektnih aktivnosti</h1>
@@ -127,13 +109,13 @@
             <a class="btn btn-success" href="/User/ProjekatAktivnostPlan/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Dodaj novi</a>
         </div>
         <div id="print_excel">
-            <a href="/Report/IndexUserAktivnost?o=@id.organisationId" class="btn btn-info">Export to Excel</a>
+            <a href="/User/ProjekatAktivnostPlan/Excel?u=@id.userId" class="btn btn-info">Export to Excel</a>
         </div>
     </div>
     <table class="table">
         <thead>
         <th>ID</th>
-        @*<th>Projekat plan</th>*@
+        <th>Projekat plan</th>
         <th>Šifra</th>
         <th>Naziv</th>
         <th>Datum od</th>
@@ -147,14 +129,15 @@
             {
                 <tr>
                     <td>@x.ProjekatAktivnostPlan_ID</td>
-                    @*<td>@x.projekatPlan.Naziv</td>*@
+                    <td>@x.projekatPlan.Naziv</td>
                     <td>@x.Sifra</td>
                     <td>@x.Naziv</td>
                     <td>@(x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".")</td>
                     <td>@(x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".")</td>
                     <td>@x.JedinicaMjere</td>
                     <td>@x.Kolicina</td>
-                    <td><a class="btn btn-danger" href="/User/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a></td>
+                    <td><a class="btn btn-primary" href="/User/ProjekatAktivnostPlan/Uredi?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
+                    <a class="btn btn-danger" href="/User/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a></td>
                 </tr>
             }
         </tbody>
