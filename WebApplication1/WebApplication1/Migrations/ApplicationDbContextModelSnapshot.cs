@@ -311,7 +311,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("StatusID");
 
-                    b.ToTable("Status");
+                    b.ToTable("Statusi");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Uloge", b =>

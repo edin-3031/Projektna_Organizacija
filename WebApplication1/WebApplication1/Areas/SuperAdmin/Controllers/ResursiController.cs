@@ -1,9 +1,8 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using MySqlX.XDevAPI.Common;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.VM;

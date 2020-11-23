@@ -89,30 +89,12 @@
             <ul id="adm">
                 <li><a href="/SuperAdmin/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
                 <li><a href="/SuperAdmin/Uloge/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Uloge</a></li>
+                <li><a href="/SuperAdmin/Status/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Statusi</a></li>
             </ul>
         </ul>
     </div>
 </div>
-@*<script>
-    $(document.getElementsByTagName("li")).mousedown(function () {
-        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px 25px 25px 0px";
-    });
 
-    $(document.getElementsByTagName("li")).mouseleave(function () {
-        this.style.backgroundColor = "rgb(51, 51, 51)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px";
-    });
-
-    $(document.getElementsByTagName("a")).mousedown(function () {
-        this.style.color = "White";
-    });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
 <center>
     <h1>Prikaz Resursa</h1>
     <form action="/SuperAdmin/Resursi/UnosSnimi">

@@ -16,6 +16,10 @@ namespace WebApplication1.Models
         [ForeignKey("organizacionaJedinica")]
         public int OrganizacionaJedinica_FK { get; set; }
 
+        public Status? status { get; set; }
+        [ForeignKey("status")]
+        public int Status_FK { get; set; }
+
         public int Sifra { get; set; }
         public string Naziv{ get; set; }
         public DateTime DatumOd { get; set; }

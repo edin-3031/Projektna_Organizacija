@@ -423,3 +423,6 @@ D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\AdminOrgJed\Views\ProjekatPlan\Uredi.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\ProjekatAktivnostPlan\Uredi.cshtml.g.cs
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\ProjekatPlan\Prikaz.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\SuperAdmin\Views\Status\Unos.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\SuperAdmin\Views\Status\Prikaz.cshtml.g.cs
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Areas\SuperAdmin\Views\Status\Uredi.cshtml.g.cs
