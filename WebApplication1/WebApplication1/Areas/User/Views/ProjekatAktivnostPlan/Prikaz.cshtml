@@ -136,8 +136,18 @@
                     <td>@(x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".")</td>
                     <td>@x.JedinicaMjere</td>
                     <td>@x.Kolicina</td>
-                    <td><a class="btn btn-primary" href="/User/ProjekatAktivnostPlan/Uredi?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
-                    <a class="btn btn-danger" href="/User/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a></td>
+                    <td>
+                        <a class="btn btn-primary" href="/User/ProjekatAktivnostPlan/Uredi?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
+                        <a id="ukloni_@x.ProjekatAktivnostPlan_ID" class="btn btn-danger" style="color:white">Ukloni</a>
+                        <script>
+                            $("#ukloni_@x.ProjekatAktivnostPlan_ID").click(function () {
+                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
+
+                                if (t===true)
+                                    window.location.href = "/User/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId";
+                            });
+                        </script>
+                    </td>
                 </tr>
             }
         </tbody>

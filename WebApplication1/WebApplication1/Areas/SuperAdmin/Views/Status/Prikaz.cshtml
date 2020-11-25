@@ -70,7 +70,7 @@
 <div id="kutijaZaMeni">
     <div id="menu">
         <br />
-        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/SuperAdmin/Admin/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
+        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/SuperAdmin/SuperAdmin/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
         <ul>
             <li id="sifarnik">Opšti šifarnik</li>
             <ul id="o_s">
@@ -103,7 +103,6 @@
     <a class="btn btn-success" href="/SuperAdmin/Status/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Dodaj novi</a><br /><br />
     <table class="table">
         <thead>
-        <th>ID</th>
         <th>Naziv</th>
         <th>Šifra</th>
         <th>Akcija</th>
@@ -112,12 +111,19 @@
             @foreach (var x in statusi)
             {
                 <tr>
-                    <td>@x.StatusID</td>
                     <td>@x.Naziv</td>
                     <td>@x.Sifra</td>
                     <td>
                         <a class="btn btn-primary" href="/SuperAdmin/Status/Uredi?u=@id.userId&o=@id.organisationId&r=@id.roleId&id=@x.StatusID">Uredi</a>
-                        <a class="btn btn-danger" href="/SuperAdmin/Status/Ukloni?u=@id.userId&o=@id.organisationId&r=@id.roleId&id=@x.StatusID">Ukloni</a>
+                        <a id="ukloni_@x.StatusID" class="btn btn-danger" style="color:white">Ukloni</a>
+                        <script>
+                            $("#ukloni_@x.StatusID").click(function () {
+                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
+
+                                if (t===true)
+                                    window.location.href = "/SuperAdmin/Status/Ukloni?u=@id.userId&o=@id.organisationId&r=@id.roleId&id=@x.StatusID";
+                            });
+                        </script>
                     </td>
                 </tr>
             }

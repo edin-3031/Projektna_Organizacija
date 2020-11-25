@@ -30,14 +30,14 @@
             {
                 <tr>
                     <td>@x.korisnik</td>
-                    <td>@x.datum</td>
+                    <td>@(x.datum.Date.Day+"."+x.datum.Date.Month+"."+x.datum.Date.Year+".")</td>
                     <td>@x.kolicina</td>
                     <td>@x.opis</td>
                 </tr>
             }
         </tbody>
     </table>
-    <button id="sakrij" class="btn btn-primary">Sakrij</button>
+    <button id="sakrij" class="btn btn-primary">Sakrij</button><br />
     <script>
         $("#sakrij").click(function () {
             $("#sakrij").hide();

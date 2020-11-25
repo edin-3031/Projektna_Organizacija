@@ -140,7 +140,7 @@
                         <option value="@p_a.ProjekatPlan_FK">@p_a.projekatPlan.Naziv</option>
                         @foreach (var x in lista_proj_plan)
                         {
-                            <option value="@x.ProjekatPlan_ID">@x.Naziv ()</option>
+                            <option value="@x.ProjekatPlan_ID">@x.Naziv (@x.organizacionaJedinica.Naziv)</option>
                         }
                     </select>
                 </td>

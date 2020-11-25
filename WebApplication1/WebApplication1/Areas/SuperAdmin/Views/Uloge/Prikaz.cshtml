@@ -96,26 +96,7 @@
         </ul>
     </div>
 </div>
-@*<script>
-    $(document.getElementsByTagName("li")).mousedown(function () {
-        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px 25px 25px 0px";
-    });
 
-    $(document.getElementsByTagName("li")).mouseleave(function () {
-        this.style.backgroundColor = "rgb(51, 51, 51)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px";
-    });
-
-    $(document.getElementsByTagName("a")).mousedown(function () {
-        this.style.color = "White";
-    });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
 <center>
     <h1>Prikaz Uloga</h1>
     <div id="dugmad">
@@ -125,7 +106,6 @@
     </div>
     <table class="table">
         <thead>
-        <th>ID</th>
         <th>Šifra</th>
         <th>Naziv</th>
         <th>Opis</th>
@@ -135,12 +115,21 @@
             @foreach (var x in lista)
             {
                 <tr>
-                    <td>@x.Uloge_ID</td>
                     <td>@x.Sifra</td>
                     <td>@x.Naziv</td>
                     <td>@x.Opis</td>
-                    <td><a type="submit" class=" btn btn-primary" href="/SuperAdmin/Uloge/Uredi?id=@x.Uloge_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
-                    <a type="submit" class=" btn btn-danger" href="/SuperAdmin/Uloge/Obrisi?id=@x.Uloge_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Obriši</a></td>
+                    <td>
+                        <a type="submit" class=" btn btn-primary" href="/SuperAdmin/Uloge/Uredi?id=@x.Uloge_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
+                        <a id="ukloni_@x.Uloge_ID" class="btn btn-danger" style="color:white">Ukloni</a>
+                        <script>
+                            $("#ukloni_@x.Uloge_ID").click(function () {
+                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
+
+                                if (t===true)
+                                    window.location.href = "/SuperAdmin/Uloge/Obrisi?id=@x.Uloge_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId";
+                            });
+                        </script>
+                    </td>
                 </tr>
             }
         </tbody>

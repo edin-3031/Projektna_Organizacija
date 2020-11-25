@@ -20,7 +20,7 @@
     <h1>Detalji Realizacija</h1>
     <table class="table">
         <thead>
-            @*<th>Korisnik</th>*@
+            <th>Korisnik</th>
         <th>Datum</th>
         <th>Ostvarena količina</th>
         <th>Opis</th>
@@ -29,8 +29,8 @@
             @foreach (var x in Model.lista)
             {
                 <tr>
-                    @*<td>@x.korisnik</td>*@
-                    <td>@x.datum</td>
+                    <td>@x.korisnik</td>
+                    <td>@(x.datum.Date.Day+"."+ x.datum.Date.Month + "."+ x.datum.Date.Year + ".")</td>
                     <td>@x.kolicina</td>
                     <td>@x.opis</td>
                 </tr>
@@ -38,6 +38,7 @@
         </tbody>
     </table>
     <button id="sakrij" class="btn btn-primary">Sakrij</button>
+    <br />
     <script>
         $("#sakrij").click(function () {
             $("#sakrij").hide();

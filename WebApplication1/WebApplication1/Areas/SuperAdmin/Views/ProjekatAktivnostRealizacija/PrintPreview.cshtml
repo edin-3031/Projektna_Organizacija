@@ -66,58 +66,6 @@
         border-radius: 0px 25px 25px 0px;
     }
 </style>
-<div id="kutijaZaMeni">
-    <div id="menu">
-        <br />
-        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/SuperAdmin/SuperAdmin/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
-        <ul>
-            <li id="sifarnik">Opšti šifarnik</li>
-            <ul id="o_s">
-                <li><a href="/SuperAdmin/Drzava/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Država</a></li>
-                <li><a href="/SuperAdmin/PTT/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">PTT</a></li>
-                <li><a href="/SuperAdmin/Organizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizacija</a></li>
-                <li><a href="/SuperAdmin/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizaciona jedinica</a></li>
-                <li><a href="/SuperAdmin/KorisnikOrg/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnik-Organizaciona jedinica</a></li>
-            </ul>
-            <li id="transakcije">Transakcije</li>
-            <ul id="tra">
-                <li><a href="/SuperAdmin/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
-                <li><a href="/SuperAdmin/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
-            </ul>
-            <li id="izvjestaji">Izvještaji</li>
-            <ul id="izv">
-                <li><a href="/SuperAdmin/ProjekatAktivnostRealizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Realizacija</a></li>
-            </ul>
-            <li id="admin">Admin</li>
-            <ul id="adm">
-                <li><a href="/SuperAdmin/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
-                <li><a href="/SuperAdmin/Uloge/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Uloge</a></li>
-                <li><a href="/SuperAdmin/Status/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Statusi</a></li>
-            </ul>
-        </ul>
-    </div>
-</div>
-@*<script>
-    $(document.getElementsByTagName("li")).mousedown(function () {
-        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px 25px 25px 0px";
-    });
-
-    $(document.getElementsByTagName("li")).mouseleave(function () {
-        this.style.backgroundColor = "rgb(51, 51, 51)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px";
-    });
-
-    $(document.getElementsByTagName("a")).mousedown(function () {
-        this.style.color = "White";
-    });
-    //$(document.getElementsByTagName("li")).mouseup(function () {
-    //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-    //});
-</script>*@
-
 <div id="print_pdf"><a class="btn btn-info" id="etpdf">Export to PDF</a></div>
 <script>
     $("#etpdf").click(function () {

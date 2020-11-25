@@ -4,10 +4,11 @@
 @using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
-    List<OrganizacionaJedinica> lista_org_jed = (List<OrganizacionaJedinica>)ViewData["lista_org_jed"];
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
-
     uor id = (uor)ViewData["id"];
+
+    List<OrganizacionaJedinica> lista_org_jed = (List<OrganizacionaJedinica>)ViewData["lista_org_jed"];
+    List<Status> stat_lista = (List<Status>)ViewData["statusi"];
 }
 <style>
     td {
@@ -97,26 +98,6 @@
         </ul>
     </div>
 </div>
-@*<script>
-    $(document.getElementsByTagName("li")).mousedown(function () {
-        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px 25px 25px 0px";
-    });
-
-    $(document.getElementsByTagName("li")).mouseleave(function () {
-        this.style.backgroundColor = "rgb(51, 51, 51)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px";
-    });
-
-    $(document.getElementsByTagName("a")).mousedown(function () {
-        this.style.color = "White";
-    });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
 <center>
     <h1>Unos Projektnog Plana</h1>
     <form method="post" action="/SuperAdmin/ProjekatPlan/UnosSnimi">
@@ -179,6 +160,22 @@
                 </td>
                 <td>
                     <input type="datetime-local" name="Do" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Status
+                    </label>
+                </td>
+                <td>
+                    <select name="status_id">
+                        <option>---Odaberi---</option>
+                        @foreach (var x in stat_lista)
+                        {
+                            <option value="@x.StatusID">@x.Naziv</option>
+                        }
+                    </select>
                 </td>
             </tr>
         </table>

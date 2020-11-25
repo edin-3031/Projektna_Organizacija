@@ -111,33 +111,37 @@
     </div>
     <table class="table">
         <thead>
-        <th>ID</th>
-        <th>Korisničko ime</th>
-        <th>Uloga</th>
+        <th>Ime i prezime</th>
         <th>Šifra</th>
-        <th>Ime</th>
-        <th>Prezime</th>
+        <th>Uloga</th>
+        <th>Korisničko ime</th>
+        <th>Lozinka</th>
         <th>Telefon</th>
         <th>Mail</th>
-        <th>Lozinka</th>
         <th>Akcija</th>
         </thead>
         <tbody>
             @foreach (var x in lista)
             {
                 <tr>
-                    <td>@x.Korisnici_ID</td>
-                    <td>@x.Korisnicko_Ime</td>
-                    <td>@x.uloge.Naziv</td>
+                    <td>@(x.Ime.ToString()+" "+x.Prezime.ToString())</td>
                     <td>@x.Sifra</td>
-                    <td>@x.Ime</td>
-                    <td>@x.Prezime</td>
+                    <td>@x.uloge.Naziv</td>
+                    <td>@x.Korisnicko_Ime</td>
+                    <td>@x.Lozinka</td>
                     <td>@x.Telefon</td>
                     <td>@x.Mail</td>
-                    <td>@x.Lozinka</td>
                     <td>
                         <a class="btn btn-primary" href="/AdminOrg/Korisnik/Uredi?id=@x.Korisnici_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
-                        <a class="btn btn-danger" href="/AdminOrg/Korisnik/Ukloni?id=@x.Korisnici_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a>
+                        <a id="ukloni_@x.Korisnici_ID" class="btn btn-danger" style="color:white">Ukloni</a>
+                        <script>
+                            $("#ukloni_@x.Korisnici_ID").click(function () {
+                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
+
+                                if (t===true)
+                                    window.location.href = "/AdminOrg/Korisnik/Ukloni?id=@x.Korisnici_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId";
+                            });
+                        </script>
                     </td>
                 </tr>
             }

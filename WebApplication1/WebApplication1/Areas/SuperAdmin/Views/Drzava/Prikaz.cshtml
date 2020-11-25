@@ -95,26 +95,7 @@
         </ul>
     </div>
 </div>
-@*<script>
-    $(document.getElementsByTagName("li")).mousedown(function () {
-        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px 25px 25px 0px";
-    });
 
-    $(document.getElementsByTagName("li")).mouseleave(function () {
-        this.style.backgroundColor = "rgb(51, 51, 51)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px";
-    });
-
-    $(document.getElementsByTagName("a")).mousedown(function () {
-        this.style.color = "White";
-    });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
 <center>
     <h1>Prikaz Država</h1>
     <div id="dugmad">
@@ -124,7 +105,6 @@
     </div>
     <table class="table">
         <thead>
-        <th>ID</th>
         <th>Šifra</th>
         <th>Naziv</th>
         <th>Akcija</th>
@@ -132,13 +112,23 @@
         <tbody>
             @foreach (var x in lista)
             {
-                <tr>
-                    <td>@x.Drazava_ID</td>
-                    <td>@x.Sifra</td>
-                    <td>@x.Naziv</td>
-                    <td><a class="btn btn-primary" href="/SuperAdmin/Drzava/Uredi?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Uredi</a>
-                    <a class="btn btn-danger" href="/SuperAdmin/Drzava/Ukloni?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Ukloni</a></td>
-                </tr>
+            <tr>
+                <td>@x.Sifra</td>
+                <td>@x.Naziv</td>
+                <td>
+                    <a class="btn btn-primary" href="/SuperAdmin/Drzava/Uredi?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Uredi</a>
+
+                    <a id="ukloni_@x.Drazava_ID" class="btn btn-danger" style="color:white">Ukloni</a>
+                    <script>
+                        $("#ukloni_@x.Drazava_ID").click(function () {
+                            var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
+
+                            if (t===true)
+                                window.location.href = "/SuperAdmin/Drzava/Ukloni?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId";
+                        });
+                    </script>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

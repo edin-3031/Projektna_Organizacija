@@ -74,6 +74,22 @@
     #dat2 {
         width: 100%;
     }
+    .aktiv {
+        background-color: lawngreen;
+        font-weight: bold;
+    }
+
+    .prek {
+        background-color: dodgerblue;
+        color: white;
+        font-weight: bold;
+    }
+
+    .zavrs {
+        background-color: orangered;
+        color: white;
+        font-weight: bold;
+    }
 </style>
 <style>
 
@@ -163,9 +179,6 @@
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
     <div id="dugmad">
-        @*<div id="dodaj">
-            <a class="btn btn-success" href="/AdminOrg/ProjekatPlan/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Dodaj novi</a>
-        </div>*@
         <div id="print_excel">
             <a href="/User/ProjekatPlan/Excel?u=@id.userId" class="btn btn-info">Export to Excel</a>
         </div>
@@ -176,6 +189,7 @@
         <th>Naziv</th>
         <th>Datum od</th>
         <th>Datum do</th>
+        <th>Status</th>
         </thead>
         <tbody>
             @foreach (var x in lista)
@@ -185,6 +199,20 @@
                     <td>@x.Naziv</td>
                     <td>@(x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".")</td>
                     <td>@(x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".")</td>
+                    <td id="status_@x.ProjekatPlan_ID">@x.status.Naziv</td>
+                    <script>
+                        var element = document.getElementById("status_@x.ProjekatPlan_ID");
+
+                        if (element.innerText == "Aktivan") {
+                            element.classList.add("aktiv");
+                        }
+                        else if (element.innerText == "Prekinut") {
+                            element.classList.add("prek");
+                        }
+                        else if (element.innerText == "Završen") {
+                            element.classList.add("zavrs");
+                        }
+                    </script>
                 </tr>
             }
         </tbody>

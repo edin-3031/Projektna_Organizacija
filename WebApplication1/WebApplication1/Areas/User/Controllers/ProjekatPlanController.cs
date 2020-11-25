@@ -33,7 +33,17 @@ namespace WebApplication1.Areas.User.Controllers
         {
 
             int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).Select(x=>new ProjekatPlan {
+                DatumDo = x.DatumDo,
+                DatumOd = x.DatumOd,
+                Naziv = x.Naziv,
+                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                Sifra = x.Sifra,
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+            }).ToList();
 
             using (var workbook = new XLWorkbook())
             {
@@ -43,6 +53,7 @@ namespace WebApplication1.Areas.User.Controllers
                 worksheet.Cell(currentRow, 2).Value = "Naziv";
                 worksheet.Cell(currentRow, 3).Value = "Datum od";
                 worksheet.Cell(currentRow, 4).Value = "Datum do";
+                worksheet.Cell(currentRow, 5).Value = "Status";
 
                 foreach (var x in pp_final)
                 {
@@ -51,6 +62,7 @@ namespace WebApplication1.Areas.User.Controllers
                     worksheet.Cell(currentRow, 2).Value = x.Naziv;
                     worksheet.Cell(currentRow, 3).Value = x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".";
                     worksheet.Cell(currentRow, 4).Value = x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".";
+                    worksheet.Cell(currentRow, 5).Value = x.status.Naziv;
                 }
 
                 using (var stream = new MemoryStream())
@@ -71,7 +83,17 @@ namespace WebApplication1.Areas.User.Controllers
 
             int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
 
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).Select(x=>new ProjekatPlan {
+                DatumDo = x.DatumDo,
+                DatumOd = x.DatumOd,
+                Naziv = x.Naziv,
+                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                Sifra = x.Sifra,
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+            }).ToList();
 
             ViewData["proj_plan"] = pp_final;
 

@@ -69,6 +69,22 @@
         font-size: 1vw;
         border-radius: 0px 25px 25px 0px;
     }
+    .aktiv {
+        background-color: lawngreen;
+        font-weight: bold;
+    }
+
+    .prek {
+        background-color: dodgerblue;
+        color: white;
+        font-weight: bold;
+    }
+
+    .zavrs {
+        background-color: orangered;
+        color: white;
+        font-weight: bold;
+    }
 </style>
 <div id="kutijaZaMeni">
     <div id="menu">
@@ -96,26 +112,7 @@
         </ul>
     </div>
 </div>
-@*<script>
-    $(document.getElementsByTagName("li")).mousedown(function () {
-        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px 25px 25px 0px";
-    });
 
-    $(document.getElementsByTagName("li")).mouseleave(function () {
-        this.style.backgroundColor = "rgb(51, 51, 51)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px";
-    });
-
-    $(document.getElementsByTagName("a")).mousedown(function () {
-        this.style.color = "White";
-    });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Prikaz Projektnih Planova</h1>
@@ -131,27 +128,48 @@
     </div>
     <table class="table">
         <thead>
-        <th>ID</th>
         <th>Organizaciona jedinica</th>
         <th>Šifra</th>
         <th>Naziv</th>
         <th>Datum od</th>
         <th>Datum do</th>
+        <th>Status</th>
         <th>Akcija</th>
         </thead>
         <tbody>
             @foreach (var x in lista)
             {
                 <tr>
-                    <td>@x.ProjekatPlan_ID</td>
                     <td>@x.organizacionaJedinica.Naziv</td>
                     <td>@x.Sifra</td>
                     <td>@x.Naziv</td>
-                    <td>@x.DatumOd</td>
-                    <td>@x.DatumDo</td>
+                    <td>@(x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".")</td>
+                    <td>@(x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".")</td>
+                    <td id="status_@x.ProjekatPlan_ID">@x.status.Naziv</td>
+                    <script>
+                        var element = document.getElementById("status_@x.ProjekatPlan_ID");
+
+                        if (element.innerText == "Aktivan") {
+                            element.classList.add("aktiv");
+                        }
+                        else if (element.innerText == "Prekinut") {
+                            element.classList.add("prek");
+                        }
+                        else if (element.innerText == "Završen") {
+                            element.classList.add("zavrs");
+                        }
+                    </script>
                     <td>
                         <a class="btn btn-primary" href="/AdminOrg/ProjekatPlan/Uredi?id=@x.ProjekatPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
-                        <a class="btn btn-danger" href="/AdminOrg/ProjekatPlan/Ukloni?id=@x.ProjekatPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a>
+                        <a id="ukloni_@x.ProjekatPlan_ID" class="btn btn-danger" style="color:white">Ukloni</a>
+                        <script>
+                            $("#ukloni_@x.ProjekatPlan_ID").click(function () {
+                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
+
+                                if (t===true)
+                                    window.location.href = "/AdminOrg/ProjekatPlan/Ukloni?id=@x.ProjekatPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId";
+                            });
+                        </script>
                     </td>
                 </tr>
             }

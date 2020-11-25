@@ -312,8 +312,15 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             k.uloge = db.Uloge.Where(a => a.Uloge_ID == k.Uloge_FK).FirstOrDefault();
             ViewData["korisnik"] = k;
 
-            List<Uloge> uloge = db.Uloge.ToList();
-            ViewData["uloge"] = uloge;
+            List<Uloge> lista_uloge = db.Uloge.Where(a => a.Uloge_ID != 1).Select(x => new Uloge
+            {
+                Naziv = x.Naziv,
+                Opis = x.Opis,
+                Sifra = x.Sifra,
+                Uloge_ID = x.Uloge_ID
+            }).ToList();
+
+            ViewData["uloge"] = lista_uloge;
 
             uor podaci = new uor
             {

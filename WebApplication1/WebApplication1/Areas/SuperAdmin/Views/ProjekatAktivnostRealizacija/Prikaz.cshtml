@@ -97,26 +97,7 @@
         </ul>
     </div>
 </div>
-@*<script>
-    $(document.getElementsByTagName("li")).mousedown(function () {
-        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px 25px 25px 0px";
-    });
 
-    $(document.getElementsByTagName("li")).mouseleave(function () {
-        this.style.backgroundColor = "rgb(51, 51, 51)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px";
-    });
-
-    $(document.getElementsByTagName("a")).mousedown(function () {
-        this.style.color = "White";
-    });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
 <center>
     <h1>Prikaz Realizacija</h1>
     <div id="dugmad">
@@ -126,17 +107,13 @@
         <div id="detalji">
             <a class="btn btn-warning" href="/SuperAdmin/ProjekatAktivnostRealizacija/Detalji?u=@id.userId&o=@id.organisationId&r=@id.roleId">Detalji</a>
         </div>
-        @*<div id="print_preview"><a href="/ProjekatAktivnostRealizacija/PrintPreview" class="btn btn-info">Export to PDF</a></div>*@
-        @*<div id="print_preview"><a href="/SuperAdmin/ProjekatAktivnostRealizacija/Pdf" class="btn btn-info">Export to PDF</a></div>*@
         <div id="print_excel"><a href="/SuperAdmin/ProjekatAktivnostRealizacija/Excel" class="btn btn-info">Export to Excel</a></div>
         <div></div>
         <div></div>
     </div>
     <table class="table">
         <thead>
-        <th>ID</th>
         <th>Projekat aktivnost plan</th>
-        @*<th>Korisnik</th>*@
         <th>Datum</th>
         <th>Količina</th>
         <th>Opis</th>
@@ -146,14 +123,22 @@
             @foreach (var x in lista)
             {
                 <tr>
-                    <td>@x.ProjekatAktivnostRealizacija_ID</td>
                     <td>@x.projekatAktivnostPlan.Naziv</td>
-                    @*<td>@(x.korisnici.Ime+" "+x.korisnici.Prezime)</td>*@
                     <td>@(x.Datum.Date.Day+"."+ x.Datum.Date.Month + "." + x.Datum.Date.Year + ".")</td>
                     <td>@x.Kolicina</td>
                     <td>@x.Opis</td>
-                    <td><a class="btn btn-primary" href="/SuperAdmin/ProjekatAktivnostRealizacija/Uredi?id=@x.ProjekatAktivnostRealizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
-                    <a class="btn btn-danger" href="/SuperAdmin/ProjekatAktivnostRealizacija/Ukloni?id=@x.ProjekatAktivnostRealizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a></td>
+                    <td>
+                        <a class="btn btn-primary" href="/SuperAdmin/ProjekatAktivnostRealizacija/Uredi?id=@x.ProjekatAktivnostRealizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
+                        <a id="ukloni_@x.ProjekatAktivnostRealizacija_ID" class="btn btn-danger" style="color:white">Ukloni</a>
+                        <script>
+                            $("#ukloni_@x.ProjekatAktivnostRealizacija_ID").click(function () {
+                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
+
+                                if (t===true)
+                                    window.location.href = "/SuperAdmin/ProjekatAktivnostRealizacija/Ukloni?id=@x.ProjekatAktivnostRealizacija_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId";
+                            });
+                        </script>
+                    </td>
                 </tr>
             }
         </tbody>

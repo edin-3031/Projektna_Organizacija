@@ -4,11 +4,12 @@
 @using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    uor id = (uor)ViewData["id"];
+
     List<OrganizacionaJedinica> lista_org_jed = (List<OrganizacionaJedinica>)ViewData["org_jed"];
     ProjekatPlan p = (ProjekatPlan)ViewData["projekat"];
-    Layout = "~/Views/Shared/_Layout_admin.cshtml";
-
-    uor id = (uor)ViewData["id"];
+    List<Status> stat_lista = (List<Status>)ViewData["statusi"];
 }
 <style>
     td {
@@ -163,6 +164,22 @@
                 </td>
                 <td>
                     <input type="datetime" name="DO" value="@p.DatumDo">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Status
+                    </label>
+                </td>
+                <td>
+                    <select name="status_id">
+                        <option value="@p.Status_FK">@p.status.Naziv</option>
+                        @foreach (var x in stat_lista)
+                        {
+                            <option value="@x.StatusID">@x.Naziv</option>
+                        }
+                    </select>
                 </td>
             </tr>
         </table>

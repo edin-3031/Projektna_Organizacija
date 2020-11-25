@@ -98,9 +98,6 @@
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
     <div id="dugmad">
-        <div id="dodaj">
-            <a href="/AdminOrg/Korisnik/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId" class="btn btn-success">Dodaj novog</a>
-        </div>
         <div id="print_excel">
             <a href="/AdminOrgJed/Korisnik/Excel?u=@id.userId" class="btn btn-info">Export to Excel</a>
         </div>
@@ -115,7 +112,6 @@
         <th>Telefon</th>
         <th>Mail</th>
         <th>Lozinka</th>
-        @*<th>Akcija</th>*@
         </thead>
         <tbody>
             @foreach (var x in lista)
@@ -129,10 +125,6 @@
                     <td>@x.Telefon</td>
                     <td>@x.Mail</td>
                     <td>@x.Lozinka</td>
-                    @*<td>
-                        <a class="btn btn-primary" href="/AdminOrg/Korisnik/Uredi?id=@x.Korisnici_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
-                        <a class="btn btn-danger" href="/AdminOrg/Korisnik/Ukloni?id=@x.Korisnici_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Ukloni</a>
-                    </td>*@
                 </tr>
             }
         </tbody>

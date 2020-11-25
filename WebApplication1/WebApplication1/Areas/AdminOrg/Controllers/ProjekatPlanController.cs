@@ -66,7 +66,9 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                             Naziv = x.Naziv,
                             organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
                             ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
+                            Sifra = x.Sifra,
+                            status=db.Status.Where(a=>a.StatusID==x.Status_FK).FirstOrDefault(),
+                            Status_FK=x.Status_FK
                         });
                     }
                 }
@@ -81,6 +83,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                 worksheet.Cell(currentRow, 3).Value = "Organizaciona Jedinica";
                 worksheet.Cell(currentRow, 4).Value = "Datum od";
                 worksheet.Cell(currentRow, 5).Value = "Datum do";
+                worksheet.Cell(currentRow, 5).Value = "Status";
 
                 foreach (var x in pp_final)
                 {
@@ -90,6 +93,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                     worksheet.Cell(currentRow, 3).Value = x.organizacionaJedinica.Naziv;
                     worksheet.Cell(currentRow, 4).Value = x.DatumOd;
                     worksheet.Cell(currentRow, 5).Value = x.DatumDo;
+                    worksheet.Cell(currentRow, 5).Value = x.status.Naziv;
                 }
 
                 using (var stream = new MemoryStream())
@@ -126,7 +130,9 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                             Naziv = x.Naziv,
                             organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
                             ProjekatPlan_ID=x.ProjekatPlan_ID,
-                            Sifra=x.Sifra
+                            Sifra=x.Sifra,
+                            Status_FK = x.Status_FK,
+                            status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
                         });
                     }
                 }
@@ -176,6 +182,9 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
 
             ViewData["lista_org_jed"] = org;
 
+            List<Status> stat_lista = db.Status.ToList();
+            ViewData["statusi"] = stat_lista;
+
             uor podaci = new uor
             {
                 roleId = r,
@@ -189,7 +198,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             return View();
         }
         [Area("AdminOrg")]
-        public IActionResult UnosSnimi(int organizacionaJedinica, int sifra, string naziv, DateTime Od, DateTime Do, int u, int o, int r)
+        public IActionResult UnosSnimi(int organizacionaJedinica, int sifra, string naziv, DateTime Od, DateTime Do, int u, int o, int r, int status_id)
         {
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
@@ -202,7 +211,8 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                 DatumOd = Od,
                 Naziv = naziv,
                 OrganizacionaJedinica_FK = organizacionaJedinica,
-                Sifra = sifra
+                Sifra = sifra,
+                Status_FK = status_id
             };
 
             db.ProjekatPlan.Add(temp);
@@ -226,7 +236,9 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                             Naziv = x.Naziv,
                             organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
                             ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
+                            Sifra = x.Sifra,
+                            Status_FK = x.Status_FK,
+                            status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
                         });
                     }
                 }
@@ -280,7 +292,9 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                             Naziv = x.Naziv,
                             organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
                             ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
+                            Sifra = x.Sifra,
+                            Status_FK = x.Status_FK,
+                            status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
                         });
                     }
                 }
@@ -337,6 +351,9 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             p.organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == p.OrganizacionaJedinica_FK).FirstOrDefault();
             ViewData["projekat"] = p;
 
+            List<Status> stat_lista = db.Status.ToList();
+            ViewData["statusi"] = stat_lista;
+
             uor podaci = new uor
             {
                 roleId = r,
@@ -350,7 +367,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         }
 
         [Area("AdminOrg")]
-        public IActionResult UrediSnimi(int id, int u, int o, int r, DateTime DO, DateTime OD, string naziv, int org_jed, int sifra)
+        public IActionResult UrediSnimi(int id, int u, int o, int r, DateTime DO, DateTime OD, string naziv, int org_jed, int sifra, int status_id)
         {
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
@@ -364,6 +381,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             t.Naziv = naziv;
             t.OrganizacionaJedinica_FK = org_jed;
             t.Sifra = sifra;
+            t.Status_FK = status_id;
 
             db.SaveChanges();
 
@@ -386,7 +404,9 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                             Naziv = x.Naziv,
                             organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
                             ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
+                            Sifra = x.Sifra,
+                            Status_FK = x.Status_FK,
+                            status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
                         });
                     }
                 }

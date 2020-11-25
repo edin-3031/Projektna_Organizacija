@@ -6,28 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.VM;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Data;
-using WebApplication1.Models;
-using WebApplication1.Models.VM;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Data;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Org.BouncyCastle.Asn1.Misc;
-using WebApplication1.Data;
-using WebApplication1.Models;
-using WebApplication1.Models.VM;
 using Microsoft.AspNetCore.Hosting;
 using SelectPdf;
 using Aspose.Pdf;
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace WebApplication1.Areas.SuperAdmin.Controllers
 {
@@ -44,7 +32,17 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         public IActionResult Excel()
         {
 
-            List<ProjekatPlan> proj_plan = db.ProjekatPlan.ToList();
+            List<ProjekatPlan> proj_plan = db.ProjekatPlan.Select(x=>new ProjekatPlan { 
+                DatumDo=x.DatumDo,
+                DatumOd=x.DatumOd,
+                Naziv=x.Naziv,
+                status=db.Status.Where(a=>a.StatusID==x.Status_FK).FirstOrDefault(),
+                Status_FK=x.Status_FK,
+                organizacionaJedinica=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                OrganizacionaJedinica_FK=x.OrganizacionaJedinica_FK,
+                ProjekatPlan_ID=x.ProjekatPlan_ID,
+                Sifra=x.Sifra
+            }).ToList();
 
             using (var workbook = new XLWorkbook())
             {
@@ -56,6 +54,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 worksheet.Cell(currentRow, 4).Value = "Datum od";
                 worksheet.Cell(currentRow, 5).Value = "Datum do";
                 worksheet.Cell(currentRow, 6).Value = "Organizaciona Jedinica";
+                worksheet.Cell(currentRow, 7).Value = "Status";
 
                 foreach (var x in proj_plan)
                 {
@@ -66,6 +65,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                     worksheet.Cell(currentRow, 4).Value = x.DatumOd;
                     worksheet.Cell(currentRow, 5).Value = x.DatumDo;
                     worksheet.Cell(currentRow, 6).Value = db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID== x.OrganizacionaJedinica_FK).Select(o=>o.Naziv).FirstOrDefault();
+                    worksheet.Cell(currentRow, 7).Value = x.status.Naziv;
                 }
 
                 using (var stream = new MemoryStream())
@@ -88,7 +88,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 OrganizacionaJedinica_FK=x.OrganizacionaJedinica_FK,
                 ProjekatPlan_ID=x.ProjekatPlan_ID,
                 Sifra=x.Sifra,
-                organizacionaJedinica=db.OrganizacionaJedinica.Where(d=>d.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault()
+                organizacionaJedinica=db.OrganizacionaJedinica.Where(d=>d.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK=x.Status_FK,
+                status=db.Status.Where(a=>a.StatusID==x.Status_FK).FirstOrDefault()
             }).ToList();
 
             uor podaci = new uor
@@ -119,6 +121,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
 
             ViewData["lista_org_jed"] = lista_org_jed;
 
+            List<Status> stat_lista = db.Status.ToList();
+            ViewData["statusi"] = stat_lista;
+
             uor podaci = new uor
             {
                 roleId = r,
@@ -132,7 +137,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             return View();
         }
         [Area("SuperAdmin")]
-        public IActionResult UnosSnimi(int organizacionaJedinica, int sifra, string naziv, DateTime Od, DateTime Do, int u, int o, int r)
+        public IActionResult UnosSnimi(int organizacionaJedinica, int sifra, string naziv, DateTime Od, DateTime Do, int u, int o, int r, int status_id)
         {
             ProjekatPlan temp = new ProjekatPlan
             {
@@ -140,7 +145,8 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 DatumOd = Od,
                 Naziv = naziv,
                 OrganizacionaJedinica_FK = organizacionaJedinica,
-                Sifra = sifra
+                Sifra = sifra,
+                Status_FK=status_id
             };
 
             db.ProjekatPlan.Add(temp);
@@ -154,7 +160,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
                 ProjekatPlan_ID = x.ProjekatPlan_ID,
                 Sifra = x.Sifra,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
             }).ToList();
             ViewData["proj_plan"] = lista_proj_plan;
 
@@ -189,7 +197,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
                 ProjekatPlan_ID = x.ProjekatPlan_ID,
                 Sifra = x.Sifra,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
             }).ToList();
             ViewData["proj_plan"] = lista_proj_plan;
 
@@ -215,7 +225,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
 
             ProjekatPlan p = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == id).FirstOrDefault();
             p.organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == p.OrganizacionaJedinica_FK).FirstOrDefault();
+            p.status = db.Status.Where(a => a.StatusID == p.Status_FK).FirstOrDefault();
             ViewData["projekat"] = p;
+
+            List<Status> stat_lista = db.Status.ToList();
+            ViewData["statusi"] = stat_lista;
 
             uor podaci = new uor
             {
@@ -230,7 +244,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         }
 
         [Area("SuperAdmin")]
-        public IActionResult UrediSnimi(int id, int u, int o, int r, DateTime DO, DateTime OD, string naziv, int org_jed, int sifra)
+        public IActionResult UrediSnimi(int id, int u, int o, int r, DateTime DO, DateTime OD, string naziv, int org_jed, int sifra, int status_id)
         {
             ProjekatPlan t = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == id).FirstOrDefault();
 
@@ -239,6 +253,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             t.Naziv = naziv;
             t.OrganizacionaJedinica_FK = org_jed;
             t.Sifra = sifra;
+            t.Status_FK = status_id;
 
             db.SaveChanges();
 
@@ -250,7 +265,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
                 ProjekatPlan_ID = x.ProjekatPlan_ID,
                 Sifra = x.Sifra,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
             }).ToList();
 
             uor podaci = new uor

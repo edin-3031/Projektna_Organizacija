@@ -223,7 +223,18 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             ViewData["proj_aktiv"] = p_a;
 
 
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
+            List<ProjekatPlan> p_p = db.ProjekatPlan.Select(x => new ProjekatPlan {
+                DatumDo = x.DatumDo,
+                DatumOd = x.DatumOd,
+                Naziv = x.Naziv,
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                Sifra = x.Sifra,
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+            }).ToList();
+
             ViewData["p_p"] = p_p;
 
             uor podaci = new uor

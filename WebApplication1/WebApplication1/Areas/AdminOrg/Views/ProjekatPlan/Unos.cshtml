@@ -9,6 +9,8 @@
 
     uor id = (uor)ViewData["id"];
 
+    List<Status> stat_lista = (List<Status>)ViewData["statusi"];
+
     byte[] pic = (byte[])ViewData["logo"];
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
@@ -161,6 +163,22 @@
                 </td>
                 <td>
                     <input type="datetime-local" name="Do" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Status
+                    </label>
+                </td>
+                <td>
+                    <select name="status_id">
+                        <option>---Odaberi---</option>
+                        @foreach (var x in stat_lista)
+                        {
+                            <option value="@x.StatusID">@x.Naziv</option>
+                        }
+                    </select>
                 </td>
             </tr>
         </table>

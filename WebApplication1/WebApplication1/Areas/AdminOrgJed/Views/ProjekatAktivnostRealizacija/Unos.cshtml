@@ -100,32 +100,14 @@
         </ul>
     </div>
 </div>
-@*<script>
-        $(document.getElementsByTagName("li")).mousedown(function () {
-            this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-            this.style.width = "100%";
-            this.style.borderRadius = "0px 25px 25px 0px";
-        });
 
-        $(document.getElementsByTagName("li")).mouseleave(function () {
-            this.style.backgroundColor = "rgb(51, 51, 51)";
-            this.style.width = "100%";
-            this.style.borderRadius = "0px";
-        });
-
-        $(document.getElementsByTagName("a")).mousedown(function () {
-            this.style.color = "White";
-        });
-            //$(document.getElementsByTagName("li")).mouseup(function () {
-            //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-            //});
-    </script>*@
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Unos realizacije</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
-
+    <br />
+    <br />
     <form method="post" action="/AdminOrgJed/ProjekatAktivnostRealizacija/UnosSnimi">
 
         <input hidden="hidden" name="u" value="@id.userId" />

@@ -45,7 +45,17 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
         {
             int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
 
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).Select(x=>new ProjekatPlan {
+                DatumDo = x.DatumDo,
+                DatumOd = x.DatumOd,
+                Naziv = x.Naziv,
+                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                Sifra = x.Sifra,
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+            }).ToList();
 
             using (var workbook = new XLWorkbook())
             {
@@ -55,6 +65,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 worksheet.Cell(currentRow, 2).Value = "Naziv";
                 worksheet.Cell(currentRow, 3).Value = "Datum od";
                 worksheet.Cell(currentRow, 4).Value = "Datum do";
+                worksheet.Cell(currentRow, 5).Value = "Status";
 
                 foreach (var x in pp_final)
                 {
@@ -63,6 +74,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     worksheet.Cell(currentRow, 2).Value = x.Naziv;
                     worksheet.Cell(currentRow, 3).Value = x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".";
                     worksheet.Cell(currentRow, 4).Value = x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".";
+                    worksheet.Cell(currentRow, 5).Value = x.status.Naziv; ;
                 }
 
                 using (var stream = new MemoryStream())
@@ -83,7 +95,18 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
 
             int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
 
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).Select(x=>new ProjekatPlan {
+                DatumDo = x.DatumDo,
+                DatumOd = x.DatumOd,
+                Naziv = x.Naziv,
+                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                Sifra = x.Sifra,
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+            }).ToList();
+
             ViewData["proj_plan"] = pp_final;
 
             uor podaci = new uor
@@ -111,12 +134,15 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 userId = u
             };
 
+            List<Status> stat_lista = db.Status.ToList();
+            ViewData["statusi"] = stat_lista;
+
             ViewData["id"] = podaci;
 
             return View();
         }
         [Area("AdminOrgJed")]
-        public IActionResult UnosSnimi(int sifra, string naziv, DateTime Od, DateTime Do, int u, int o, int r)
+        public IActionResult UnosSnimi(int sifra, string naziv, DateTime Od, DateTime Do, int u, int o, int r, int status_id)
         {
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
@@ -130,13 +156,26 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 DatumOd = Od,
                 Naziv = naziv,
                 OrganizacionaJedinica_FK = id_org_jed,
-                Sifra=sifra
+                Sifra=sifra,
+                Status_FK = status_id
             };
 
-            db.ProjekatPlan.Add(temp);
+            db.Add(temp);
             db.SaveChanges();
 
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).Select(x => new ProjekatPlan
+            {
+                DatumDo = x.DatumDo,
+                DatumOd = x.DatumOd,
+                Naziv = x.Naziv,
+                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                Sifra = x.Sifra,
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+            }).ToList();
+
             ViewData["proj_plan"] = pp_final;
 
             uor podaci = new uor
@@ -167,7 +206,19 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 db.SaveChanges();
             }
 
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).Select(x => new ProjekatPlan
+            {
+                DatumDo = x.DatumDo,
+                DatumOd = x.DatumOd,
+                Naziv = x.Naziv,
+                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                Sifra = x.Sifra,
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+            }).ToList();
+
             ViewData["proj_plan"] = pp_final;
 
             uor podaci = new uor
@@ -195,6 +246,9 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             p.organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == p.OrganizacionaJedinica_FK).FirstOrDefault();
             ViewData["projekat"] = p;
 
+            List<Status> stat_lista = db.Status.ToList();
+            ViewData["statusi"] = stat_lista;
+
             uor podaci = new uor
             {
                 roleId = r,
@@ -208,7 +262,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
         }
 
         [Area("AdminOrgJed")]
-        public IActionResult UrediSnimi(int id, int u, int o, int r, DateTime DO, DateTime OD, string naziv, int sifra)
+        public IActionResult UrediSnimi(int id, int u, int o, int r, DateTime DO, DateTime OD, string naziv, int sifra, int status_id)
         {
             byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
 
@@ -223,10 +277,23 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             t.Naziv = naziv;
             t.OrganizacionaJedinica_FK = id_org_jed;
             t.Sifra = sifra;
+            t.Status_FK = status_id;
 
             db.SaveChanges();
 
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).Select(x => new ProjekatPlan
+            {
+                DatumDo = x.DatumDo,
+                DatumOd = x.DatumOd,
+                Naziv = x.Naziv,
+                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                Sifra = x.Sifra,
+                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                Status_FK = x.Status_FK,
+                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+            }).ToList();
+
             ViewData["proj_plan"] = pp_final;
 
             uor podaci = new uor
