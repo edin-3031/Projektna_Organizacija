@@ -116,12 +116,18 @@
                     <td>
                         <a class="btn btn-primary" href="/SuperAdmin/Status/Uredi?u=@id.userId&o=@id.organisationId&r=@id.roleId&id=@x.StatusID">Uredi</a>
                         <a id="ukloni_@x.StatusID" class="btn btn-danger" style="color:white">Ukloni</a>
-                        <script>
-                            $("#ukloni_@x.StatusID").click(function () {
-                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
 
-                                if (t===true)
-                                    window.location.href = "/SuperAdmin/Status/Ukloni?u=@id.userId&o=@id.organisationId&r=@id.roleId&id=@x.StatusID";
+                        <span style="color:black; position:absolute;float:right;margin-left:1%;" id="poruka_@x.StatusID">Sigurni? <a href="/SuperAdmin/Status/Ukloni?u=@id.userId&o=@id.organisationId&r=@id.roleId&id=@x.StatusID" style="color:black; font-weight:bold;">Da</a> <a id="no_@x.StatusID" style="color:black;cursor:pointer; font-weight:bold;">Ne</a></span>
+                        <script>
+                            $("#poruka_@x.StatusID").hide();
+
+                            $("#ukloni_@x.StatusID").click(function () {
+
+                                $("#poruka_@x.StatusID").slideDown();
+                            });
+
+                            $("#no_@x.StatusID").click(function () {
+                                $("#poruka_@x.StatusID").slideUp();
                             });
                         </script>
                     </td>
@@ -130,3 +136,6 @@
         </tbody>
     </table>
 </center>
+
+
+

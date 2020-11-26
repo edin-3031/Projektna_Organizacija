@@ -10,20 +10,23 @@
     uor id = (uor)ViewData["id"];
 }
 <style>
-    .aktiv{
-        background-color:lawngreen;
-        font-weight:bold;
+    .aktiv {
+        background-color: lawngreen;
+        font-weight: bold;
     }
+
     .prek {
         background-color: dodgerblue;
         color: white;
         font-weight: bold;
     }
+
     .zavrs {
         background-color: orangered;
         color: white;
         font-weight: bold;
     }
+
     td {
         padding: 10px;
     }
@@ -158,12 +161,18 @@
                     <td>
                         <a class="btn btn-primary" href="/SuperAdmin/ProjekatPlan/Uredi?id=@x.ProjekatPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
                         <a id="ukloni_@x.ProjekatPlan_ID" class="btn btn-danger" style="color:white">Ukloni</a>
-                        <script>
-                            $("#ukloni_@x.ProjekatPlan_ID").click(function () {
-                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
 
-                                if (t===true)
-                                    window.location.href = "/SuperAdmin/ProjekatPlan/Ukloni?id=@x.ProjekatPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId";
+                        <span style="color:black; position:absolute;float:right;margin-left:1%;" id="poruka_@x.ProjekatPlan_ID">Sigurni? <a href="/SuperAdmin/ProjekatPlan/Ukloni?id=@x.ProjekatPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" style="color:black; font-weight:bold;">Da</a> <a id="no_@x.ProjekatPlan_ID" style="color:black;cursor:pointer; font-weight:bold;">Ne</a></span>
+                        <script>
+                            $("#poruka_@x.ProjekatPlan_ID").hide();
+
+                            $("#ukloni_@x.ProjekatPlan_ID").click(function () {
+
+                                $("#poruka_@x.ProjekatPlan_ID").slideDown();
+                            });
+
+                            $("#no_@x.ProjekatPlan_ID").click(function () {
+                                $("#poruka_@x.ProjekatPlan_ID").slideUp();
                             });
                         </script>
                     </td>

@@ -120,12 +120,18 @@
                 <td>
                     <a class="btn btn-primary" href="/SuperAdmin/KorisnikOrg/Uredi?id=@x.K_O_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
                     <a id="ukloni_@x.K_O_ID" class="btn btn-danger" style="color:white">Ukloni</a>
-                    <script>
-                            $("#ukloni_@x.K_O_ID").click(function () {
-                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
 
-                                if (t===true)
-                                    window.location.href = "/SuperAdmin/KorisnikOrg/Ukloni?id=@x.K_O_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId";
+                    <span style="color:black; position:absolute;float:right;margin-left:1%;" id="poruka_@x.K_O_ID">Sigurni? <a href="/SuperAdmin/KorisnikOrg/Ukloni?id=@x.K_O_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" style="color:black; font-weight:bold;">Da</a> <a id="no_@x.K_O_ID" style="color:black;cursor:pointer; font-weight:bold;">Ne</a></span>
+                    <script>
+                            $("#poruka_@x.K_O_ID").hide();
+
+                            $("#ukloni_@x.K_O_ID").click(function () {
+
+                                $("#poruka_@x.K_O_ID").slideDown();
+                            });
+
+                            $("#no_@x.K_O_ID").click(function () {
+                                $("#poruka_@x.K_O_ID").slideUp();
                             });
                     </script>
                 </td>

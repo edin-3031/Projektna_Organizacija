@@ -7,16 +7,20 @@
     string poruka = (string)TempData["poruka"];
 
 }
-
+<head>
+    <script src="jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
 <style>
-    #login{
-        border:1px solid black;
-        width:60%;
-        height:60%;
-        margin-top:10%;
-        background-color:rgba(0,0,0,0.5);
-        border-radius:100px;
+    #login {
+        border: 1px solid black;
+        width: 60%;
+        height: 60%;
+        margin-top: 10%;
+        background-color: rgba(0,0,0,0.5);
+        border-radius: 100px;
     }
+
     input {
         position: relative;
         width: 70%;
@@ -26,44 +30,56 @@
         text-align-last: center;
         border: 3px solid black;
     }
+
     label {
         color: white;
         font-family: Arial;
         font-size: 2vw;
         font-weight: bold;
     }
-    #go{
-        height:3.5vw;
-        width:8vw;
-        background-color:floralwhite;
-        color:black;
-        font-family:'Agency FB';
-        border-radius:25px;
-        font-size:2vw;
-        font-weight:bold;
-        border:3px solid black;
+
+    #go {
+        height: 3.5vw;
+        width: 8vw;
+        background-color: floralwhite;
+        color: black;
+        font-family: 'Agency FB';
+        border-radius: 25px;
+        font-size: 2vw;
+        font-weight: bold;
+        border: 3px solid black;
+    }
+    #msg {
+        position: absolute;
+        font-size: 2.5vw;
+        background-color: orangered;
+        color: white;
+        height: 3vw;
+        width: 30vw;
+        border-radius: 50px;
+        padding: 2%;
+        top: 1%;
+        left: 35%;
+        align-self:center;
     }
 </style>
+@if (poruka != null)
+{
+    <div id="msg">@poruka</div>
+    <script>
+        $("#msg").hide().slideDown(1000).delay(2000).slideUp(1000);
+    </script>
+}
 <center>
-
-    @if (poruka != null)
-    {
-        <br />
-        <center>
-            <span style="position:absolute;font-size:300%; background-color:orangered" id="msg">@poruka</span>
-        </center>
-        <script>
-            $("#msg").slideDown().delay(1000).slideUp();
-        </script>
-    }
-
-    <form id="login" method="post" action="/Auth/AuthProces">
-        <div style="position:relative; margin-top:10%;">
-            <label>Korisničko ime</label><br />
-            <input type="text" name="username" autofocus/><br />
-            <label>Lozinka</label><br />
-            <input type="password" name="pass"/><br /><br />
-        </div>
-        <button class="btn btn-danger" id="go" type="submit">Prijavi se</button>
-    </form>
+    <div>
+        <form  style="border:5px solid black;" id="login" method="post" action="/Auth/AuthProces">
+            <div style="position:relative; margin-top:10%;">
+                <label>Korisničko ime</label><br />
+                <input type="text" name="username" autofocus /><br />
+                <label>Lozinka</label><br />
+                <input type="password" name="pass" /><br /><br />
+            </div>
+            <button class="btn btn-danger" id="go" type="submit">Prijavi se</button>
+        </form>
+    </div>
 </center>

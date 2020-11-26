@@ -90,35 +90,14 @@
         </ul>
     </div>
 </div>
-@*<script>
-    $(document.getElementsByTagName("li")).mousedown(function () {
-        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px 25px 25px 0px";
-    });
 
-    $(document.getElementsByTagName("li")).mouseleave(function () {
-        this.style.backgroundColor = "rgb(51, 51, 51)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px";
-    });
-
-    $(document.getElementsByTagName("a")).mousedown(function () {
-        this.style.color = "White";
-    });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Prikaz Realizacija</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
     <div id="dugmad">
-        @*<div id="dodaj">
-                <a class="btn btn-success" href="/UserReport/ProjekatAktivnostRealizacija/Unos">Unesi novu</a>
-            </div>*@
+
         <div id="detalji">
             <a class="btn btn-warning" href="/UserReport/ProjekatAktivnostRealizacija/Detalji?u=@id.userId&o=@id.organisationId&r=@id.roleId">Detalji</a>
         </div>
@@ -137,7 +116,7 @@
             <th>Datum</th>
             <th>Količina</th>
             <th>Opis</th>
-            @*<th>Akcija</th>*@
+
         </thead>
         <tbody>
             @foreach (var x in lista)
@@ -150,8 +129,7 @@
                     <td>@(x.Datum.Date.Day+"."+ x.Datum.Date.Month + "." + x.Datum.Date.Year + ".")</td>
                     <td>@x.Kolicina</td>
                     <td>@x.Opis</td>
-                    @*<td><a class="btn btn-danger" href="/UserReport/ProjekatAktivnostRealizacija/Ukloni?id=@x.ProjekatAktivnostRealizacija_ID">Ukloni</a></td>
-                        <td><a class="btn btn-primary" href="/UserReport/ProjekatAktivnostRealizacija/Uredi?id=@x.ProjekatAktivnostRealizacija_ID">Uredi</a></td>*@
+
                 </tr>
             }
         </tbody>

@@ -14,7 +14,7 @@
 
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
-    
+
 }
 <style>
 
@@ -139,12 +139,17 @@
                     <td>
                         <a class="btn btn-primary" href="/User/ProjekatAktivnostPlan/Uredi?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
                         <a id="ukloni_@x.ProjekatAktivnostPlan_ID" class="btn btn-danger" style="color:white">Ukloni</a>
+                        <span style="color:black; position:absolute;float:right;margin-left:1%;" id="poruka_@x.ProjekatAktivnostPlan_ID">Sigurni? <a href="/User/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" style="color:black; font-weight:bold;">Da</a> <a id="no_@x.ProjekatAktivnostPlan_ID" style="color:black;cursor:pointer; font-weight:bold;">Ne</a></span>
                         <script>
-                            $("#ukloni_@x.ProjekatAktivnostPlan_ID").click(function () {
-                                var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
+                            $("#poruka_@x.ProjekatAktivnostPlan_ID").hide();
 
-                                if (t===true)
-                                    window.location.href = "/User/ProjekatAktivnostPlan/Ukloni?id=@x.ProjekatAktivnostPlan_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId";
+                            $("#ukloni_@x.ProjekatAktivnostPlan_ID").click(function () {
+
+                                $("#poruka_@x.ProjekatAktivnostPlan_ID").slideDown();
+                            });
+
+                            $("#no_@x.ProjekatAktivnostPlan_ID").click(function () {
+                                $("#poruka_@x.ProjekatAktivnostPlan_ID").slideUp();
                             });
                         </script>
                     </td>

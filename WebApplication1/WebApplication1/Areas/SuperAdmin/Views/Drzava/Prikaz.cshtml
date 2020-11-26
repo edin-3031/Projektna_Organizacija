@@ -112,23 +112,30 @@
         <tbody>
             @foreach (var x in lista)
             {
-            <tr>
-                <td>@x.Sifra</td>
-                <td>@x.Naziv</td>
-                <td>
-                    <a class="btn btn-primary" href="/SuperAdmin/Drzava/Uredi?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Uredi</a>
+                <tr>
+                    <td>@x.Sifra</td>
+                    <td>@x.Naziv</td>
+                    <td>
+                        <a class="btn btn-primary" href="/SuperAdmin/Drzava/Uredi?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Uredi</a>
 
-                    <a id="ukloni_@x.Drazava_ID" class="btn btn-danger" style="color:white">Ukloni</a>
-                    <script>
-                        $("#ukloni_@x.Drazava_ID").click(function () {
-                            var t = confirm("Da li ste sigurni da želite obrisati odabrani podatak?");
+                        <a id="ukloni_@x.Drazava_ID" class="btn btn-danger" style="color:white">Ukloni</a>
 
-                            if (t===true)
-                                window.location.href = "/SuperAdmin/Drzava/Ukloni?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId";
-                        });
-                    </script>
-                </td>
-            </tr>
+                        <span style="color:black; position:absolute;float:right;margin-left:1%;" id="poruka_@x.Drazava_ID">Sigurni? <a href="/SuperAdmin/Drzava/Ukloni?id=@x.Drazava_ID&u=@Model.userId&o=@Model.organisationId&r=@Model.roleId" style="color:black; font-weight:bold;">Da</a> <a id="no_@x.Drazava_ID" style="color:black;cursor:pointer; font-weight:bold;">Ne</a></span>
+                        <script>
+                            $("#poruka_@x.Drazava_ID").hide();
+
+                            $("#ukloni_@x.Drazava_ID").click(function () {
+
+                                $("#poruka_@x.Drazava_ID").slideDown();
+                            });
+
+                            $("#no_@x.Drazava_ID").click(function () {
+                                $("#poruka_@x.Drazava_ID").slideUp();
+                            });
+                        </script>
+
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

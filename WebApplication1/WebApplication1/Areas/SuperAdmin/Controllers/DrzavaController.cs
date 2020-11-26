@@ -74,23 +74,6 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             podaci.organisationId = o;
             podaci.roleId = r;
 
-            //List<OrganizacionaJedinica> lista_oj = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).Select(x => new OrganizacionaJedinica
-            //{
-            //    drzava=db.Drzava.Where(p=>p.Drazava_ID==x.Drzava_FK).FirstOrDefault()
-            //}).ToList();
-
-            //List<Drzava> lista_drzava = new List<Drzava>();
-
-            //foreach(var x in lista_oj)
-            //{
-            //    lista_drzava.Add(new Drzava
-            //    {
-            //        Drazava_ID=x.drzava.Drazava_ID,
-            //        Naziv=x.drzava.Naziv,
-            //        Sifra=x.drzava.Sifra
-            //    });
-            //}
-
             List<Drzava> lista_drzava = db.Drzava.ToList();
 
             ViewData["drzave"] = lista_drzava;
@@ -131,24 +114,6 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             podaci.organisationId = o;
             podaci.roleId = r;
 
-            //List<OrganizacionaJedinica> lista_oj = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).Select(x => new OrganizacionaJedinica
-            //{
-            //    Drzava_FK=x.Drzava_FK
-            //}).ToList();
-
-            //List<Drzava> lista_drzava = new List<Drzava>();
-
-            //foreach (var x in lista_oj)
-            //{
-            //    lista_drzava.Add(new Drzava
-            //    {
-            //        Drazava_ID = db.Drzava.Where(a=>a.Drazava_ID==x.Drzava_FK).Select(o=>o.Drazava_ID).FirstOrDefault(),
-            //        Naziv = db.Drzava.Where(a => a.Drazava_ID == x.Drzava_FK).Select(o => o.Naziv).FirstOrDefault(),
-            //        Sifra = db.Drzava.Where(a => a.Drazava_ID == x.Drzava_FK).Select(o => o.Sifra).FirstOrDefault()
-            //    });
-            //}
-            //ViewData["drzave"] = lista_drzava;
-
             List<Drzava> lista_drzava = db.Drzava.ToList();
 
             ViewData["drzave"] = lista_drzava;
@@ -172,25 +137,6 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             podaci.userId = u;
             podaci.organisationId = o;
             podaci.roleId = r;
-
-            //List<OrganizacionaJedinica> lista_oj = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).Select(x => new OrganizacionaJedinica
-            //{
-            //    drzava = db.Drzava.Where(p => p.Drazava_ID == x.Drzava_FK).FirstOrDefault()
-            //}).ToList();
-
-            //List<Drzava> lista_drzava = new List<Drzava>();
-
-            //foreach (var x in lista_oj)
-            //{
-            //    lista_drzava.Add(new Drzava
-            //    {
-            //        Drazava_ID = x.drzava.Drazava_ID,
-            //        Naziv = x.drzava.Naziv,
-            //        Sifra = x.drzava.Sifra
-            //    });
-            //}
-
-            //ViewData["drzave"] = lista_drzava;
 
             List<Drzava> lista_drzava = db.Drzava.ToList();
 
