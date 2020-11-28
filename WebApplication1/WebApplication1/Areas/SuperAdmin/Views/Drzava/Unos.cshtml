@@ -78,6 +78,17 @@
         height: 3vw;
         width: 12vw;
     }
+    .err{
+        border:2px solid red;
+    }
+    span {
+        position: absolute;
+        float: right;
+        margin-left: 1%;
+        background-color: indianred;
+        color: white;
+        font-weight: bold;
+    }
 </style>
 
 <div id="kutijaZaMeni">
@@ -114,22 +125,79 @@
 
 <center>
     <h1>Unos države</h1>
-        
-    <form action="/SuperAdmin/Drzava/UnosSnimi">
+
+    <form method="post" action="/SuperAdmin/Drzava/UnosSnimi">
         <table>
             <tr>
                 <td><label>Šifra</label></td>
-                <td><input id="s" type="text" name="sifra" /></td>
+                <td><input onkeypress="provjera('sfr')" id="sfr" type="text" name="sifra" /><span id="sifra_span"></span></td>
             </tr>
             <tr>
                 <td><label>Naziv</label></td>
-                <td><input id="n" type="text" name="naziv" /></td>
+                <td><input onchange="provjera('n')" id="n" type="text" name="naziv" /><span id="naziv_span"></span></td>
             </tr>
             <input hidden="hidden" name="u" value="@id.userId" />
             <input hidden="hidden" name="r" value="@id.roleId" />
             <input hidden="hidden" name="o" value="@id.organisationId" />
         </table>
 
-        <button type="submit" class="btn btn-primary">Snimi</button>
+        <button type="submit" id="snimi"  class="btn btn-primary">Snimi</button>
+
     </form>
+
+
 </center>
+
+<script>
+    $(document).ready(function () {
+        document.getElementById("snimi").disabled = true;
+
+    });
+
+    var prvi, drugi = false;
+
+    function provjera(id) {
+
+        if (id === "sfr") {
+            var sifra = document.getElementById(id).value;
+
+            if (isNaN(sifra) || sifra === "") {
+                document.getElementById("snimi").disabled = true;
+                document.getElementById(id).classList.add('err');
+                document.getElementById("sifra_span").innerHTML = "Unos moraju biti brojevi";
+                document.getElementById("sifra_span").classList.add("err");
+                prvi = false;
+            }
+
+            else {
+                document.getElementById(id).classList.remove('err');
+                document.getElementById("sifra_span").innerHTML = ";
+                document.getElementById("sifra_span").classList.remove("err");
+                prvi = true;
+            }
+        }
+
+        if (id==="n") {
+            var naziv = document.getElementById(id).value;
+
+            if (naziv === "") {
+                document.getElementById("snimi").disabled = true;
+                document.getElementById(id).classList.add('err');
+                document.getElementById("naziv_span").innerHTML = "Ovo polje je obavezno";
+                document.getElementById("naziv_span").classList.add("err");
+                drugi = false;
+            }
+
+            else {
+                document.getElementById(id).classList.remove('err');
+                document.getElementById("naziv_span").innerHTML = "";
+                document.getElementById("naziv_span").classList.remove("err");
+                drugi = true;
+            }
+        }
+
+        if (prvi === true && drugi === true) {
+            document.getElementById("snimi").disabled = false;
+        }
+    }
+</script>

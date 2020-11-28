@@ -88,7 +88,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 Organizacija_ID = x.Organizacija_ID,
                 PTT_FK = x.PTT_FK,
                 Sifra = x.Sifra,
-                drzava = db.Drzava.Where(c => c.Drazava_ID == x.Drzava_FK).FirstOrDefault(),
+                drzava = db.Drzava.Where(c => c.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
                 ptt = db.PTT.Where(v => v.PTT_ID == x.PTT_FK).FirstOrDefault()
             }).ToList();
 
@@ -102,7 +102,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             Organizacija org_temp = db.Organizacija.Where(a => a.Organizacija_ID == id).FirstOrDefault();
 
             org_temp.ptt = db.PTT.Where(a => a.PTT_ID == org_temp.PTT_FK).FirstOrDefault();
-            org_temp.drzava = db.Drzava.Where(a => a.Drazava_ID == org_temp.Drzava_FK).FirstOrDefault();
+            org_temp.drzava = db.Drzava.Where(a => a.Drzava_ID == org_temp.Drzava_FK).FirstOrDefault();
 
             ViewData["organizacija_uredi"] = org_temp;
 
@@ -124,7 +124,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
 
             List<Drzava> lista_drzava = db.Drzava.Select(z => new Drzava
             {
-                Drazava_ID = z.Drazava_ID,
+                Drzava_ID = z.Drzava_ID,
                 Sifra = z.Sifra,
                 Naziv = z.Naziv
             }).ToList();
@@ -159,7 +159,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                     worksheet.Cell(currentRow, 2).Value = x.Naziv;
                     worksheet.Cell(currentRow, 3).Value = x.Sifra;
                     worksheet.Cell(currentRow, 4).Value = x.Adresa;
-                    worksheet.Cell(currentRow, 5).Value = db.Drzava.Where(a => a.Drazava_ID == x.Drzava_FK).Select(o => o.Naziv).FirstOrDefault();
+                    worksheet.Cell(currentRow, 5).Value = db.Drzava.Where(a => a.Drzava_ID == x.Drzava_FK).Select(o => o.Naziv).FirstOrDefault();
                     worksheet.Cell(currentRow, 6).Value = db.PTT.Where(a => a.PTT_ID == x.PTT_FK).Select(o => o.Naziv).FirstOrDefault();
                 }
 
@@ -191,7 +191,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 Organizacija_ID = x.Organizacija_ID,
                 PTT_FK = x.PTT_FK,
                 Sifra = x.Sifra,
-                drzava = db.Drzava.Where(c => c.Drazava_ID == x.Drzava_FK).FirstOrDefault(),
+                drzava = db.Drzava.Where(c => c.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
                 ptt = db.PTT.Where(v => v.PTT_ID == x.PTT_FK).FirstOrDefault()
             }).ToList();
 
@@ -254,7 +254,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 Organizacija_ID = x.Organizacija_ID,
                 PTT_FK = x.PTT_FK,
                 Sifra = x.Sifra,
-                drzava = db.Drzava.Where(c => c.Drazava_ID == x.Drzava_FK).FirstOrDefault(),
+                drzava = db.Drzava.Where(c => c.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
                 ptt = db.PTT.Where(v => v.PTT_ID == x.PTT_FK).FirstOrDefault()
             }).ToList();
 
@@ -282,7 +282,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
 
             List<Drzava> lista_drzava = db.Drzava.Select(z => new Drzava
             {
-                Drazava_ID = z.Drazava_ID,
+                Drzava_ID = z.Drzava_ID,
                 Sifra = z.Sifra,
                 Naziv = z.Naziv
             }).ToList();
@@ -304,16 +304,20 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         [Area("SuperAdmin")]
         public IActionResult Prikaz(int u, int o, int r)
         {
+            int c = db.Organizacija.Count();
+
             List<Organizacija> lista_organizacija = db.Organizacija.Select(x => new Organizacija
             {
                 Adresa=x.Adresa,
                 Drzava_FK=x.Drzava_FK,
+                Logo=x.Logo,
                 Naziv=x.Naziv,
                 Organizacija_ID=x.Organizacija_ID,
                 PTT_FK=x.PTT_FK,
                 Sifra=x.Sifra,
-                drzava=db.Drzava.Where(c=>c.Drazava_ID==x.Drzava_FK).FirstOrDefault(),
-                ptt=db.PTT.Where(v=>v.PTT_ID==x.PTT_FK).FirstOrDefault()
+                Slika=x.Slika,
+                drzava=db.Drzava.Where(a=>a.Drzava_ID==x.Drzava_FK).FirstOrDefault(),
+                ptt=db.PTT.Where(a=>a.PTT_ID==x.PTT_FK).FirstOrDefault()
             }).ToList();
 
             ViewData["organizacija"] = lista_organizacija;

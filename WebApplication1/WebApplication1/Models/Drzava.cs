@@ -9,7 +9,7 @@ namespace WebApplication1.Models
     public class Drzava
     {
         [Key]
-        public int Drazava_ID { get; set; }
+        public int Drzava_ID { get; set; }
 
         public int Sifra { get; set; }
         public string Naziv { get; set; }

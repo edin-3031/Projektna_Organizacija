@@ -33,7 +33,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
 
             ViewData["id"] = podaci;
 
-            Drzava t = db.Drzava.Where(a => a.Drazava_ID == id_drzava).FirstOrDefault();
+            Drzava t = db.Drzava.Where(a => a.Drzava_ID == id_drzava).FirstOrDefault();
 
             t.Naziv = naziv;
             t.Sifra = sifra;
@@ -58,7 +58,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
 
             ViewData["id"] = podaci;
 
-            Drzava tmp = db.Drzava.Where(a => a.Drazava_ID == id).FirstOrDefault();
+            Drzava tmp = db.Drzava.Where(a => a.Drzava_ID == id).FirstOrDefault();
 
             ViewData["uredi_drzava"] = tmp;
 
@@ -124,7 +124,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         [Area("SuperAdmin")]
         public IActionResult Ukloni(int id, int u, int o, int r)
         {
-            Drzava temp = db.Drzava.Where(x => x.Drazava_ID == id).SingleOrDefault();
+            Drzava temp = db.Drzava.Where(x => x.Drzava_ID == id).FirstOrDefault();
 
             if (temp != null)
             {

@@ -19,7 +19,7 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Drzava", b =>
                 {
-                    b.Property<int>("Drazava_ID")
+                    b.Property<int>("Drzava_ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -29,7 +29,7 @@ namespace WebApplication1.Migrations
                     b.Property<int>("Sifra")
                         .HasColumnType("int");
 
-                    b.HasKey("Drazava_ID");
+                    b.HasKey("Drzava_ID");
 
                     b.ToTable("Drzava");
                 });
@@ -311,7 +311,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("StatusID");
 
-                    b.ToTable("Statusi");
+                    b.ToTable("Status");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Uloge", b =>

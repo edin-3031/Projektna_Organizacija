@@ -168,7 +168,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                     lista_org_jed.Add(new OrganizacionaJedinica
                     {
                         Adresa = x.Adresa,
-                        drzava = db.Drzava.Where(a => a.Drazava_ID == x.Drzava_FK).FirstOrDefault(),
+                        drzava = db.Drzava.Where(a => a.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
                         Drzava_FK = x.Drzava_FK,
                         Naziv = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).Select(p => p.Naziv).FirstOrDefault(),
                         organizacija = db.Organizacija.Where(a => a.Organizacija_ID == o).FirstOrDefault(),
@@ -333,7 +333,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                     lista_org_jed.Add(new OrganizacionaJedinica
                     {
                         Adresa = x.Adresa,
-                        drzava = db.Drzava.Where(a => a.Drazava_ID == x.Drzava_FK).FirstOrDefault(),
+                        drzava = db.Drzava.Where(a => a.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
                         Drzava_FK = x.Drzava_FK,
                         Naziv = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).Select(p => p.Naziv).FirstOrDefault(),
                         organizacija = db.Organizacija.Where(a => a.Organizacija_ID == o).FirstOrDefault(),

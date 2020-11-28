@@ -114,7 +114,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             {
                 Naziv=x.Naziv,
                 organizacija=db.Organizacija.Where(v=>v.Organizacija_ID==x.Organizacija_FK).FirstOrDefault(),
-                drzava=db.Drzava.Where(v=>v.Drazava_ID==x.Drzava_FK).FirstOrDefault(),
+                drzava=db.Drzava.Where(v=>v.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
                 ptt=db.PTT.Where(v=>v.PTT_ID==x.PTT_FK).FirstOrDefault(),
                 OrganizacionaJedinica_ID=x.OrganizacionaJedinica_ID
             }).ToList();
