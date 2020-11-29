@@ -1,95 +1,11 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@using WebApplication1.Models;
+﻿@using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
     uor id = (uor)ViewData["id"];
 }
-
-<style>
-
-    .err {
-        border: 2px solid red;
-    }
-
-    td {
-        padding: 10px;
-    }
-
-    a, td {
-        /*font-weight: bold;*/
-        text-align-last: center;
-    }
-
-    li, ul {
-        list-style: none;
-        margin-top: 5%;
-    }
-
-    ul {
-        margin: 0px;
-        padding: 0px;
-        border: 0px;
-    }
-
-    #sifarnik, #transakcije, #izvjestaji, #admin {
-        font-weight: bold;
-    }
-
-    a {
-        color: white;
-        text-decoration-line: none;
-    }
-
-        a:hover {
-            color: white;
-            text-decoration: none;
-            text-decoration-line: none;
-        }
-
-    #kutijaZaMeni {
-        position: fixed;
-        height: 100%;
-        width: 17%;
-        /*            background-color:green;*/
-        display: block;
-        margin-left: -17.8%;
-    }
-
-    #menu {
-        position: fixed;
-        /*height: 65%;*/
-        width: 15%;
-        margin-left: 0px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        top: 20%;
-        font-size: 1vw;
-        border-radius: 0px 25px 25px 0px;
-    }
-    #msg {
-        color: white;
-        border: 2px solid red;
-        background-color: orangered;
-        align-items: center;
-        align-content: center;
-        height: 3vw;
-        width: 12vw;
-    }
-    .err{
-        border:2px solid red;
-    }
-    span {
-        position: absolute;
-        float: right;
-        margin-left: 1%;
-        background-color: indianred;
-        color: white;
-        font-weight: bold;
-    }
-</style>
+<link rel="stylesheet" href="~/css/SuperUser/Drzava/Unos.css"/>
+<script src="~/js/SuperUser/Drzava/Unos.js"></script>
 
 <div id="kutijaZaMeni">
     <div id="menu">
@@ -130,74 +46,18 @@
         <table>
             <tr>
                 <td><label>Šifra</label></td>
-                <td><input onkeypress="provjera('sfr')" id="sfr" type="text" name="sifra" /><span id="sifra_span"></span></td>
+                <td><input onkeypress="provjera('sfr')" onchange="provjera('sfr')" onblur="provjera('sfr')" id="sfr" type="text" name="sifra" /><span id="sifra_span"></span></td>
             </tr>
             <tr>
                 <td><label>Naziv</label></td>
-                <td><input onchange="provjera('n')" id="n" type="text" name="naziv" /><span id="naziv_span"></span></td>
+                <td><input onchange="provjera('n')" onblur="provjera('n')" onkeypress="provjera('n')" id="n" type="text" name="naziv" /><span id="naziv_span"></span></td>
             </tr>
             <input hidden="hidden" name="u" value="@id.userId" />
             <input hidden="hidden" name="r" value="@id.roleId" />
             <input hidden="hidden" name="o" value="@id.organisationId" />
         </table>
 
-        <button type="submit" id="snimi"  class="btn btn-primary">Snimi</button>
+        <button type="submit" id="snimi" class="btn btn-primary">Snimi</button>
 
     </form>
-
-
 </center>
-
-<script>
-    $(document).ready(function () {
-        document.getElementById("snimi").disabled = true;
-
-    });
-
-    var prvi, drugi = false;
-
-    function provjera(id) {
-
-        if (id === "sfr") {
-            var sifra = document.getElementById(id).value;
-
-            if (isNaN(sifra) || sifra === "") {
-                document.getElementById("snimi").disabled = true;
-                document.getElementById(id).classList.add('err');
-                document.getElementById("sifra_span").innerHTML = "Unos moraju biti brojevi";
-                document.getElementById("sifra_span").classList.add("err");
-                prvi = false;
-            }
-
-            else {
-                document.getElementById(id).classList.remove('err');
-                document.getElementById("sifra_span").innerHTML = ";
-                document.getElementById("sifra_span").classList.remove("err");
-                prvi = true;
-            }
-        }
-
-        if (id==="n") {
-            var naziv = document.getElementById(id).value;
-
-            if (naziv === "") {
-                document.getElementById("snimi").disabled = true;
-                document.getElementById(id).classList.add('err');
-                document.getElementById("naziv_span").innerHTML = "Ovo polje je obavezno";
-                document.getElementById("naziv_span").classList.add("err");
-                drugi = false;
-            }
-
-            else {
-                document.getElementById(id).classList.remove('err');
-                document.getElementById("naziv_span").innerHTML = "";
-                document.getElementById("naziv_span").classList.remove("err");
-                drugi = true;
-            }
-        }
-
-        if (prvi === true && drugi === true) {
-            document.getElementById("snimi").disabled = false;
-        }
-    }
-</script>

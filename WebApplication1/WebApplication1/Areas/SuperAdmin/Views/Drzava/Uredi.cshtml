@@ -1,7 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@using WebApplication1.Models;
+﻿@using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
@@ -9,76 +6,9 @@
     uor id = (uor)ViewData["id"];
     Drzava drzava = (Drzava)ViewData["uredi_drzava"];
 }
-<style>
-    td {
-        padding: 10px;
-    }
+<link rel="stylesheet" href="~/css/SuperUser/Drzava/Uredi.css"/>
+<script src="~/js/SuperUser/Drzava/Uredi.js"></script>
 
-    a, td {
-        /*font-weight: bold;*/
-        text-align-last: center;
-    }
-
-    li, ul {
-        list-style: none;
-        margin-top: 5%;
-    }
-
-    ul {
-        margin: 0px;
-        padding: 0px;
-        border: 0px;
-    }
-
-    #sifarnik, #transakcije, #izvjestaji, #admin {
-        font-weight: bold;
-    }
-
-    a {
-        color: white;
-        text-decoration-line: none;
-    }
-
-        a:hover {
-            color: white;
-            text-decoration: none;
-            text-decoration-line: none;
-        }
-
-    #kutijaZaMeni {
-        position: fixed;
-        height: 100%;
-        width: 17%;
-        /*            background-color:green;*/
-        display: block;
-        margin-left: -17.8%;
-    }
-
-    #menu {
-        position: fixed;
-        /*height: 65%;*/
-        width: 15%;
-        margin-left: 0px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        top: 20%;
-        font-size: 1vw;
-        border-radius: 0px 25px 25px 0px;
-    }
-
-    .err{
-        border:2px solid red;
-    }
-
-    span {
-        position:absolute;
-        float:right;
-        margin-left:1%;
-        background-color:indianred;
-        color:white;
-        font-weight:bold;
-    }
-</style>
 <div id="kutijaZaMeni">
     <div id="menu">
         <br />
@@ -132,59 +62,3 @@
         <button type="submit" id="snimi" class="btn btn-primary">Snimi</button>
     </form>
 </center>
-
-
-
-<script>
-    var prvi, drugi = false;
-
-    function provjera(id) {
-
-        if (id === "sfr") {
-            var sifra = document.getElementById(id).value;
-
-            if (isNaN(sifra) || sifra === "") {
-                document.getElementById("snimi").disabled = true;
-                document.getElementById(id).classList.add('err');
-                document.getElementById("sifra_span").innerHTML = "Unos moraju biti brojevi";
-                document.getElementById("sifra_span").classList.add("err");
-                prvi = false;
-                document.getElementById("snimi").disabled = true;
-            }
-
-            else {
-                document.getElementById(id).classList.remove('err');
-                document.getElementById("sifra_span").innerHTML = "";
-                document.getElementById("sifra_span").classList.remove("err");
-                prvi = true;
-            }
-        }
-
-        if (id==="n") {
-            var naziv = document.getElementById(id).value;
-
-            if (naziv === "") {
-                document.getElementById("snimi").disabled = true;
-                document.getElementById(id).classList.add('err');
-                document.getElementById("naziv_span").innerHTML = "Ovo polje je obavezno";
-                document.getElementById("naziv_span").classList.add("err");
-                document.getElementById("snimi").disabled = true;
-                drugi = false;
-            }
-
-            else {
-                document.getElementById(id).classList.remove('err');
-                document.getElementById("naziv_span").innerHTML = "";
-                document.getElementById("naziv_span").classList.remove("err");
-                drugi = true;
-            }
-        }
-
-        if (prvi === true && drugi === true) {
-            document.getElementById("snimi").disabled = false;
-        }
-        else {
-            document.getElementById("snimi").disabled = true;
-        }
-    }
-</script>

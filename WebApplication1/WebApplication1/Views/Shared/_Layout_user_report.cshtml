@@ -119,7 +119,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1" style="float:right">
-                        <li style="margin-top:0%;float:right;position:relative;"><a class="btn btn-danger" href="/Auth/Index">Log out</a></li>
+                        <li style="margin-top:0%;float:right;position:relative;"><a class="btn btn-danger" onclick="noBack()" href="/Auth/Index">Log out</a></li>
+                        <script type="text/javascript">
+                            window.history.forward();
+                            function noBack() {
+                                window.history.forward();
+                            }
+                        </script>
                     </ul>
                 </div>
             </div>

@@ -140,7 +140,15 @@
             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </li>*@
                         <li class="nav-item">
-                            <a style="color:white; background-color:orangered" class="btn" title="Log out" id="logOut" href="/Auth/Index">Log out</a>
+                            <a style="color:white; background-color:orangered" onclick="noBack()" class="btn" title="Log out" id="logOut" href="/Auth/Index">Odjavi se</a>
+
+                            <script type="text/javascript">
+                                window.history.forward();
+                                function noBack() {
+                                    window.history.forward();
+                                }
+                            </script>
+
                             <a class="btn" style="color:white; background-color:cornflowerblue" title="share on facebook" id="fb">Share on facebook</a>
                             <script>
                                 $("#fb").click(function () {
