@@ -12,11 +12,11 @@ namespace WebApplication1.Models
         [Key]
         public int Organizacija_ID { get; set; }
 
-        public PTT? ptt { get; set; }
+        public PTT ptt { get; set; }
         [ForeignKey("ptt")]
         public int PTT_FK { get; set; }
 
-        public Drzava? drzava { get; set; }
+        public Drzava drzava { get; set; }
         [ForeignKey("drzava")]
         public int Drzava_FK { get; set; }
 
@@ -26,8 +26,10 @@ namespace WebApplication1.Models
         
         public string Adresa{ get; set; }
 
-        public byte[] Slika { get; set; }
+#nullable enable
 
-        public byte[] Logo { get; set; }
+        public byte[]? Slika { get; set; }
+
+        public byte[]? Logo { get; set; }
     }
 }

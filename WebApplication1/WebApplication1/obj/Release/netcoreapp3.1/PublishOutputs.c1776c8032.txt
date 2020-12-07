@@ -1,8 +1,13 @@
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\WebApplication1.exe
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\Select.Html.dep
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\css\site.css
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\css\SuperUser\Drzava\Prikaz.css
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\css\SuperUser\Drzava\Unos.css
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\css\SuperUser\Drzava\Uredi.css
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\favicon.ico
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\site.js
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\SuperUser\Drzava\Unos.js
+D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\SuperUser\Drzava\Uredi.js
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 D:\New Project\Projektna_Organizacija\WebApplication1\WebApplication1\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css

@@ -16,12 +16,15 @@ using Microsoft.AspNetCore.Hosting;
 using SelectPdf;
 using Aspose.Pdf;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication1.Areas.SuperAdmin.Controllers
 {
     public class ProjekatPlanController : Controller
     {
         private readonly ApplicationDbContext db;
+        public string poruka = "Morate se ponovo prijaviti";
 
         public ProjekatPlanController(ApplicationDbContext _db)
         {
@@ -31,258 +34,261 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         [Area("SuperAdmin")]
         public IActionResult Excel()
         {
-
-            List<ProjekatPlan> proj_plan = db.ProjekatPlan.Select(x=>new ProjekatPlan { 
-                DatumDo=x.DatumDo,
-                DatumOd=x.DatumOd,
-                Naziv=x.Naziv,
-                status=db.Status.Where(a=>a.StatusID==x.Status_FK).FirstOrDefault(),
-                Status_FK=x.Status_FK,
-                organizacionaJedinica=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                OrganizacionaJedinica_FK=x.OrganizacionaJedinica_FK,
-                ProjekatPlan_ID=x.ProjekatPlan_ID,
-                Sifra=x.Sifra
-            }).ToList();
-
-            using (var workbook = new XLWorkbook())
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                var worksheet = workbook.Worksheets.Add("Projekat_Plan");
-                var currentRow = 1;
-                worksheet.Cell(currentRow, 1).Value = "Projekat Plan ID";
-                worksheet.Cell(currentRow, 2).Value = "Naziv";
-                worksheet.Cell(currentRow, 3).Value = "Šifra";
-                worksheet.Cell(currentRow, 4).Value = "Datum od";
-                worksheet.Cell(currentRow, 5).Value = "Datum do";
-                worksheet.Cell(currentRow, 6).Value = "Organizaciona Jedinica";
-                worksheet.Cell(currentRow, 7).Value = "Status";
-
-                foreach (var x in proj_plan)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                List<ProjekatPlan> proj_plan = db.ProjekatPlan.Select(x => new ProjekatPlan
                 {
-                    currentRow++;
-                    worksheet.Cell(currentRow, 1).Value = x.ProjekatPlan_ID;
-                    worksheet.Cell(currentRow, 2).Value = x.Naziv;
-                    worksheet.Cell(currentRow, 3).Value = x.Sifra;
-                    worksheet.Cell(currentRow, 4).Value = x.DatumOd;
-                    worksheet.Cell(currentRow, 5).Value = x.DatumDo;
-                    worksheet.Cell(currentRow, 6).Value = db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID== x.OrganizacionaJedinica_FK).Select(o=>o.Naziv).FirstOrDefault();
-                    worksheet.Cell(currentRow, 7).Value = x.status.Naziv;
-                }
+                    DatumDo = x.DatumDo,
+                    DatumOd = x.DatumOd,
+                    Naziv = x.Naziv,
+                    status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault(),
+                    Status_FK = x.Status_FK,
+                    organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                    OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                    ProjekatPlan_ID = x.ProjekatPlan_ID,
+                    Sifra = x.Sifra
+                }).ToList();
 
-                using (var stream = new MemoryStream())
+                using (var workbook = new XLWorkbook())
                 {
-                    workbook.SaveAs(stream);
-                    var content = stream.ToArray();
-                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Projekat-PlanInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                    var worksheet = workbook.Worksheets.Add("Projekat_Plan");
+                    var currentRow = 1;
+                    worksheet.Cell(currentRow, 1).Value = "Projekat Plan ID";
+                    worksheet.Cell(currentRow, 2).Value = "Naziv";
+                    worksheet.Cell(currentRow, 3).Value = "Šifra";
+                    worksheet.Cell(currentRow, 4).Value = "Datum od";
+                    worksheet.Cell(currentRow, 5).Value = "Datum do";
+                    worksheet.Cell(currentRow, 6).Value = "Organizaciona Jedinica";
+                    worksheet.Cell(currentRow, 7).Value = "Status";
+
+                    foreach (var x in proj_plan)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 1).Value = x.ProjekatPlan_ID;
+                        worksheet.Cell(currentRow, 2).Value = x.Naziv;
+                        worksheet.Cell(currentRow, 3).Value = x.Sifra;
+                        worksheet.Cell(currentRow, 4).Value = x.DatumOd;
+                        worksheet.Cell(currentRow, 5).Value = x.DatumDo;
+                        worksheet.Cell(currentRow, 6).Value = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).Select(o => o.Naziv).FirstOrDefault();
+                        worksheet.Cell(currentRow, 7).Value = x.status.Naziv;
+                    }
+
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Projekat-PlanInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                    }
                 }
             }
         }
 
         [Area("SuperAdmin")]
-        public IActionResult Prikaz(int u, int o, int r)
+        public IActionResult Prikaz()
         {
-            List<ProjekatPlan> lista_proj_plan = db.ProjekatPlan.Select(x => new ProjekatPlan
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                DatumDo=x.DatumDo,
-                DatumOd=x.DatumOd,
-                Naziv=x.Naziv,
-                OrganizacionaJedinica_FK=x.OrganizacionaJedinica_FK,
-                ProjekatPlan_ID=x.ProjekatPlan_ID,
-                Sifra=x.Sifra,
-                organizacionaJedinica=db.OrganizacionaJedinica.Where(d=>d.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                Status_FK=x.Status_FK,
-                status=db.Status.Where(a=>a.StatusID==x.Status_FK).FirstOrDefault()
-            }).ToList();
-
-            uor podaci = new uor
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                List<ProjekatPlanVM> lista_proj_plan = db.ProjekatPlan.Include(a => a.organizacionaJedinica).Include(a => a.status).Select(x => new ProjekatPlanVM
+                {
+                    DatumDo = x.DatumDo,
+                    DatumOd = x.DatumOd,
+                    Naziv = x.Naziv,
+                    OrganizacionaJedinica_id = x.OrganizacionaJedinica_FK,
+                    OrganizacionaJedinica_naziv = x.organizacionaJedinica.Naziv,
+                    ProjekatPlan_ID = x.ProjekatPlan_ID,
+                    Sifra = x.Sifra,
+                    Status_id = x.Status_FK,
+                    Status_naziv = x.status.Naziv
+                }).ToList();
 
-            ViewData["id"] = podaci;
+                ViewData["proj_plan"] = lista_proj_plan;
 
-
-            ViewData["proj_plan"] = lista_proj_plan;
-
-            return View();
+                return View();
+            }
         }
         [Area("SuperAdmin")]
-        public IActionResult Unos(int u, int o, int r)
+        public IActionResult Unos()
         {
-            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Naziv=x.Naziv,
-                organizacija=db.Organizacija.Where(v=>v.Organizacija_ID==x.Organizacija_FK).FirstOrDefault(),
-                drzava=db.Drzava.Where(v=>v.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
-                ptt=db.PTT.Where(v=>v.PTT_ID==x.PTT_FK).FirstOrDefault(),
-                OrganizacionaJedinica_ID=x.OrganizacionaJedinica_ID
-            }).ToList();
-
-            ViewData["lista_org_jed"] = lista_org_jed;
-
-            List<Status> stat_lista = db.Status.ToList();
-            ViewData["statusi"] = stat_lista;
-
-            uor podaci = new uor
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                List<OrganizacionaJedinicaVM> lista_org_jed = db.OrganizacionaJedinica.Include(a => a.drzava).Include(a => a.organizacija).Include(a => a.ptt).Select(x => new OrganizacionaJedinicaVM
+                {
+                    Naziv = x.Naziv,
+                    OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
+                    PTT_id = x.PTT_FK,
+                    PTT_naziv = x.ptt.Naziv,
+                    Drzava_id = x.Drzava_FK,
+                    Drzava_naziv = x.drzava.Naziv,
+                    Adresa = x.Adresa,
+                    Organizacija_id = x.Organizacija_FK,
+                    Organizacija_naziv = x.organizacija.Naziv
+                }).ToList();
 
-            ViewData["id"] = podaci;
+                ViewData["lista_org_jed"] = lista_org_jed;
 
+                List<Status> stat_lista = db.Status.ToList();
+                ViewData["statusi"] = stat_lista;
 
-            return View();
+                return View();
+            }
         }
         [Area("SuperAdmin")]
-        public IActionResult UnosSnimi(int organizacionaJedinica, int sifra, string naziv, DateTime Od, DateTime Do, int u, int o, int r, int status_id)
+        public IActionResult UnosSnimi(int organizacionaJedinica, int sifra, string naziv, DateTime Od, DateTime Do, int status_id)
         {
-            ProjekatPlan temp = new ProjekatPlan
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                DatumDo = Do,
-                DatumOd = Od,
-                Naziv = naziv,
-                OrganizacionaJedinica_FK = organizacionaJedinica,
-                Sifra = sifra,
-                Status_FK=status_id
-            };
-
-            db.ProjekatPlan.Add(temp);
-            db.SaveChanges();
-
-            List<ProjekatPlan> lista_proj_plan = db.ProjekatPlan.Select(x => new ProjekatPlan
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                DatumDo = x.DatumDo,
-                DatumOd = x.DatumOd,
-                Naziv = x.Naziv,
-                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                ProjekatPlan_ID = x.ProjekatPlan_ID,
-                Sifra = x.Sifra,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                Status_FK = x.Status_FK,
-                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
-            }).ToList();
-            ViewData["proj_plan"] = lista_proj_plan;
+                ProjekatPlan temp = new ProjekatPlan
+                {
+                    DatumDo = Do,
+                    DatumOd = Od,
+                    Naziv = naziv,
+                    OrganizacionaJedinica_FK = organizacionaJedinica,
+                    Sifra = sifra,
+                    Status_FK = status_id
+                };
 
-
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
-            return View("Prikaz");
-        }
-        [Area("SuperAdmin")]
-        public IActionResult Ukloni(int id, int u, int o, int r)
-        {
-            ProjekatPlan temp = db.ProjekatPlan.Where(x => x.ProjekatPlan_ID == id).FirstOrDefault();
-
-            if (temp != null)
-            {
-                db.ProjekatPlan.Remove(temp);
+                db.ProjekatPlan.Add(temp);
                 db.SaveChanges();
+
+                List<ProjekatPlanVM> lista_proj_plan = db.ProjekatPlan.Include(a => a.organizacionaJedinica).Include(a => a.status).Select(x => new ProjekatPlanVM
+                {
+                    DatumDo = x.DatumDo,
+                    DatumOd = x.DatumOd,
+                    Naziv = x.Naziv,
+                    OrganizacionaJedinica_id = x.OrganizacionaJedinica_FK,
+                    OrganizacionaJedinica_naziv = x.organizacionaJedinica.Naziv,
+                    ProjekatPlan_ID = x.ProjekatPlan_ID,
+                    Sifra = x.Sifra,
+                    Status_id = x.Status_FK,
+                    Status_naziv = x.status.Naziv
+                }).ToList();
+
+                ViewData["proj_plan"] = lista_proj_plan;
+
+                return View("Prikaz");
             }
-
-            List<ProjekatPlan> lista_proj_plan = db.ProjekatPlan.Select(x => new ProjekatPlan
+        }
+        [Area("SuperAdmin")]
+        public IActionResult Ukloni(int id)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                DatumDo = x.DatumDo,
-                DatumOd = x.DatumOd,
-                Naziv = x.Naziv,
-                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                ProjekatPlan_ID = x.ProjekatPlan_ID,
-                Sifra = x.Sifra,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                Status_FK = x.Status_FK,
-                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
-            }).ToList();
-            ViewData["proj_plan"] = lista_proj_plan;
-
-            uor podaci = new uor
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                ProjekatPlan temp = db.ProjekatPlan.Where(x => x.ProjekatPlan_ID == id).FirstOrDefault();
 
-            ViewData["id"] = podaci;
+                if (temp != null)
+                {
+                    db.ProjekatPlan.Remove(temp);
+                    db.SaveChanges();
+                }
 
+                List<ProjekatPlanVM> lista_proj_plan = db.ProjekatPlan.Include(a => a.organizacionaJedinica).Include(a => a.status).Select(x => new ProjekatPlanVM
+                {
+                    DatumDo = x.DatumDo,
+                    DatumOd = x.DatumOd,
+                    Naziv = x.Naziv,
+                    OrganizacionaJedinica_id = x.OrganizacionaJedinica_FK,
+                    OrganizacionaJedinica_naziv = x.organizacionaJedinica.Naziv,
+                    ProjekatPlan_ID = x.ProjekatPlan_ID,
+                    Sifra = x.Sifra,
+                    Status_id = x.Status_FK,
+                    Status_naziv = x.status.Naziv
+                }).ToList();
 
-            return View("Prikaz");
+                ViewData["proj_plan"] = lista_proj_plan;
+
+                return View("Prikaz");
+            }
         }
 
         [Area("SuperAdmin")]
-        public IActionResult Uredi(int id, int u, int o, int r)
+        public IActionResult Uredi(int id)
         {
-            List<OrganizacionaJedinica> org_jed_lista = db.OrganizacionaJedinica.ToList();
-
-            ViewData["org_jed"] = org_jed_lista;
-
-            ProjekatPlan p = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == id).FirstOrDefault();
-            p.organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == p.OrganizacionaJedinica_FK).FirstOrDefault();
-            p.status = db.Status.Where(a => a.StatusID == p.Status_FK).FirstOrDefault();
-            ViewData["projekat"] = p;
-
-            List<Status> stat_lista = db.Status.ToList();
-            ViewData["statusi"] = stat_lista;
-
-            uor podaci = new uor
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                List<OrganizacionaJedinica> org_jed_lista = db.OrganizacionaJedinica.ToList();
 
-            ViewData["id"] = podaci;
+                ViewData["org_jed"] = org_jed_lista;
 
-            return View();
+                ProjekatPlan p = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == id).FirstOrDefault();
+                p.organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == p.OrganizacionaJedinica_FK).FirstOrDefault();
+                p.status = db.Status.Where(a => a.StatusID == p.Status_FK).FirstOrDefault();
+                ViewData["projekat"] = p;
+
+                List<Status> stat_lista = db.Status.ToList();
+                ViewData["statusi"] = stat_lista;
+
+                return View();
+            }
         }
 
         [Area("SuperAdmin")]
-        public IActionResult UrediSnimi(int id, int u, int o, int r, DateTime DO, DateTime OD, string naziv, int org_jed, int sifra, int status_id)
+        public IActionResult UrediSnimi(int id, DateTime DO, DateTime OD, string naziv, int org_jed, int sifra, int status_id)
         {
-            ProjekatPlan t = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == id).FirstOrDefault();
-
-            t.DatumDo=DO;
-            t.DatumOd=OD;
-            t.Naziv = naziv;
-            t.OrganizacionaJedinica_FK = org_jed;
-            t.Sifra = sifra;
-            t.Status_FK = status_id;
-
-            db.SaveChanges();
-
-            List < ProjekatPlan > lista_proj_plan = db.ProjekatPlan.Select(x => new ProjekatPlan
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                DatumDo = x.DatumDo,
-                DatumOd = x.DatumOd,
-                Naziv = x.Naziv,
-                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                ProjekatPlan_ID = x.ProjekatPlan_ID,
-                Sifra = x.Sifra,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                Status_FK = x.Status_FK,
-                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
-            }).ToList();
-
-            uor podaci = new uor
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                ProjekatPlan t = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == id).FirstOrDefault();
 
-            ViewData["id"] = podaci;
+                t.DatumDo = DO;
+                t.DatumOd = OD;
+                t.Naziv = naziv;
+                t.OrganizacionaJedinica_FK = org_jed;
+                t.Sifra = sifra;
+                t.Status_FK = status_id;
 
+                db.SaveChanges();
 
-            ViewData["proj_plan"] = lista_proj_plan;
+                List<ProjekatPlanVM> lista_proj_plan = db.ProjekatPlan.Include(a => a.organizacionaJedinica).Include(a => a.status).Select(x => new ProjekatPlanVM
+                {
+                    DatumDo = x.DatumDo,
+                    DatumOd = x.DatumOd,
+                    Naziv = x.Naziv,
+                    OrganizacionaJedinica_id = x.OrganizacionaJedinica_FK,
+                    OrganizacionaJedinica_naziv = x.organizacionaJedinica.Naziv,
+                    ProjekatPlan_ID = x.ProjekatPlan_ID,
+                    Sifra = x.Sifra,
+                    Status_id = x.Status_FK,
+                    Status_naziv = x.status.Naziv
+                }).ToList();
 
-            return View("Prikaz");
+                ViewData["proj_plan"] = lista_proj_plan;
+
+                return View("Prikaz");
+            }
         }
     }
 }

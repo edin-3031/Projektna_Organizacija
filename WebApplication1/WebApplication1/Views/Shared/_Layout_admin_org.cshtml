@@ -1,154 +1,145 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@{
+    string username = Context.Session.GetString("username");
+}
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApplication1</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
-    <style>
-        td, th, option {
-            text-align: center;
-        }
-
-        li, ul {
-            list-style: none;
-            margin-top: 5%;
-        }
-
-        ul{
-            margin:0px;
-            padding:0px;
-            border:0px;
-        }
-
-        #sifarnik, #transakcije, #izvjestaji, #admin {
-            font-weight: bold;
-        }
-
-        a {
-            color: white;
-            text-decoration-line: none;
-        }
-
-        #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
-            display: inline-block;
-            margin:2%;
-        }
-        #print_preview, #print_excel, #print_pdf{
-            color:white;
-        }
-        #dugmad {
-            margin-bottom: 2%;
-            margin-top: 2%;
-        }
-        a:hover{
-            color:white;
-            text-decoration:none;
-            text-decoration-line:none;
-        }
-        #kutijaZaMeni {
-            position: fixed;
-            height: 100%;
-            width: 17%;
-            /*            background-color:green;*/
-            display: block;
-            margin-left: -17.8%;
-        }
-         #menu {
-            position: fixed;
-            /*height: 65%;*/
-            width: 15%;
-            margin-left:0px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            top: 20%;
-            font-size: 1vw;
-            border-radius: 0px 25px 25px 0px;
-        }
-    </style>
-</head>
-<body>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - WebApplication1</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
     
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1" style="float:right">
-                        <li style="margin-top:0%;float:right;position:relative;"><a class="btn btn-danger" onclick="noBack()" href="/Auth/Index">Odjavi se</a></li>
-                        <script type="text/javascript">
-                            window.history.forward();
-                            function noBack() {
-                                window.history.forward();
-                            }
-                        </script>
-                        @*<li style="margin-top:0%;float:right;position:relative;"><a class="btn" id="fb" style="color:white; background-color:cornflowerblue;">Share on Facebook</a></li>
-                        <script>
-                            $("#fb").click(function () {
-                                document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + document.URL;
-                            });
-                        </script>*@
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
+        <style>
+            td, th, option {
+                text-align: center;
+            }
+    
+            li, ul {
+                list-style: none;
+                margin-top: 5%;
+            }
+    
+            ul {
+                margin: 0px;
+                padding: 0px;
+                border: 0px;
+            }
+    
+            #sifarnik, #transakcije, #izvjestaji, #admin {
+                font-weight: bold;
+            }
+    
+            a {
+                color: white;
+                text-decoration-line: none;
+            }
+    
+            #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
+                display: inline-block;
+                margin: 2%;
+            }
+    
+            #print_preview, #print_excel, #print_pdf {
+                color: white;
+            }
+    
+            #dugmad {
+                margin-bottom: 2%;
+                margin-top: 2%;
+            }
+    
+            a:hover {
+                color: white;
+                text-decoration: none;
+                text-decoration-line: none;
+            }
+    
+            #kutijaZaMeni {
+                position: fixed;
+                height: 100%;
+                width: 17%;
+                /*            background-color:green;*/
+                display: block;
+                margin-left: -17.8%;
+            }
+    
+            #menu {
+                position: fixed;
+                /*height: 65%;*/
+                width: 15%;
+                margin-left: 0px;
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+                top: 20%;
+                font-size: 1vw;
+                border-radius: 0px 25px 25px 0px;
+            }
+        </style>
+    </head>
+    <body>
+    
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+    
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+    
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <partial name="_LoginPartial" />
+                        <ul class="navbar-nav flex-grow-1" style="float:right">
+                            <li style="display:inline;margin:0px;">@username</li>
+                            <li style="display:inline;margin:0px; margin-left:80%;"><a class="btn btn-danger" href="/AdminOrg/AdminOrg/LogOut">Odjavi se</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div style="margin-left:17%; width:100%" class="container">
+    
+            <div id="kutijaZaMeni">
+                <div id="menu">
+                    <br />
+                    <a style="color:white; text-decoration-line:none; font-size:120%;" href="/AdminOrg/AdminOrg/Index">Projektna Organizacija</a><br /><br />
+                    <ul>
+                        <li id="sifarnik">Opšti šifarnik</li>
+                        <ul id="o_s">
+                            <li><a href="/AdminOrg/OrganizacionaJedinica/Prikaz">Organizaciona jedinica</a></li>
+                            <li><a href="/AdminOrg/KorisnikOrg/Prikaz">Korisnik-Organizaciona jedinica</a></li>
+                        </ul>
+                        <li id="transakcije">Transakcije</li>
+                        <ul id="tra">
+                            <li><a href="/AdminOrg/ProjekatPlan/Prikaz">Plan</a></li>
+                            <li><a href="/AdminOrg/ProjekatAktivnostPlan/Prikaz">Aktivnosti</a></li>
+                        </ul>
+                        <li id="izvjestaji">Izvještaji</li>
+                        <ul id="izv">
+                            <li><a href="/AdminOrg/ProjekatAktivnostRealizacija/Prikaz">Realizacija</a></li>
+                        </ul>
+                        <li id="admin">Admin</li>
+                        <ul id="adm">
+                            <li><a href="/AdminOrg/Korisnik/Prikaz">Korisnici</a></li>
+                        </ul>
                     </ul>
                 </div>
             </div>
-        </nav>
-
-        <!--<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <a class="navbar-brand" asp-area="AdminOrg" asp-controller="AdminOrg" asp-action="Index">Projektna organizacija</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                <partial name="_LoginPartial" />
-                <ul class="navbar-nav flex-grow-1">-->
-        @*<li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </li>*@
-        <!--<li class="nav-item">
-                        <a class="btn" style="color:white; background-color:cornflowerblue" title="share on facebook" id="fb">Share on facebook</a>
-                        <script>
-                            $("#fb").click(function () {
-                                document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + document.URL;
-                                //document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=www.google.com";
-                            });
-                        </script>
-                    </li>
-                    <li class="nav-item">
-                        <a style="color:white; background-color:orangered" class="btn" title="Log out" id="logOut" href="/Auth/Index">Log out</a>
-                    </li>
-                </ul>
-            </div>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </nav>-->
-    </header>
-    <div style="margin-left:17%; width:100%" class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    @*<footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - WebApplication1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
-
-</body>
+    
+        @*<footer class="border-top footer text-muted">
+                <div class="container">
+                    &copy; 2020 - WebApplication1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+            </footer>*@
+    </body>
 </html>

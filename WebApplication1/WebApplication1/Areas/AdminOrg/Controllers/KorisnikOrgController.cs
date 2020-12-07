@@ -7,29 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.VM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Data;
-using WebApplication1.Models;
-using WebApplication1.Models.VM;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using System.Data;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Org.BouncyCastle.Asn1.Misc;
-using WebApplication1.Data;
-using WebApplication1.Models;
-using WebApplication1.Models.VM;
 using Microsoft.AspNetCore.Hosting;
 using SelectPdf;
 using Aspose.Pdf;
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication1.Areas.AdminOrg.Controllers
 {
@@ -42,10 +29,10 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         }
 
         [Area("AdminOrg")]
-        public IActionResult Excel(int o)
+        public IActionResult Excel()
         {
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
+            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
 
@@ -94,13 +81,12 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         }
 
         [Area("AdminOrg")]
-        public IActionResult Prikaz(int u, int o, int r)
+        public IActionResult Prikaz()
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
+            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
 
@@ -122,25 +108,16 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                 }
             }
             ViewData["kor_org_jed"] = k_o_final;
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
 
             return View();
         }
         [Area("AdminOrg")]
-        public IActionResult Unos(int u, int o, int r)
+        public IActionResult Unos()
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
-            List<OrganizacionaJedinica> org_jed_temp = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
+            List<OrganizacionaJedinica> org_jed_temp = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
 
             List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
             List<Korisnici> k_final = new List<Korisnici>();
@@ -169,7 +146,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             }
             ViewData["korisnik"] = k_final;
 
-            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Where(a=>a.Organizacija_FK==o).Select(x => new OrganizacionaJedinica
+            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Where(a=>a.Organizacija_FK== (int)HttpContext.Session.GetInt32("organisation ID")).Select(x => new OrganizacionaJedinica
             {
                 OrganizacionaJedinica_ID=x.OrganizacionaJedinica_ID,
                 Naziv=x.Naziv,
@@ -177,24 +154,14 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
 
             ViewData["org_jed"] = lista_org_jed;
 
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
             return View();
         }
         [Area("AdminOrg")]
-        public IActionResult UnosSnimi(int korisnik, int organizacionaJedinica, int u, int o, int r)
+        public IActionResult UnosSnimi(int korisnik, int organizacionaJedinica)
         {
 
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
             Korisnici_OrganizacionaJedinica temp = new Korisnici_OrganizacionaJedinica
             {
                 Korisnici_FK = korisnik,
@@ -205,7 +172,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             db.SaveChanges();
 
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
+            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
 
@@ -228,51 +195,31 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             }
             ViewData["kor_org_jed"] = k_o_final;
 
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
             return View("Prikaz");
         }
 
         [Area("AdminOrg")]
-        public IActionResult Uredi(int id, int u, int o, int r)
+        public IActionResult Uredi(int id)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
             Korisnici_OrganizacionaJedinica temp = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_OrganizacionaJedinica_ID == id).FirstOrDefault();
             temp.korisnici = db.Korisnici.Where(a => a.Korisnici_ID == temp.Korisnici_FK).FirstOrDefault();
             temp.organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == temp.OrganizacionaJedinica_FK).FirstOrDefault();
             ViewData["kor_oj"] = temp;
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a=>a.Organizacija_FK==o).ToList();
+            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a=>a.Organizacija_FK== (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
             ViewData["OrganizacionaJedinice"] = org_jed;
-
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
 
             return View();
         }
 
         [Area("AdminOrg")]
-        public IActionResult UrediSnimi(int k_o_id, int u, int o, int r, int korisnik, int org_jed)
+        public IActionResult UrediSnimi(int k_o_id, int korisnik, int org_jed)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
             Korisnici_OrganizacionaJedinica t = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_OrganizacionaJedinica_ID == k_o_id).FirstOrDefault();
 
@@ -282,7 +229,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             db.SaveChanges();
 
 
-            List<OrganizacionaJedinica> org_jed_2 = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
+            List<OrganizacionaJedinica> org_jed_2 = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
 
@@ -305,24 +252,14 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             }
             ViewData["kor_org_jed"] = k_o_final;
 
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
             return View("Prikaz");
         }
 
         [Area("AdminOrg")]
-        public IActionResult Ukloni(int id, int u, int o, int r)
+        public IActionResult Ukloni(int id)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
             Korisnici_OrganizacionaJedinica temp = db.Korisnici_OrganizacionaJedinica.Where(v => v.Korisnici_OrganizacionaJedinica_ID == id).SingleOrDefault();
 
@@ -332,7 +269,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                 db.SaveChanges();
             }
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == o).ToList();
+            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
             List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
 
@@ -354,15 +291,6 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
                 }
             }
             ViewData["kor_org_jed"] = k_o_final;
-
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
 
             return View("Prikaz");
         }

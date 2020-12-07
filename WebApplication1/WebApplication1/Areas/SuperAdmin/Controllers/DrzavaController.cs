@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -14,135 +15,144 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
     {
         private readonly ApplicationDbContext db;
 
+        public string poruka="Morate se ponovo prijaviti";
+
         public DrzavaController(ApplicationDbContext _db)
         {
             db = _db;
         }
 
-        public uor podaci;
-
         [Area("SuperAdmin")]
-        public IActionResult UrediSnimi(int id_drzava, int u, int o, int r, string naziv, int sifra)
+        public IActionResult UrediSnimi(int id_drzava, string naziv, int sifra)
         {
-            uor model = new uor
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
-            Drzava t = db.Drzava.Where(a => a.Drzava_ID == id_drzava).FirstOrDefault();
-
-            t.Naziv = naziv;
-            t.Sifra = sifra;
-
-            db.SaveChanges();
-
-            List<Drzava> lista_drzava = db.Drzava.ToList();
-
-            ViewData["drzave"] = lista_drzava;
-
-            return View("Prikaz",model);
-        }
-
-        [Area("SuperAdmin")]
-        public IActionResult Uredi(int id, int u, int o, int r)
-        {
-            podaci = new uor();
-
-            podaci.userId = u;
-            podaci.organisationId = o;
-            podaci.roleId = r;
-
-            ViewData["id"] = podaci;
-
-            Drzava tmp = db.Drzava.Where(a => a.Drzava_ID == id).FirstOrDefault();
-
-            ViewData["uredi_drzava"] = tmp;
-
-            return View();
-        }
-
-        [Area("SuperAdmin")]
-        public IActionResult Prikaz(int u, int o, int r)
-        {
-            podaci = new uor();
-
-            podaci.userId = u;
-            podaci.organisationId = o;
-            podaci.roleId = r;
-
-            List<Drzava> lista_drzava = db.Drzava.ToList();
-
-            ViewData["drzave"] = lista_drzava;
-
-            return View(podaci);
-        }
-
-
-
-        [Area("SuperAdmin")]
-        public IActionResult Unos(int u, int o, int r)
-        {
-            podaci = new uor();
-
-            podaci.userId = u;
-            podaci.organisationId = o;
-            podaci.roleId = r;
-
-            ViewData["id"] = podaci;
-
-            return View("Unos");
-        }
-        [Area("SuperAdmin")]
-        public IActionResult UnosSnimi(int u, int o, int r,int sifra, string naziv)
-        {
-            Drzava temp = new Drzava
-            {
-                Naziv = naziv,
-                Sifra = sifra
-            };
-
-            db.Drzava.Add(temp);
-            db.SaveChanges();
-
-            uor podaci = new uor();
-
-            podaci.userId = u;
-            podaci.organisationId = o;
-            podaci.roleId = r;
-
-            List<Drzava> lista_drzava = db.Drzava.ToList();
-
-            ViewData["drzave"] = lista_drzava;
-
-
-            return View("Prikaz",podaci);
-        }
-        [Area("SuperAdmin")]
-        public IActionResult Ukloni(int id, int u, int o, int r)
-        {
-            Drzava temp = db.Drzava.Where(x => x.Drzava_ID == id).FirstOrDefault();
-
-            if (temp != null)
-            {
-                db.Drzava.Remove(temp);
-                db.SaveChanges();
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
             }
+            else
+            {
+                Drzava t = db.Drzava.Where(a => a.Drzava_ID == id_drzava).FirstOrDefault();
 
-            podaci = new uor();
+                t.Naziv = naziv;
+                t.Sifra = sifra;
 
-            podaci.userId = u;
-            podaci.organisationId = o;
-            podaci.roleId = r;
+                db.SaveChanges();
 
-            List<Drzava> lista_drzava = db.Drzava.ToList();
+                List<Drzava> lista_drzava = db.Drzava.ToList();
 
-            ViewData["drzave"] = lista_drzava;
+                ViewData["drzave"] = lista_drzava;
 
-            return View("Prikaz",podaci);
+                return View("Prikaz");
+            }
+        }
+
+        [Area("SuperAdmin")]
+        public IActionResult Uredi(int id)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+
+                Drzava tmp = db.Drzava.Where(a => a.Drzava_ID == id).FirstOrDefault();
+
+                ViewData["uredi_drzava"] = tmp;
+
+                return View();
+            }
+        }
+
+        [Area("SuperAdmin")]
+        public IActionResult Prikaz()
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                List<Drzava> lista_drzava = db.Drzava.ToList();
+
+                ViewData["drzave"] = lista_drzava;
+
+                return View();
+            }
+        }
+
+
+
+        [Area("SuperAdmin")]
+        public IActionResult Unos()
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                return View("Unos");
+            }
+        }
+        [Area("SuperAdmin")]
+        public IActionResult UnosSnimi(int sifra, string naziv)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                Drzava temp = new Drzava
+                {
+                    Naziv = naziv,
+                    Sifra = sifra
+                };
+
+                db.Drzava.Add(temp);
+                db.SaveChanges();
+
+
+
+                List<Drzava> lista_drzava = db.Drzava.ToList();
+
+                ViewData["drzave"] = lista_drzava;
+
+
+                return View("Prikaz");
+            }
+        }
+        [Area("SuperAdmin")]
+        public IActionResult Ukloni(int id)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                Drzava temp = db.Drzava.Where(x => x.Drzava_ID == id).FirstOrDefault();
+
+                if (temp != null)
+                {
+                    db.Drzava.Remove(temp);
+                    db.SaveChanges();
+                }
+
+
+                List<Drzava> lista_drzava = db.Drzava.ToList();
+
+                ViewData["drzave"] = lista_drzava;
+
+                return View("Prikaz");
+            }
         }
     }
 }

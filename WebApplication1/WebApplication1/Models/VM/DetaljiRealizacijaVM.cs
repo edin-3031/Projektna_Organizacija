@@ -22,7 +22,7 @@ namespace WebApplication1.Models.VM
 
     public class lista_DetaljiRealizacijaVM
     {
+        #nullable enable
         public List<DetaljiRealizacijaVM>? lista { get; set; }
     }
-
 }

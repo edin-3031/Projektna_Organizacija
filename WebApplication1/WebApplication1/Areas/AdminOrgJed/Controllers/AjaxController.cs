@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -30,7 +31,6 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             {
                 if(x.ProjekatAktivnostPlan_FK==idAktivnost)
                 {
-                    int _user = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == idRealizacija).Select(o => o.Korisnici_FK).FirstOrDefault();
                     _lista.Add(new DetaljiRealizacijaVM
                     {
                         datum=x.Datum.Date,
@@ -39,7 +39,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         idRealizacija=idRealizacija,
                         idUser=korisnikId,
                         kolicina=x.Kolicina,
-                        korisnik=db.Korisnici.Where(a=>a.Korisnici_ID== _user).Select(o=>o.Ime.ToString()+" "+o.Prezime.ToString()).FirstOrDefault(),
+                        korisnik=db.Korisnici.Where(a=>a.Korisnici_ID== HttpContext.Session.GetInt32("user ID")).Select(o=>o.Ime.ToString()+" "+o.Prezime.ToString()).FirstOrDefault(),
                         NazivAktivnosti=db.ProjekatAktivnostPlan.Where(a=>a.ProjekatAktivnostPlan_ID==idAktivnost).Select(o=>o.Naziv).FirstOrDefault(),
                         NazivProjekta=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID==idProjekat).Select(o=>o.Naziv).FirstOrDefault(),
                         opis=x.Opis

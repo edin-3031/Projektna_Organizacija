@@ -1,144 +1,58 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Microsoft.AspNetCore.Http;
 @using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @model WebApplication1.Models.VM.uor;
 @{
     Layout = "~/Views/Shared/_Layout_user_report.cshtml";
 
-    uor id = (uor)ViewData["id"];
-
     byte[] pic = (byte[])ViewData["slika"];
-
 
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+
+    var organizacija = Context.Session.GetString("organisation");
+    var organizacijaId = Context.Session.GetInt32("organisation ID");
+    var organizacionaJedinica = Context.Session.GetString("orgJed");
+    var organizacionaJedinicaId = Context.Session.GetInt32("orgJed ID");
+    var password = Context.Session.GetString("password");
+    var role = Context.Session.GetString("role");
+    var roleId = Context.Session.GetInt32("role ID");
+    var user = Context.Session.GetString("user");
+    var userId = Context.Session.GetInt32("user ID");
+    var username = Context.Session.GetString("username");
 }
 
 <style>
-    tr {
-        /*border: 1px solid black;*/
-    }
 
     td {
         padding: 10px;
     }
 
     a, td {
-        /*font-weight: bold;*/
         text-align-last: center;
     }
 </style>
-<style>
 
+<img style="height:45vw; width:81vw;" src="@imgsrc" />
 
-    li, ul {
-        list-style: none;
-        margin-top: 5%;
-    }
-
-    ul {
-        margin: 0px;
-        padding: 0px;
-        border: 0px;
-    }
-
-    #sifarnik, #transakcije, #izvjestaji, #admin {
-        font-weight: bold;
-    }
-
-    a {
-        color: white;
-        text-decoration-line: none;
-    }
-
-    #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
-        display: inline-block;
-        margin: 2%;
-    }
-
-    #print_preview, #print_excel, #print_pdf {
-        color: white;
-    }
-
-    #dugmad {
-        margin-bottom: 2%;
-        margin-top: 2%;
-    }
-
-    a:hover {
-        color: white;
-        text-decoration: none;
-        text-decoration-line: none;
-    }
-
-    #kutijaZaMeni {
-        position: fixed;
-        height: 100%;
-        width: 17%;
-        /*            background-color:green;*/
-        display: block;
-        margin-left: -17.8%;
-    }
-
-    #menu {
-        position: fixed;
-        /*height: 65%;*/
-        width: 15%;
-        margin-left: 0px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        top: 20%;
-        font-size: 1vw;
-        border-radius: 0px 25px 25px 0px;
-    }
-</style>
-<div id="kutijaZaMeni">
-    <div id="menu">
-        <br />
-        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/UserReport/UserReport/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
-        <ul>
-            <li id="izvjestaji">Izvještaji</li>
-            <ul id="izv">
-                <li><a href="/UserReport/ProjekatAktivnostRealizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Realizacija</a></li>
-            </ul>
-        </ul>
-    </div>
-</div>
-@*<script>
-    $(document.getElementsByTagName("li")).mousedown(function () {
-        this.style.backgroundColor = "rgba(250, 90, 90, 0.8)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px 25px 25px 0px";
-    });
-
-    $(document.getElementsByTagName("li")).mouseleave(function () {
-        this.style.backgroundColor = "rgb(51, 51, 51)";
-        this.style.width = "100%";
-        this.style.borderRadius = "0px";
-    });
-
-    $(document.getElementsByTagName("a")).mousedown(function () {
-        this.style.color = "White";
-    });
-        //$(document.getElementsByTagName("li")).mouseup(function () {
-        //    this.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        //});
-</script>*@
-<center>
-
-    <!--<h1>User_Report</h1><br />
-
-    <h1>Meni</h1>
-    <table>
-        <tr>
-            <td>Projekat Aktivnost Realizacija</td>
-            <td><a class="btn btn-primary" href="/UserReport/ProjekatAktivnostRealizacija/Prikaz?u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Prikaz</a></td>-->
-    @*<td><a class="btn btn-success" href="/UserReport/ProjekatAktivnostRealizacija/Unos">Unos</a></td>*@
-    <!--<td><a class="btn btn-warning" href="/UserReport/ProjekatAktivnostRealizacija/Detalji?u=@Model.userId&o=@Model.organisationId&r=@Model.roleId">Detalji</a></td>
-        </tr>
-    </table>-->
-
-    <img style="height:45vw; width:81vw;" src="@imgsrc" />
-</center>
+<br />
+<h1>Organizacija: @organizacija</h1>
+<br />
+<h1>Organizacija ID: @organizacijaId</h1>
+<br />
+<h1>Organizaciona Jedinica: @organizacionaJedinica</h1>
+<br />
+<h1>Organizaciona Jedinica ID: @organizacionaJedinicaId</h1>
+<br />
+<h1>Lozinka: @password</h1>
+<br />
+<h1>Uloga: @role</h1>
+<br />
+<h1>Uloga ID: @roleId</h1>
+<br />
+<h1>Korisnik: @user</h1>
+<br />
+<h1>Korisnik ID: @userId</h1>
+<br />
+<h1>Korisničko ime: @username</h1>
+<br />

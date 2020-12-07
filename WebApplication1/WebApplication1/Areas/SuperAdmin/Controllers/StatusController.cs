@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
     public class StatusController : Controller
     {
         private readonly ApplicationDbContext db;
+        public string poruka = "Morate se ponovo prijaviti";
 
         public StatusController(ApplicationDbContext _db)
         {
@@ -19,131 +21,125 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         }
 
         [Area("SuperAdmin")]
-        public IActionResult Prikaz(int u, int o, int r)
+        public IActionResult Prikaz()
         {
-            List<Status> s = db.Status.ToList();
-            ViewData["status"] = s;
-
-            uor podaci = new uor
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
-            return View();
-        }
-
-        [Area("SuperAdmin")]
-        public IActionResult Unos(int u, int o, int r)
-        {
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
-            return View();
-        }
-
-        [Area("SuperAdmin")]
-        public IActionResult UnosSnimi(int sifra, string naziv, int u, int o, int r)
-        {
-            Status s_temp = new Status
-            {
-                Naziv = naziv,
-                Sifra = sifra
-            };
-
-            db.Status.Add(s_temp);
-            db.SaveChanges();
-
-            List<Status> s = db.Status.ToList();
-            ViewData["status"] = s;
-
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
-            return View("Prikaz");
-        }
-
-        [Area("SuperAdmin")]
-        public IActionResult Uredi(int u, int o, int r, int id)
-        {
-            Status s_temp = db.Status.Where(a => a.StatusID == id).FirstOrDefault();
-
-            ViewData["status"] = s_temp;
-
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
-            return View();
-        }
-        [Area("SuperAdmin")]
-        public IActionResult UrediSnimi(int id, int u, int o, int r, string naziv, int sifra)
-        {
-            Status s_temp = db.Status.Where(a => a.StatusID == id).FirstOrDefault();
-
-            s_temp.Naziv = naziv;
-            s_temp.Sifra = sifra;
-
-            uor podaci = new uor
-            {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
-
-            db.SaveChanges();
-
-            List<Status> s = db.Status.ToList();
-            ViewData["status"] = s;
-
-            ViewData["id"] = podaci;
-
-            return View("Prikaz");
-        }
-        [Area("SuperAdmin")]
-        public IActionResult Ukloni(int u, int o, int r, int id)
-        {
-            Status s_temp = db.Status.Where(a => a.StatusID == id).FirstOrDefault();
-
-            if (s_temp != null)
-            {
-                db.Remove(s_temp);
-                db.SaveChanges();
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
             }
-
-            uor podaci = new uor
+            else
             {
-                organisationId = o,
-                roleId = r,
-                userId = u
-            };
+                List<Status> s = db.Status.ToList();
+                ViewData["status"] = s;
 
-            ViewData["id"] = podaci;
+                return View();
+            }
+        }
 
-            List<Status> s = db.Status.ToList();
-            ViewData["status"] = s;
+        [Area("SuperAdmin")]
+        public IActionResult Unos()
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                return View();
+            }
+        }
 
-            return View("Prikaz");
+        [Area("SuperAdmin")]
+        public IActionResult UnosSnimi(int sifra, string naziv)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                Status s_temp = new Status
+                {
+                    Naziv = naziv,
+                    Sifra = sifra
+                };
+
+                db.Status.Add(s_temp);
+                db.SaveChanges();
+
+                List<Status> s = db.Status.ToList();
+                ViewData["status"] = s;
+
+                return View("Prikaz");
+            }
+        }
+
+        [Area("SuperAdmin")]
+        public IActionResult Uredi(int id)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                Status s_temp = db.Status.Where(a => a.StatusID == id).FirstOrDefault();
+
+                ViewData["status"] = s_temp;
+
+                return View();
+            }
+        }
+        [Area("SuperAdmin")]
+        public IActionResult UrediSnimi(int id, string naziv, int sifra)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                Status s_temp = db.Status.Where(a => a.StatusID == id).FirstOrDefault();
+
+                s_temp.Naziv = naziv;
+                s_temp.Sifra = sifra;
+
+                db.SaveChanges();
+
+                List<Status> s = db.Status.ToList();
+                ViewData["status"] = s;
+
+                return View("Prikaz");
+            }
+        }
+        [Area("SuperAdmin")]
+        public IActionResult Ukloni(int id)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                Status s_temp = db.Status.Where(a => a.StatusID == id).FirstOrDefault();
+
+                if (s_temp != null)
+                {
+                    db.Remove(s_temp);
+                    db.SaveChanges();
+                }
+
+                List<Status> s = db.Status.ToList();
+                ViewData["status"] = s;
+
+                return View("Prikaz");
+            }
         }
     }
 }

@@ -12,12 +12,12 @@ namespace WebApplication1.Models
         [Key]
         public int Korisnici_OrganizacionaJedinica_ID { get; set; }
 
-        public Korisnici? korisnici { get; set; }
+        public Korisnici korisnici { get; set; }
         [ForeignKey("korisnici")]
         public int Korisnici_FK { get; set; }
 
-        public OrganizacionaJedinica? organizacionaJedinica { get; set; }
-        [ForeignKey("organizacionaJedinica ")]
+        public OrganizacionaJedinica organizacionaJedinica { get; set; }
+        [ForeignKey("organizacionaJedinica")]
         public int OrganizacionaJedinica_FK { get; set; }
     }
 }

@@ -6,35 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.VM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Data;
-using WebApplication1.Models;
-using WebApplication1.Models.VM;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Data;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Org.BouncyCastle.Asn1.Misc;
-using WebApplication1.Data;
-using WebApplication1.Models;
-using WebApplication1.Models.VM;
 using Microsoft.AspNetCore.Hosting;
 using SelectPdf;
 using Aspose.Pdf;
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication1.Areas.SuperAdmin.Controllers
 {
     public class OrganizacionaJedinicaController : Controller
     {
         private readonly ApplicationDbContext db;
+        public string poruka = "Morate se ponovo prijaviti";
+
 
         public OrganizacionaJedinicaController(ApplicationDbContext _db)
         {
@@ -46,261 +37,265 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         [Area("SuperAdmin")]
         public IActionResult Excel()
         {
-
-            List<OrganizacionaJedinica> _org_jed = db.OrganizacionaJedinica.ToList();
-
-            using (var workbook = new XLWorkbook())
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                var worksheet = workbook.Worksheets.Add("Organizaciona_jedinica");
-                var currentRow = 1;
-                worksheet.Cell(currentRow, 1).Value = "Organizaciona jedinica ID";
-                worksheet.Cell(currentRow, 2).Value = "Naziv";
-                worksheet.Cell(currentRow, 3).Value = "Adresa";
-                worksheet.Cell(currentRow, 4).Value = "Organizacija";
-                worksheet.Cell(currentRow, 5).Value = "Država";
-                worksheet.Cell(currentRow, 6).Value = "PTT";
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                List<OrganizacionaJedinica> _org_jed = db.OrganizacionaJedinica.ToList();
 
-                foreach (var x in _org_jed)
+                using (var workbook = new XLWorkbook())
                 {
-                    currentRow++;
-                    worksheet.Cell(currentRow, 1).Value = x.OrganizacionaJedinica_ID;
-                    worksheet.Cell(currentRow, 2).Value = x.Naziv;
-                    worksheet.Cell(currentRow, 3).Value = x.Adresa;
-                    worksheet.Cell(currentRow, 4).Value = db.Organizacija.Where(a => a.Organizacija_ID == x.Organizacija_FK).Select(o => o.Naziv).FirstOrDefault();
-                    worksheet.Cell(currentRow, 5).Value = db.Drzava.Where(a => a.Drzava_ID == x.Drzava_FK).Select(o => o.Naziv).FirstOrDefault();
-                    worksheet.Cell(currentRow, 6).Value = db.PTT.Where(a => a.PTT_ID == x.PTT_FK).Select(o => o.Naziv).FirstOrDefault();
-                }
+                    var worksheet = workbook.Worksheets.Add("Organizaciona_jedinica");
+                    var currentRow = 1;
+                    worksheet.Cell(currentRow, 1).Value = "Organizaciona jedinica ID";
+                    worksheet.Cell(currentRow, 2).Value = "Naziv";
+                    worksheet.Cell(currentRow, 3).Value = "Adresa";
+                    worksheet.Cell(currentRow, 4).Value = "Organizacija";
+                    worksheet.Cell(currentRow, 5).Value = "Država";
+                    worksheet.Cell(currentRow, 6).Value = "PTT";
 
-                using (var stream = new MemoryStream())
-                {
-                    workbook.SaveAs(stream);
-                    var content = stream.ToArray();
-                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "OrganizacionaJedinicaInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                    foreach (var x in _org_jed)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 1).Value = x.OrganizacionaJedinica_ID;
+                        worksheet.Cell(currentRow, 2).Value = x.Naziv;
+                        worksheet.Cell(currentRow, 3).Value = x.Adresa;
+                        worksheet.Cell(currentRow, 4).Value = db.Organizacija.Where(a => a.Organizacija_ID == x.Organizacija_FK).Select(o => o.Naziv).FirstOrDefault();
+                        worksheet.Cell(currentRow, 5).Value = db.Drzava.Where(a => a.Drzava_ID == x.Drzava_FK).Select(o => o.Naziv).FirstOrDefault();
+                        worksheet.Cell(currentRow, 6).Value = db.PTT.Where(a => a.PTT_ID == x.PTT_FK).Select(o => o.Naziv).FirstOrDefault();
+                    }
+
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "OrganizacionaJedinicaInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                    }
                 }
             }
         }
 
         [Area("SuperAdmin")]
-        public IActionResult Prikaz(int u, int o, int r)
+        public IActionResult Prikaz()
         {
-            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Adresa = x.Adresa,
-                drzava = db.Drzava.Where(c => c.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
-                Drzava_FK = x.Drzava_FK,
-                Naziv = x.Naziv,
-                organizacija = db.Organizacija.Where(v => v.Organizacija_ID == x.Organizacija_FK).FirstOrDefault(),
-                Organizacija_FK = x.Organizacija_FK,
-                OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
-                ptt = db.PTT.Where(b => b.PTT_ID == x.PTT_FK).FirstOrDefault(),
-                PTT_FK = x.PTT_FK
-            }).ToList();
-
-            ViewData["org_jed"] = lista_org_jed;
-
-            uor podaci = new uor
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                List<OrganizacionaJedinicaVM> lista_org_jed = db.OrganizacionaJedinica.Include(a => a.drzava).Include(a => a.ptt).Include(a => a.organizacija).Select(x => new OrganizacionaJedinicaVM
+                {
+                    Adresa = x.Adresa,
+                    Drzava_id = x.drzava.Drzava_ID,
+                    Drzava_naziv = x.drzava.Naziv,
+                    Naziv = x.Naziv,
+                    Organizacija_id = x.organizacija.Organizacija_ID,
+                    Organizacija_naziv = x.organizacija.Naziv,
+                    OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
+                    PTT_id = x.ptt.PTT_ID,
+                    PTT_naziv = x.ptt.Naziv
+                }).ToList();
 
-            ViewData["id"] = podaci;
+                ViewData["org_jed"] = lista_org_jed;
 
-            return View();
+
+
+                return View();
+            }
         }
         [Area("SuperAdmin")]
-        public IActionResult Unos(int u, int o, int r)
+        public IActionResult Unos()
         {
-            List<Organizacija> lista_organizacija = db.Organizacija.Select(x => new Organizacija
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Adresa = x.Adresa,
-                Naziv = x.Naziv,
-                Organizacija_ID = x.Organizacija_ID,
-                Sifra = x.Sifra
-            }).ToList();
-
-
-            List<PTT> lista_ptt = db.PTT.Select(x => new PTT
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                Naziv = x.Naziv,
-                Sifra = x.Sifra,
-                PTT_ID = x.PTT_ID
-            }).ToList();
+                List<Organizacija> lista_organizacija = db.Organizacija.Select(x => new Organizacija
+                {
+                    Adresa = x.Adresa,
+                    Naziv = x.Naziv,
+                    Organizacija_ID = x.Organizacija_ID,
+                    Sifra = x.Sifra
+                }).ToList();
 
 
-            List<Drzava> lista_drzava = db.Drzava.Select(x => new Drzava
-            {
-                Drzava_ID = x.Drzava_ID,
-                Sifra = x.Sifra,
-                Naziv = x.Naziv
-            }).ToList();
+                List<PTT> lista_ptt = db.PTT.Select(x => new PTT
+                {
+                    Naziv = x.Naziv,
+                    Sifra = x.Sifra,
+                    PTT_ID = x.PTT_ID
+                }).ToList();
 
-            ViewData["organizacije"] = lista_organizacija;
-            ViewData["ptt"] = lista_ptt;
-            ViewData["drzava"] = lista_drzava;
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                List<Drzava> lista_drzava = db.Drzava.Select(x => new Drzava
+                {
+                    Drzava_ID = x.Drzava_ID,
+                    Sifra = x.Sifra,
+                    Naziv = x.Naziv
+                }).ToList();
 
-            ViewData["id"] = podaci;
+                ViewData["organizacije"] = lista_organizacija;
+                ViewData["ptt"] = lista_ptt;
+                ViewData["drzava"] = lista_drzava;
 
-            return View("Unos");
+
+
+                return View("Unos");
+            }
         }
         [Area("SuperAdmin")]
-        public IActionResult UnosSnimi(int organizacija, int ptt, int drzava, string naziv, string adresa, int u, int o, int r)
+        public IActionResult UnosSnimi(int organizacija, int ptt, int drzava, string naziv, string adresa)
         {
-            OrganizacionaJedinica temp = new OrganizacionaJedinica
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Adresa = adresa,
-                Drzava_FK = drzava,
-                Naziv = naziv,
-                Organizacija_FK = organizacija,
-                PTT_FK = ptt
-            };
-
-            db.OrganizacionaJedinica.Add(temp);
-            db.SaveChanges();
-
-            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                Adresa = x.Adresa,
-                drzava = db.Drzava.Where(c => c.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
-                Drzava_FK = x.Drzava_FK,
-                Naziv = x.Naziv,
-                organizacija = db.Organizacija.Where(v => v.Organizacija_ID == x.Organizacija_FK).FirstOrDefault(),
-                Organizacija_FK = x.Organizacija_FK,
-                OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
-                ptt = db.PTT.Where(b => b.PTT_ID == x.PTT_FK).FirstOrDefault(),
-                PTT_FK = x.PTT_FK
-            }).ToList();
+                OrganizacionaJedinica temp = new OrganizacionaJedinica
+                {
+                    Adresa = adresa,
+                    Drzava_FK = drzava,
+                    Naziv = naziv,
+                    Organizacija_FK = organizacija,
+                    PTT_FK = ptt
+                };
 
-            ViewData["org_jed"] = lista_org_jed;
-
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
-            return View("Prikaz");
-        }
-        [Area("SuperAdmin")]
-        public IActionResult Ukloni(int id, int u, int o, int r)
-        {
-            OrganizacionaJedinica temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).FirstOrDefault();
-
-            if (temp != null)
-            {
-                db.OrganizacionaJedinica.Remove(temp);
+                db.OrganizacionaJedinica.Add(temp);
                 db.SaveChanges();
+
+                List<OrganizacionaJedinicaVM> lista_org_jed = db.OrganizacionaJedinica.Include(a => a.drzava).Include(a => a.ptt).Include(a => a.organizacija).Select(x => new OrganizacionaJedinicaVM
+                {
+                    Adresa = x.Adresa,
+                    Drzava_id = x.drzava.Drzava_ID,
+                    Drzava_naziv = x.drzava.Naziv,
+                    Naziv = x.Naziv,
+                    Organizacija_id = x.organizacija.Organizacija_ID,
+                    Organizacija_naziv = x.organizacija.Naziv,
+                    OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
+                    PTT_id = x.ptt.PTT_ID,
+                    PTT_naziv = x.ptt.Naziv
+                }).ToList();
+
+                ViewData["org_jed"] = lista_org_jed;
+
+                return View("Prikaz");
             }
-
-            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
+        }
+        [Area("SuperAdmin")]
+        public IActionResult Ukloni(int id)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Adresa = x.Adresa,
-                drzava = db.Drzava.Where(c => c.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
-                Drzava_FK = x.Drzava_FK,
-                Naziv = x.Naziv,
-                organizacija = db.Organizacija.Where(v => v.Organizacija_ID == x.Organizacija_FK).FirstOrDefault(),
-                Organizacija_FK = x.Organizacija_FK,
-                OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
-                ptt = db.PTT.Where(b => b.PTT_ID == x.PTT_FK).FirstOrDefault(),
-                PTT_FK = x.PTT_FK
-            }).ToList();
-
-            ViewData["org_jed"] = lista_org_jed;
-
-            uor podaci = new uor
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                OrganizacionaJedinica temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).FirstOrDefault();
 
-            ViewData["id"] = podaci;
+                if (temp != null)
+                {
+                    db.OrganizacionaJedinica.Remove(temp);
+                    db.SaveChanges();
+                }
 
-            return View("Prikaz");
+                List<OrganizacionaJedinicaVM> lista_org_jed = db.OrganizacionaJedinica.Include(a => a.drzava).Include(a => a.ptt).Include(a => a.organizacija).Select(x => new OrganizacionaJedinicaVM
+                {
+                    Adresa = x.Adresa,
+                    Drzava_id = x.drzava.Drzava_ID,
+                    Drzava_naziv = x.drzava.Naziv,
+                    Naziv = x.Naziv,
+                    Organizacija_id = x.organizacija.Organizacija_ID,
+                    Organizacija_naziv = x.organizacija.Naziv,
+                    OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
+                    PTT_id = x.ptt.PTT_ID,
+                    PTT_naziv = x.ptt.Naziv
+                }).ToList();
+
+                ViewData["org_jed"] = lista_org_jed;
+
+                return View("Prikaz");
+            }
         }
 
         [Area("SuperAdmin")]
-        public IActionResult Uredi(int id, int u, int o, int r)
+        public IActionResult Uredi(int id)
         {
-            OrganizacionaJedinica temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).FirstOrDefault();
-
-            temp.drzava = db.Drzava.Where(a => a.Drzava_ID == temp.Drzava_FK).FirstOrDefault();
-            temp.organizacija = db.Organizacija.Where(a => a.Organizacija_ID == temp.Organizacija_FK).FirstOrDefault();
-            temp.ptt = db.PTT.Where(a => a.PTT_ID == temp.PTT_FK).FirstOrDefault();
-
-            ViewData["org_jed"] = temp;
-
-            List<PTT> ptt_lista = db.PTT.ToList();
-            ViewData["ptt"] = ptt_lista;
-
-            List<Drzava> drzava_lista = db.Drzava.ToList();
-            ViewData["drzava"] = drzava_lista;
-
-            List<Organizacija> organizacija_lista = db.Organizacija.ToList();
-            ViewData["organizacija"] = organizacija_lista;
-
-
-            uor podaci = new uor
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                OrganizacionaJedinica temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).FirstOrDefault();
 
-            ViewData["id"] = podaci;
+                temp.drzava = db.Drzava.Where(a => a.Drzava_ID == temp.Drzava_FK).FirstOrDefault();
+                temp.organizacija = db.Organizacija.Where(a => a.Organizacija_ID == temp.Organizacija_FK).FirstOrDefault();
+                temp.ptt = db.PTT.Where(a => a.PTT_ID == temp.PTT_FK).FirstOrDefault();
 
-            return View();
+                ViewData["org_jed"] = temp;
+
+                List<PTT> ptt_lista = db.PTT.ToList();
+                ViewData["ptt"] = ptt_lista;
+
+                List<Drzava> drzava_lista = db.Drzava.ToList();
+                ViewData["drzava"] = drzava_lista;
+
+                List<Organizacija> organizacija_lista = db.Organizacija.ToList();
+                ViewData["organizacija"] = organizacija_lista;
+
+                return View();
+            }
         }
 
         [Area("SuperAdmin")]
-        public IActionResult UrediSnimi(int id_org_jed, int u, int o, int r, string naziv, int organizacija, string adresa, int drzava, int ptt)
+        public IActionResult UrediSnimi(int id_org_jed, string naziv, int organizacija, string adresa, int drzava, int ptt)
         {
-            OrganizacionaJedinica t = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID== id_org_jed).FirstOrDefault();
-
-            t.Naziv = naziv;
-            t.Adresa = adresa;
-            t.Drzava_FK = drzava;
-            t.Organizacija_FK = organizacija;
-            t.PTT_FK = ptt;
-
-            db.SaveChanges();
-
-            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Select(x => new OrganizacionaJedinica
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Adresa = x.Adresa,
-                drzava = db.Drzava.Where(c => c.Drzava_ID == x.Drzava_FK).FirstOrDefault(),
-                Drzava_FK = x.Drzava_FK,
-                Naziv = x.Naziv,
-                organizacija = db.Organizacija.Where(v => v.Organizacija_ID == x.Organizacija_FK).FirstOrDefault(),
-                Organizacija_FK = x.Organizacija_FK,
-                OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
-                ptt = db.PTT.Where(b => b.PTT_ID == x.PTT_FK).FirstOrDefault(),
-                PTT_FK = x.PTT_FK
-            }).ToList();
-
-            ViewData["org_jed"] = lista_org_jed;
-
-            uor podaci = new uor
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                OrganizacionaJedinica t = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault();
 
-            ViewData["id"] = podaci;
+                t.Naziv = naziv;
+                t.Adresa = adresa;
+                t.Drzava_FK = drzava;
+                t.Organizacija_FK = organizacija;
+                t.PTT_FK = ptt;
 
-            return View("Prikaz");
+                db.SaveChanges();
+
+                List<OrganizacionaJedinicaVM> lista_org_jed = db.OrganizacionaJedinica.Include(a => a.drzava).Include(a => a.ptt).Include(a => a.organizacija).Select(x => new OrganizacionaJedinicaVM
+                {
+                    Adresa = x.Adresa,
+                    Drzava_id = x.drzava.Drzava_ID,
+                    Drzava_naziv = x.drzava.Naziv,
+                    Naziv = x.Naziv,
+                    Organizacija_id = x.organizacija.Organizacija_ID,
+                    Organizacija_naziv = x.organizacija.Naziv,
+                    OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
+                    PTT_id = x.ptt.PTT_ID,
+                    PTT_naziv = x.ptt.Naziv
+                }).ToList();
+
+                ViewData["org_jed"] = lista_org_jed;
+
+                return View("Prikaz");
+            }
         }
     }
 }

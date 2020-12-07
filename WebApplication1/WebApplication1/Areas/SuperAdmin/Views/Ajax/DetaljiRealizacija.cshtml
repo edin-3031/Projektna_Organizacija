@@ -5,15 +5,17 @@
     <h1>Detalji Realizacija</h1>
     <table class="table">
         <thead>
+            <th>Organizaciona jedinica</th>
             <th>Korisnik</th>
-        <th>Datum</th>
-        <th>Ostvarena količina</th>
-        <th>Opis</th>
+            <th>Datum</th>
+            <th>Ostvarena količina</th>
+            <th>Opis</th>
         </thead>
         <tbody>
             @foreach (var x in Model.lista)
             {
                 <tr>
+                    <td>@x.organizacionaJedinica</td>
                     <td>@x.korisnik</td>
                     <td>@(x.datum.Date.Day+"."+x.datum.Date.Month+"."+x.datum.Date.Year+".")</td>
                     <td>@x.kolicina</td>

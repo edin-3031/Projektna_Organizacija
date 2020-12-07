@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -21,20 +22,19 @@ namespace WebApplication1.Areas.User.Controllers
         }
 
         [Area("User")]
-        public IActionResult Index(int u, int o, int r)
+        public IActionResult Index()
         {
-            uor podaci = new uor
-            {
-                roleId=r,
-                organisationId=o,
-                userId=u
-            };
+            ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Slika).FirstOrDefault();
 
-            ViewData["id"] = podaci;
+            return View();
+        }
 
-            ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Slika).FirstOrDefault();
+        [Area("User")]
+        public IActionResult LogOut()
+        {
+            HttpContext.Session.Clear();
 
-            return View(podaci);
+            return Redirect("/Auth/Index");
         }
     }
 }

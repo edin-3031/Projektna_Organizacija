@@ -1,137 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@using WebApplication1.Models;
+﻿@using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
     @model WebApplication1.Models.VM.lista_DetaljiRealizacijaVM
 
-    uor id = (uor)ViewData["id"];
-    Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
+    Layout = null;
 
     byte[] pic = (byte[])ViewData["logo"];
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
-<style>
-
-
-    li, ul {
-        list-style: none;
-        margin-top: 5%;
-    }
-
-    ul {
-        margin: 0px;
-        padding: 0px;
-        border: 0px;
-    }
-
-    #sifarnik, #transakcije, #izvjestaji, #admin {
-        font-weight: bold;
-    }
-
-    a {
-        color: white;
-        text-decoration-line: none;
-    }
-
-    #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
-        display: inline-block;
-        margin: 2%;
-    }
-
-    #print_preview, #print_excel, #print_pdf {
-        color: white;
-    }
-
-    #dugmad {
-        margin-bottom: 2%;
-        margin-top: 2%;
-    }
-
-    a:hover {
-        color: white;
-        text-decoration: none;
-        text-decoration-line: none;
-    }
-
-    #kutijaZaMeni {
-        position: fixed;
-        height: 100%;
-        width: 17%;
-        /*            background-color:green;*/
-        display: block;
-        margin-left: -17.8%;
-    }
-
-    #menu {
-        position: fixed;
-        /*height: 65%;*/
-        width: 15%;
-        margin-left: 0px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        top: 20%;
-        font-size: 1vw;
-        border-radius: 0px 25px 25px 0px;
-    }
-</style>
-<div id="kutijaZaMeni">
-    <div id="menu">
-        <br />
-        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/AdminOrg/AdminOrg/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
-        <ul>
-            <li id="sifarnik">Opšti šifarnik</li>
-            <ul id="o_s">
-                <li><a href="/AdminOrg/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizaciona jedinica</a></li>
-                <li><a href="/AdminOrg/KorisnikOrg/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnik-Organizaciona jedinica</a></li>
-            </ul>
-            <li id="transakcije">Transakcije</li>
-            <ul id="tra">
-                <li><a href="/AdminOrg/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
-                <li><a href="/AdminOrg/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
-            </ul>
-            <li id="izvjestaji">Izvještaji</li>
-            <ul id="izv">
-                <li><a href="/AdminOrg/ProjekatAktivnostRealizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Realizacija</a></li>
-            </ul>
-            <li id="admin">Admin</li>
-            <ul id="adm">
-                <li><a href="/AdminOrg/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
-            </ul>
-        </ul>
-    </div>
-</div>
-
 <div id="zaglavlje" style="width:100%">
     <h1 style="position:relative; display:inline;">Print Preview</h1>
     <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
 </div>
-
-<div id="print_pdf"><a class="btn btn-info" id="etpdf">Export to PDF</a></div>
-<script>
-    $("#etpdf").click(function () {
-        var sHtml = $("#forPrint").html();
-        sHtml = sHtml.replace(/</g, "StrTag").replace(/>/g, "EndTag");
-
-        var t3 = sHtml;
-
-        var test = { "html": t3 };
-
-        $.ajax({
-            url: "/SuperAdmin/ProjekatAktivnostRealizacija/Pdf",
-            type: "POST",
-            data: test,
-            success: function (response) {
-                window.open("../SuperAdmin/ProjekatAktivnostRealizacija/Pdf?html=" + test.t3, "blank");
-            },
-            fail: function (response) {
-                alert("Fail!");
-            }
-        });
-    });
-</script>
 
 <div id="forPrint">
     <table class="table">

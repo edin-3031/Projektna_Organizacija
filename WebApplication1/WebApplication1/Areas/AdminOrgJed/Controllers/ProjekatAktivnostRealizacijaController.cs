@@ -16,6 +16,8 @@ using SelectPdf;
 using Aspose.Pdf;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Http;
+
 
 namespace WebApplication1.Areas.AdminOrgJed.Controllers
 {
@@ -31,9 +33,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
         [Area("AdminOrgJed")]
         public IActionResult Pdf(int o)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
             var document = new Document
             {
@@ -53,9 +54,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
 
             DataTable GetRecord(int o)
             {
-                byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-                ViewData["logo"] = logo;
 
                 //List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
 
@@ -302,7 +302,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         Do = DO.Value,
                         Od = OD.Value,
                         organizacijaId = organizacijaId,
-                        projekatId = projekatId
+                        projekat_Id = projekatId
                     };
 
                     return model;
@@ -399,7 +399,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         liste = lista_final,
                         Do = DO.Value,
                         organizacijaId = organizacijaId,
-                        projekatId = projekatId
+                        projekat_Id = projekatId
                     };
 
                     return model;
@@ -495,7 +495,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         liste = lista_final,
                         Od = OD.Value,
                         organizacijaId = organizacijaId,
-                        projekatId = projekatId
+                        projekat_Id = projekatId
                     };
 
                     return model;
@@ -604,7 +604,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     Do = DO.Value,
                     Od = OD.Value,
                     organizacijaId = organizacijaId,
-                    projekatId = projekatId
+                    projekat_Id = projekatId
                 };
 
                 ViewData["lista_projekata"] = lista;
@@ -737,7 +737,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         {
                             liste = lista,
                             organizacijaId = organizacijaId,
-                            projekatId = projekatId
+                            projekat_Id = projekatId
                         };
 
                         foreach (var x in model.liste)
@@ -845,7 +845,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                             liste = lista_final,
                             Od = OD.Value,
                             organizacijaId = organizacijaId,
-                            projekatId = projekatId
+                            projekat_Id = projekatId
                         };
 
                         return model;
@@ -941,7 +941,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                             liste = lista_final,
                             Do = DO.Value,
                             organizacijaId = organizacijaId,
-                            projekatId = projekatId
+                            projekat_Id = projekatId
                         };
 
                         return model;
@@ -1040,7 +1040,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                             Do = DO.Value,
                             Od = OD.Value,
                             organizacijaId = organizacijaId,
-                            projekatId = projekatId
+                            projekat_Id = projekatId
                         };
 
                         return model;
@@ -1050,20 +1050,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
 
             if (traziDugme == 10 && projekatId == 0 && OD == null && DO == null)
             {
-                //List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
-                //{
-                //    Datum = x.Datum,
-                //    Kolicina = x.Kolicina,
-                //    korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-                //    Korisnici_FK = x.Korisnici_FK,
-                //    Opis = x.Opis,
-                //    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                //    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
-                //    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
-                //}).ToList();
-
-                int id_org_jed_par = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed_par).ToList();
+                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
                 List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
                 List<ProjekatAktivnostPlan> pap_temp_2_par = new List<ProjekatAktivnostPlan>();
@@ -1216,7 +1203,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 {
                     liste = lista_final,
                     organizacijaId = organizacijaId,
-                    projekatId = projekatId
+                    projekat_Id = projekatId
                 };
 
                 return model;
@@ -1266,10 +1253,9 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
         }
 
         [Area("AdminOrgJed")]
-        public IActionResult Excel(int u)
+        public IActionResult Excel()
         {
-            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
             List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
             List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
@@ -1316,7 +1302,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                             ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
                             ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
                             proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
-                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == (int)HttpContext.Session.GetInt32("orgJed ID")).FirstOrDefault()
                         });
                     }
                 }
@@ -1355,9 +1341,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
         [Area("AdminOrgJed")]
         public IActionResult PrintPreview(int u, int o, int r)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
             List<ProjekatAktivnostRealizacija> _real = db.ProjekatAktivnostRealizacija.ToList();
 
             List<DetaljiRealizacijaVM> _lista = new List<DetaljiRealizacijaVM>();
@@ -1384,43 +1369,22 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 lista=_lista
             };
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
             return View(model);
         }
 
         [Area("AdminOrgJed")]
-        public IActionResult Detalji(int u, int o, int r, int projekatId = 0, DateTime? OD=null, DateTime? DO=null, int traziDugme=0)
+        public IActionResult Detalji(int projekatId = 0, DateTime? OD=null, DateTime? DO=null, int traziDugme=0)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
-            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
             ViewData["projekti"] = pp_temp;
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
             if (projekatId == 0 && (OD != null || DO != null))
             {
-                int id_org_jed_par = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed_par).ToList();
+                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
                 List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
                 List<ProjekatAktivnostPlan> pap_temp_2_par = new List<ProjekatAktivnostPlan>();
@@ -1467,7 +1431,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                                 ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
                                 ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
                                 proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
-                                OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                                OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == (int)HttpContext.Session.GetInt32("orgJed ID")).FirstOrDefault()
                             });
                         }
                     }
@@ -1582,8 +1546,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         liste = lista_final,
                         Do=DO.Value,
                         Od=OD.Value,
-                        organizacijaId=o,
-                        projekatId=projekatId
+                        organizacijaId= (int)HttpContext.Session.GetInt32("organisation ID"),
+                        projekat_Id=projekatId
                     };
 
                     return View(model);
@@ -1679,8 +1643,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     {
                         liste = lista_final,
                         Do = DO.Value,
-                        organizacijaId = o,
-                        projekatId = projekatId
+                        organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
+                        projekat_Id = projekatId
                     };
 
                     return View(model);
@@ -1775,8 +1739,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     {
                         liste = lista_final,
                         Od = OD.Value,
-                        organizacijaId = o,
-                        projekatId = projekatId
+                        organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
+                        projekat_Id = projekatId
                     };
 
                     return View(model);
@@ -1884,8 +1848,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     liste = lista_final,
                     Do = DO.Value,
                     Od = OD.Value,
-                    organizacijaId = o,
-                    projekatId = projekatId
+                    organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
+                    projekat_Id = projekatId
                 };
 
                 ViewData["lista_projekata"] = lista;
@@ -2016,8 +1980,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
                             liste = lista,
-                            organizacijaId = o,
-                            projekatId = projekatId
+                            organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
+                            projekat_Id = projekatId
                         };
 
                         foreach (var x in model.liste)
@@ -2124,8 +2088,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         {
                             liste = lista_final,
                             Od = OD.Value,
-                            organizacijaId = o,
-                            projekatId = projekatId
+                            organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
+                            projekat_Id = projekatId
                         };
 
                         return View(model);
@@ -2220,8 +2184,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         {
                             liste = lista_final,
                             Do = DO.Value,
-                            organizacijaId = o,
-                            projekatId = projekatId
+                            organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
+                            projekat_Id = projekatId
                         };
 
                         return View(model);
@@ -2319,8 +2283,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                             liste = lista_final,
                             Do = DO.Value,
                             Od = OD.Value,
-                            organizacijaId = o,
-                            projekatId = projekatId
+                            organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
+                            projekat_Id = projekatId
                         };
 
                         return View(model);
@@ -2330,20 +2294,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
 
             if (traziDugme == 10 && projekatId==0 && OD==null && DO==null)
             {
-                //List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
-                //{
-                //    Datum = x.Datum,
-                //    Kolicina = x.Kolicina,
-                //    korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-                //    Korisnici_FK = x.Korisnici_FK,
-                //    Opis = x.Opis,
-                //    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                //    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
-                //    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
-                //}).ToList();
-
-                int id_org_jed_par = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed_par).ToList();
+                List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
                 List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
                 List<ProjekatAktivnostPlan> pap_temp_2_par = new List<ProjekatAktivnostPlan>();
@@ -2390,7 +2341,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                                 ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
                                 ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
                                 proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
-                                OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                                OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == (int)HttpContext.Session.GetInt32("orgJed ID")).FirstOrDefault()
                             });
                         }
                     }
@@ -2495,8 +2446,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 lista_realizacijaVM model = new lista_realizacijaVM
                 {
                     liste = lista_final,
-                    organizacijaId = o,
-                    projekatId = projekatId
+                    organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
+                    projekat_Id = projekatId
                 };
 
                 return View(model);
@@ -2509,14 +2460,12 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             return View(model2);
         }
         [Area("AdminOrgJed")]
-        public IActionResult Prikaz(int u, int o, int r)
+        public IActionResult Prikaz()
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
-            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
             List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
             List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
@@ -2563,7 +2512,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                             ProjekatAktivnostPlan_all= db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
                             ProjekatAktivnostRealizacija_ID=x.ProjekatAktivnostRealizacija_ID,
                             proj_plan=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID==y.ProjekatPlan_FK).FirstOrDefault(),
-                            OrgJed=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==id_org_jed).FirstOrDefault()
+                            OrgJed=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID== (int)HttpContext.Session.GetInt32("orgJed ID")).FirstOrDefault()
                         });
                     }
                 }
@@ -2571,28 +2520,16 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
 
             ViewData["lista_relizacija"] = par_temp_2;
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
-
             return View();
         }
         [Area("AdminOrgJed")]
-        public IActionResult Unos(int u, int o, int r)
+        public IActionResult Unos()
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
-            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
 
-            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
             List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
             List<dropdownAdminOrgUnosRealVM> pap_final = new List<dropdownAdminOrgUnosRealVM>();
 
@@ -2614,7 +2551,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
 
             ViewData["lista_proj_aktiv_plan"] = pap_final;
 
-            List<Korisnici_OrganizacionaJedinica> ko_temp = db.Korisnici_OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<Korisnici_OrganizacionaJedinica> ko_temp = db.Korisnici_OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
             List<Korisnici> korisnici_temp = db.Korisnici.ToList();
             List<Korisnici> korisnici_final = new List<Korisnici>();
 
@@ -2636,23 +2573,13 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
 
             ViewData["lista_korisnici"] = korisnici_final;
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
             return View();
         }
         [Area("AdminOrgJed")]
-        public IActionResult UnosSnimi(int projekatAktivnostPlan, int korisnik, DateTime datum, float kolicina, string opis, int u, int o, int r)
+        public IActionResult UnosSnimi(int projekatAktivnostPlan, int korisnik, DateTime datum, float kolicina, string opis)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
             ProjekatAktivnostRealizacija temp = new ProjekatAktivnostRealizacija
             {
                 Datum = datum,
@@ -2665,22 +2592,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             db.ProjekatAktivnostRealizacija.Add(temp);
             db.SaveChanges();
 
-            //List<ProjekatAktivnostRealizacija> lista = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
-            //{
-            //    Datum = x.Datum,
-            //    Kolicina = x.Kolicina,
-            //    korisnici = db.Korisnici.Where(c => c.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-            //    Korisnici_FK = x.Korisnici_FK,
-            //    Opis = x.Opis,
-            //    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(c => c.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-            //    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
-            //    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
-            //}).ToList();
-            //ViewData["lista_relizacija"] = lista;
-
-            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-
-            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
             List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
             List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
@@ -2727,7 +2639,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                             ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
                             ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
                             proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
-                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == (int)HttpContext.Session.GetInt32("orgJed ID")).FirstOrDefault()
                         });
                     }
                 }
@@ -2735,23 +2647,13 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
 
             ViewData["lista_relizacija"] = par_temp_2;
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
             return View("Prikaz");
         }
         [Area("AdminOrgJed")]
-        public IActionResult Ukloni(int id, int o, int u, int r)
+        public IActionResult Ukloni(int id)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
             ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(x => x.ProjekatAktivnostRealizacija_ID == id).FirstOrDefault();
 
             if (temp != null)
@@ -2760,21 +2662,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 db.SaveChanges();
             }
 
-            //List<ProjekatAktivnostRealizacija> lista = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
-            //{
-            //    Datum = x.Datum,
-            //    Kolicina = x.Kolicina,
-            //    korisnici = db.Korisnici.Where(c => c.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-            //    Korisnici_FK = x.Korisnici_FK,
-            //    Opis = x.Opis,
-            //    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(c => c.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-            //    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
-            //    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
-            //}).ToList();
-            //ViewData["lista_relizacija"] = lista;
-
-            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
             List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
             List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
@@ -2821,7 +2709,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                             ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
                             ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
                             proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
-                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == (int)HttpContext.Session.GetInt32("orgJed ID")).FirstOrDefault()
                         });
                     }
                 }
@@ -2829,46 +2717,26 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
 
             ViewData["lista_relizacija"] = par_temp_2;
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
             return View("Prikaz");
         }
         [Area("AdminOrgJed")]
-        public IActionResult Uredi(int id, int u, int o, int r)
+        public IActionResult Uredi(int id)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
             ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == id).FirstOrDefault();
 
             temp.projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == temp.ProjekatAktivnostPlan_FK).FirstOrDefault();
 
             ViewData["uredi"] = temp;
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
             return View();
         }
         [Area("AdminOrgJed")]
-        public IActionResult UrediSnimi(int realizacijaId, int aktivnostId, string projekat, float kolicina, DateTime datum, string opis, int o, int u, int r)
+        public IActionResult UrediSnimi(int realizacijaId, int aktivnostId, string projekat, float kolicina, DateTime datum, string opis)
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
             ProjekatAktivnostRealizacija temp = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == realizacijaId).FirstOrDefault();
 
             temp.Kolicina = kolicina;
@@ -2878,8 +2746,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             db.Update(temp);
             db.SaveChanges();
 
-            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).ToList();
+            List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
             List<ProjekatAktivnostPlan> pap_temp = db.ProjekatAktivnostPlan.ToList();
             List<ProjekatAktivnostPlan> pap_temp_2 = new List<ProjekatAktivnostPlan>();
@@ -2926,22 +2793,13 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                             ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
                             ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
                             proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
-                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id_org_jed).FirstOrDefault()
+                            OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == (int)HttpContext.Session.GetInt32("orgJed ID")).FirstOrDefault()
                         });
                     }
                 }
             }
 
             ViewData["lista_relizacija"] = par_temp_2;
-
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
 
             return View("Prikaz");
         }

@@ -1,106 +1,14 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@using WebApplication1.Models;
+﻿@using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
     List<adminOrg_kor_orgJed_VM> lista = (List<adminOrg_kor_orgJed_VM>)ViewData["kor_org_jed"];
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
-    uor id = (uor)ViewData["id"];
 }
-<style>
-    td {
-        padding: 10px;
-    }
-
-    a, td {
-        /*font-weight: bold;*/
-        text-align-last: center;
-    }
-
-    li, ul {
-        list-style: none;
-        margin-top: 5%;
-    }
-
-    ul {
-        margin: 0px;
-        padding: 0px;
-        border: 0px;
-    }
-
-    #sifarnik, #transakcije, #izvjestaji, #admin {
-        font-weight: bold;
-    }
-
-    a {
-        color: white;
-        text-decoration-line: none;
-    }
-
-        a:hover {
-            color: white;
-            text-decoration: none;
-            text-decoration-line: none;
-        }
-
-    #kutijaZaMeni {
-        position: fixed;
-        height: 100%;
-        width: 17%;
-        /*            background-color:green;*/
-        display: block;
-        margin-left: -17.8%;
-    }
-
-    #menu {
-        position: fixed;
-        /*height: 65%;*/
-        width: 15%;
-        margin-left: 0px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        top: 20%;
-        font-size: 1vw;
-        border-radius: 0px 25px 25px 0px;
-    }
-</style>
-<div id="kutijaZaMeni">
-    <div id="menu">
-        <br />
-        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/SuperAdmin/SuperAdmin/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
-        <ul>
-            <li id="sifarnik">Opšti šifarnik</li>
-            <ul id="o_s">
-                <li><a href="/SuperAdmin/Drzava/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Država</a></li>
-                <li><a href="/SuperAdmin/PTT/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">PTT</a></li>
-                <li><a href="/SuperAdmin/Organizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizacija</a></li>
-                <li><a href="/SuperAdmin/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizaciona jedinica</a></li>
-                <li><a href="/SuperAdmin/KorisnikOrg/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnik-Organizaciona jedinica</a></li>
-            </ul>
-            <li id="transakcije">Transakcije</li>
-            <ul id="tra">
-                <li><a href="/SuperAdmin/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
-                <li><a href="/SuperAdmin/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
-            </ul>
-            <li id="izvjestaji">Izvještaji</li>
-            <ul id="izv">
-                <li><a href="/SuperAdmin/ProjekatAktivnostRealizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Realizacija</a></li>
-            </ul>
-            <li id="admin">Admin</li>
-            <ul id="adm">
-                <li><a href="/SuperAdmin/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
-                <li><a href="/SuperAdmin/Uloge/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Uloge</a></li>
-                <li><a href="/SuperAdmin/Status/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Statusi</a></li>
-            </ul>
-        </ul>
-    </div>
-</div>
 <center>
     <h1>Prikaz Korisnika - Organizacione Jedinice</h1>
     <div id="dugmad">
         <div id="dodaj">
-            <a class="btn btn-success" href="/SuperAdmin/KorisnikOrg/Unos?u=@id.userId&o=@id.organisationId&r=@id.roleId">Unesi novo</a>
+            <a class="btn btn-success" href="/SuperAdmin/KorisnikOrg/Unos">Unesi novo</a>
         </div>
         <div id="print_excel">
             <a href="/SuperAdmin/KorisnikOrg/Excel" class="btn btn-info">Export to Excel</a>
@@ -118,10 +26,10 @@
                 <td>@x.korisnik</td>
                 <td>@x.o_j</td>
                 <td>
-                    <a class="btn btn-primary" href="/SuperAdmin/KorisnikOrg/Uredi?id=@x.K_O_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId">Uredi</a>
+                    <a class="btn btn-primary" href="/SuperAdmin/KorisnikOrg/Uredi?id=@x.K_O_ID">Uredi</a>
                     <a id="ukloni_@x.K_O_ID" class="btn btn-danger" style="color:white">Ukloni</a>
 
-                    <span style="color:black; position:absolute;float:right;margin-left:1%;" id="poruka_@x.K_O_ID">Sigurni? <a href="/SuperAdmin/KorisnikOrg/Ukloni?id=@x.K_O_ID&u=@id.userId&o=@id.organisationId&r=@id.roleId" style="color:black; font-weight:bold;">Da</a> <a id="no_@x.K_O_ID" style="color:black;cursor:pointer; font-weight:bold;">Ne</a></span>
+                    <span style="color:black; position:absolute;float:right;margin-left:1%;" id="poruka_@x.K_O_ID">Sigurni? <a href="/SuperAdmin/KorisnikOrg/Ukloni?id=@x.K_O_ID" style="color:black; font-weight:bold;">Da</a> <a id="no_@x.K_O_ID" style="color:black;cursor:pointer; font-weight:bold;">Ne</a></span>
                     <script>
                             $("#poruka_@x.K_O_ID").hide();
 

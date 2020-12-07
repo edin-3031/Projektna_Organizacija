@@ -155,19 +155,19 @@ namespace WebApplication1.Migrations
                         column: x => x.Drzava_FK,
                         principalTable: "Drzava",
                         principalColumn: "Drzava_ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_OrganizacionaJedinica_Organizacija_Organizacija_FK",
                         column: x => x.Organizacija_FK,
                         principalTable: "Organizacija",
                         principalColumn: "Organizacija_ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_OrganizacionaJedinica_PTT_PTT_FK",
                         column: x => x.PTT_FK,
                         principalTable: "PTT",
                         principalColumn: "PTT_ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(

@@ -12,6 +12,7 @@ namespace WebApplication1.Models.VM
         public ProjekatAktivnostPlan ProjekatAktivnostPlan_all { get; set; }
         public int Korisnici_FK { get; set; }
         public Korisnici Korisnici { get; set; }
+        public string korisnik_ime{ get; set; }
         public DateTime Datum { get; set; }
         public float Kolicina { get; set; }
         public string Opis { get; set; }

@@ -12,12 +12,12 @@ namespace WebApplication1.Models
         [Key]
         public int ProjekatAktivnostRealizacija_ID { get; set; }
         
-        public ProjekatAktivnostPlan? projekatAktivnostPlan { get; set; }
+        public ProjekatAktivnostPlan projekatAktivnostPlan { get; set; }
         [ForeignKey("projekatAktivnostPlan")]
         public int ProjekatAktivnostPlan_FK { get; set; }
 
-        public Korisnici? korisnici { get; set; }
-        [ForeignKey("korisnici ")]
+        public Korisnici korisnici { get; set; }
+        [ForeignKey("korisnici")]
         public int Korisnici_FK { get; set; }
 
         public DateTime Datum { get; set; }

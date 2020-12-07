@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -12,6 +13,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
     public class UlogeController : Controller
     {
         private readonly ApplicationDbContext db;
+        public string poruka = "Morate se ponovo prijaviti";
 
         public UlogeController(ApplicationDbContext _db)
         {
@@ -20,159 +22,153 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         [Area("SuperAdmin")]
         public IActionResult Obrisi(int id, int u, int o, int r)
         {
-            Uloge temp = db.Uloge.Where(a => a.Uloge_ID == id).SingleOrDefault();
-
-            if(temp!=null)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                db.Uloge.Remove(temp);
-                db.SaveChanges();
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
             }
-
-            List<Uloge> lista_uloga = db.Uloge.Select(x => new Uloge
+            else
             {
-                Naziv = x.Naziv,
-                Opis = x.Opis,
-                Sifra = x.Sifra,
-                Uloge_ID = x.Uloge_ID
-            }).ToList();
+                Uloge temp = db.Uloge.Where(a => a.Uloge_ID == id).SingleOrDefault();
 
-            ViewData["prikazUloga"] = lista_uloga;
+                if (temp != null)
+                {
+                    db.Uloge.Remove(temp);
+                    db.SaveChanges();
+                }
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                List<Uloge> lista_uloga = db.Uloge.Select(x => new Uloge
+                {
+                    Naziv = x.Naziv,
+                    Opis = x.Opis,
+                    Sifra = x.Sifra,
+                    Uloge_ID = x.Uloge_ID
+                }).ToList();
 
-            ViewData["id"] = podaci;
+                ViewData["prikazUloga"] = lista_uloga;
 
-            return View("Prikaz");
+                return View("Prikaz");
+            }
         }
         [Area("SuperAdmin")]
-        public IActionResult Prikaz(int u, int o, int r)
+        public IActionResult Prikaz()
         {
-            List<Uloge> lista_uloga = db.Uloge.Select(x=>new Uloge
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Naziv=x.Naziv,
-                Opis=x.Opis,
-                Sifra=x.Sifra,
-                Uloge_ID=x.Uloge_ID
-            }).ToList();
-
-            ViewData["prikazUloga"] = lista_uloga;
-
-            uor podaci = new uor
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                List<Uloge> lista_uloga = db.Uloge.Select(x => new Uloge
+                {
+                    Naziv = x.Naziv,
+                    Opis = x.Opis,
+                    Sifra = x.Sifra,
+                    Uloge_ID = x.Uloge_ID
+                }).ToList();
 
-            ViewData["id"] = podaci;
+                ViewData["prikazUloga"] = lista_uloga;
 
-            return View("Prikaz");
+                return View("Prikaz");
+            }
         }
         [Area("SuperAdmin")]
-        public IActionResult Unos(int u, int o, int r)
+        public IActionResult Unos()
         {
-            uor podaci = new uor
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-
-            return View("Unos");
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                return View("Unos");
+            }
         }
         [Area("SuperAdmin")]
-        public IActionResult UnosSnimi(int u, int o, int r, int sifra, string naziv, string opis)
+        public IActionResult UnosSnimi(int sifra, string naziv, string opis)
         {
-            Uloge tmp = new Uloge
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Naziv = naziv,
-                Opis = opis,
-                Sifra = sifra
-            };
-
-            db.Uloge.Add(tmp);
-
-            db.SaveChanges();
-
-            List<Uloge> lista_uloga = db.Uloge.Select(x => new Uloge
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                Naziv = x.Naziv,
-                Opis = x.Opis,
-                Sifra = x.Sifra,
-                Uloge_ID = x.Uloge_ID
-            }).ToList();
+                Uloge tmp = new Uloge
+                {
+                    Naziv = naziv,
+                    Opis = opis,
+                    Sifra = sifra
+                };
 
-            ViewData["prikazUloga"] = lista_uloga;
+                db.Uloge.Add(tmp);
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                db.SaveChanges();
 
-            ViewData["id"] = podaci;
+                List<Uloge> lista_uloga = db.Uloge.Select(x => new Uloge
+                {
+                    Naziv = x.Naziv,
+                    Opis = x.Opis,
+                    Sifra = x.Sifra,
+                    Uloge_ID = x.Uloge_ID
+                }).ToList();
 
-            return View("Prikaz");
+                ViewData["prikazUloga"] = lista_uloga;
+
+                return View("Prikaz");
+            }
         }
 
         [Area("SuperAdmin")]
-        public IActionResult Uredi(int id, int u, int o, int r)
+        public IActionResult Uredi(int id)
         {
-            Uloge uloga = db.Uloge.Where(a => a.Uloge_ID == id).FirstOrDefault();
-
-            ViewData["uloga"] = uloga;
-
-            uor podaci = new uor
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                Uloge uloga = db.Uloge.Where(a => a.Uloge_ID == id).FirstOrDefault();
 
-            ViewData["id"] = podaci;
+                ViewData["uloga"] = uloga;
 
-            return View();
+                return View();
+            }
         }
 
         [Area("SuperAdmin")]
-        public IActionResult UrediSnimi(int id, int u, int o, int r, int sifra, string opis, string naziv)
+        public IActionResult UrediSnimi(int id, int sifra, string opis, string naziv)
         {
-            Uloge t= db.Uloge.Where(a => a.Uloge_ID == id).FirstOrDefault();
-
-            t.Naziv = naziv;
-            t.Opis = opis;
-            t.Sifra = sifra;
-
-            db.SaveChanges();
-
-            List<Uloge> lista_uloga = db.Uloge.Select(x => new Uloge
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Naziv = x.Naziv,
-                Opis = x.Opis,
-                Sifra = x.Sifra,
-                Uloge_ID = x.Uloge_ID
-            }).ToList();
-
-            ViewData["prikazUloga"] = lista_uloga;
-
-            uor podaci = new uor
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
+                Uloge t = db.Uloge.Where(a => a.Uloge_ID == id).FirstOrDefault();
 
-            ViewData["id"] = podaci;
+                t.Naziv = naziv;
+                t.Opis = opis;
+                t.Sifra = sifra;
 
-            return View("Prikaz");
+                db.SaveChanges();
+
+                List<Uloge> lista_uloga = db.Uloge.Select(x => new Uloge
+                {
+                    Naziv = x.Naziv,
+                    Opis = x.Opis,
+                    Sifra = x.Sifra,
+                    Uloge_ID = x.Uloge_ID
+                }).ToList();
+
+                ViewData["prikazUloga"] = lista_uloga;
+
+                return View("Prikaz");
+            }
         }
     }
 }

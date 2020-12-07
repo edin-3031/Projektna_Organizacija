@@ -1,101 +1,14 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@using WebApplication1.Models;
+﻿@using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
-    uor id = (uor)ViewData["id"];
     Layout = "~/Views/Shared/_Layout_user.cshtml";
+
     ProjekatAktivnostPlan aktiv = (ProjekatAktivnostPlan)ViewData["aktiv"];
 
     byte[] pic = (byte[])ViewData["logo"];
-
-
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
-<style>
-
-
-    li, ul {
-        list-style: none;
-        margin-top: 5%;
-    }
-
-    ul {
-        margin: 0px;
-        padding: 0px;
-        border: 0px;
-    }
-
-    #sifarnik, #transakcije, #izvjestaji, #admin {
-        font-weight: bold;
-    }
-
-    a {
-        color: white;
-        text-decoration-line: none;
-    }
-
-    #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
-        display: inline-block;
-        margin: 2%;
-    }
-
-    #print_preview, #print_excel, #print_pdf {
-        color: white;
-    }
-
-    #dugmad {
-        margin-bottom: 2%;
-        margin-top: 2%;
-    }
-
-    a:hover {
-        color: white;
-        text-decoration: none;
-        text-decoration-line: none;
-    }
-
-    #kutijaZaMeni {
-        position: fixed;
-        height: 100%;
-        width: 17%;
-        /*            background-color:green;*/
-        display: block;
-        margin-left: -17.8%;
-    }
-
-    #menu {
-        position: fixed;
-        /*height: 65%;*/
-        width: 15%;
-        margin-left: 0px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        top: 20%;
-        font-size: 1vw;
-        border-radius: 0px 25px 25px 0px;
-    }
-</style>
-<div id="kutijaZaMeni">
-    <div id="menu">
-        <br />
-        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/User/User/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
-        <ul>
-            <li id="transakcije">Transakcije</li>
-            <ul id="tra">
-                <li><a href="/User/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
-                <li><a href="/User/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
-            </ul>
-            <li id="izvjestaji">Izvještaji</li>
-            <ul id="izv">
-                <li><a href="/User/ProjekatAktivnostRealizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Realizacija</a></li>
-            </ul>
-
-        </ul>
-    </div>
-</div>
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Uređivanje projektne aktivnosti</h1>
@@ -104,9 +17,6 @@
     <br />
     <br />
     <form method="post" action="/User/ProjekatAktivnostPlan/UrediSnimi">
-        <input hidden="hidden" name="u" value="@id.userId" />
-        <input hidden="hidden" name="o" value="@id.organisationId" />
-        <input hidden="hidden" name="r" value="@id.roleId" />
         <input hidden="hidden" name="projekatPlanId" value="@aktiv.ProjekatPlan_FK" />
         <input hidden="hidden" name="id" value="@aktiv.ProjekatAktivnostPlan_ID" />
 

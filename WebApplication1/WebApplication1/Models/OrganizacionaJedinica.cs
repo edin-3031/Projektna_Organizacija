@@ -14,20 +14,22 @@ namespace WebApplication1.Models
         [Key]
         public int OrganizacionaJedinica_ID { get; set; }
 
-        public Organizacija? organizacija { get; set; }
+        public Organizacija organizacija { get; set; }
         [ForeignKey("organizacija")]
         public int Organizacija_FK { get; set; }
 
-        public PTT? ptt{ get; set; }
+        public PTT ptt{ get; set; }
         [ForeignKey("ptt")]
         public int PTT_FK{ get; set; }
 
+        public string Naziv { get; set; }
+        
+        public string Adresa { get; set; }
+
+        #nullable enable
         public Drzava? drzava{ get; set; }
         [ForeignKey("drzava")]
         public int Drzava_FK { get; set; }
 
-        public string Naziv { get; set; }
-
-        public string Adresa { get; set; }
     }
 }

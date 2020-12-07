@@ -2,42 +2,10 @@
 @using WebApplication1.Models.VM;
 @{
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
-    uor id = (uor)ViewData["id"];
 }
-<link rel="stylesheet" href="~/css/SuperUser/Drzava/Unos.css"/>
-<script src="~/js/SuperUser/Drzava/Unos.js"></script>
 
-<div id="kutijaZaMeni">
-    <div id="menu">
-        <br />
-        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/SuperAdmin/SuperAdmin/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
-        <ul>
-            <li id="sifarnik">Opšti šifarnik</li>
-            <ul id="o_s">
-                <li><a href="/SuperAdmin/Drzava/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Država</a></li>
-                <li><a href="/SuperAdmin/PTT/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">PTT</a></li>
-                <li><a href="/SuperAdmin/Organizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizacija</a></li>
-                <li><a href="/SuperAdmin/OrganizacionaJedinica/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Organizaciona jedinica</a></li>
-                <li><a href="/SuperAdmin/KorisnikOrg/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnik-Organizaciona jedinica</a></li>
-            </ul>
-            <li id="transakcije">Transakcije</li>
-            <ul id="tra">
-                <li><a href="/SuperAdmin/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
-                <li><a href="/SuperAdmin/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
-            </ul>
-            <li id="izvjestaji">Izvještaji</li>
-            <ul id="izv">
-                <li><a href="/SuperAdmin/ProjekatAktivnostRealizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Realizacija</a></li>
-            </ul>
-            <li id="admin">Admin</li>
-            <ul id="adm">
-                <li><a href="/SuperAdmin/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
-                <li><a href="/SuperAdmin/Uloge/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Uloge</a></li>
-                <li><a href="/SuperAdmin/Status/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Statusi</a></li>
-            </ul>
-        </ul>
-    </div>
-</div>
+<link rel="stylesheet" href="~/css/SuperUser/Drzava/Unos.css" />
+<script src="~/js/SuperUser/Drzava/Unos.js"></script>
 
 <center>
     <h1>Unos države</h1>
@@ -52,9 +20,6 @@
                 <td><label>Naziv</label></td>
                 <td><input onchange="provjera('n')" onblur="provjera('n')" onkeypress="provjera('n')" id="n" type="text" name="naziv" /><span id="naziv_span"></span></td>
             </tr>
-            <input hidden="hidden" name="u" value="@id.userId" />
-            <input hidden="hidden" name="r" value="@id.roleId" />
-            <input hidden="hidden" name="o" value="@id.organisationId" />
         </table>
 
         <button type="submit" id="snimi" class="btn btn-primary">Snimi</button>

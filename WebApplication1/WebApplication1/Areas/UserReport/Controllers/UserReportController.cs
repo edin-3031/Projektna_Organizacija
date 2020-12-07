@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.VM;
+using Microsoft.AspNetCore.Http;
+
 
 namespace WebApplication1.Areas.UserReport.Controllers
 {
@@ -19,20 +21,19 @@ namespace WebApplication1.Areas.UserReport.Controllers
         }
 
         [Area("UserReport")]
-        public IActionResult Index(int u, int o, int r)
+        public IActionResult Index()
         {
-            ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Slika).FirstOrDefault();
+            ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Slika).FirstOrDefault();
 
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
-            return View(podaci);
+            return View();
         }
 
+        [Area("UserReport")]
+        public IActionResult LogOut()
+        {
+            HttpContext.Session.Clear();
+
+            return Redirect("/Auth/Index");
+        }
     }
 }

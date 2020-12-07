@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using SelectPdf;
 using Aspose.Pdf;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication1.Areas.User.Controllers
 {
@@ -29,11 +30,10 @@ namespace WebApplication1.Areas.User.Controllers
         }
 
         [Area("User")]
-        public IActionResult Excel(int u)
+        public IActionResult Excel()
         {
 
-            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).Select(x=>new ProjekatPlan {
+            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Select(x=>new ProjekatPlan {
                 DatumDo = x.DatumDo,
                 DatumOd = x.DatumOd,
                 Naziv = x.Naziv,
@@ -75,15 +75,13 @@ namespace WebApplication1.Areas.User.Controllers
         }
 
         [Area("User")]
-        public IActionResult Prikaz(int u, int o, int r)
+        public IActionResult Prikaz()
         {
-            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == o).Select(o => o.Logo).FirstOrDefault();
+            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-            ViewData["logo"] = logo;
 
-            int id_org_jed = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == u).Select(o => o.OrganizacionaJedinica_FK).FirstOrDefault();
 
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == id_org_jed).Select(x=>new ProjekatPlan {
+            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Select(x=>new ProjekatPlan {
                 DatumDo = x.DatumDo,
                 DatumOd = x.DatumOd,
                 Naziv = x.Naziv,
@@ -96,15 +94,6 @@ namespace WebApplication1.Areas.User.Controllers
             }).ToList();
 
             ViewData["proj_plan"] = pp_final;
-
-            uor podaci = new uor
-            {
-                roleId = r,
-                organisationId = o,
-                userId = u
-            };
-
-            ViewData["id"] = podaci;
 
             return View();
         }

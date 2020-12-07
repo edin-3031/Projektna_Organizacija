@@ -1,19 +1,14 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@using WebApplication1.Models;
+﻿@using WebApplication1.Models;
 @using WebApplication1.Models.VM;
+@model WebApplication1.Models.VM.lista_realizacijaVM
 @{
-    @model WebApplication1.Models.VM.lista_realizacijaVM
-
     List<ProjekatPlan> projekti = (List<ProjekatPlan>)ViewData["projekti"];
 
     List<WebApplication1.Models.VM.RealizacijaVM> lista_projekata = (List<WebApplication1.Models.VM.RealizacijaVM>)ViewData["lista_projekata"];
 
     RealizacijaDetaljiSuma suma = (RealizacijaDetaljiSuma)ViewData["suma"];
 
-    uor id = (uor)ViewData["id"];
-    Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
+    Layout = "~/Views/Shared/_Layout_admin_org_jed.cshtml";
 
     byte[] pic = (byte[])ViewData["logo"];
     var base64 = Convert.ToBase64String(pic);
@@ -21,103 +16,20 @@
 
 }
 <style>
-
     #progressBar {
         border: 1px solid black;
         background-color: rgb(255, 62, 62);
         height: 25px;
         width: 100%;
     }
+
     #vrijednost {
         position: relative;
         background-color: rgb(5, 230, 0);
         height: 100%;
         display: block;
     }
-    li, ul {
-        list-style: none;
-        margin-top: 5%;
-    }
-
-    ul {
-        margin: 0px;
-        padding: 0px;
-        border: 0px;
-    }
-
-    #sifarnik, #transakcije, #izvjestaji, #admin {
-        font-weight: bold;
-    }
-
-    a {
-        color: white;
-        text-decoration-line: none;
-    }
-
-    #dodaj, #detalji, #print_preview, #print_excel, #print_pdf {
-        display: inline-block;
-        margin: 2%;
-    }
-
-    #print_preview, #print_excel, #print_pdf {
-        color: white;
-    }
-
-    #dugmad {
-        margin-bottom: 2%;
-        margin-top: 2%;
-    }
-
-    a:hover {
-        color: white;
-        text-decoration: none;
-        text-decoration-line: none;
-    }
-
-    #kutijaZaMeni {
-        position: fixed;
-        height: 100%;
-        width: 17%;
-        /*            background-color:green;*/
-        display: block;
-        margin-left: -17.8%;
-    }
-
-    #menu {
-        position: fixed;
-        /*height: 65%;*/
-        width: 15%;
-        margin-left: 0px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        top: 20%;
-        font-size: 1vw;
-        border-radius: 0px 25px 25px 0px;
-    }
 </style>
-<div id="kutijaZaMeni">
-    <div id="menu">
-        <br />
-        <a style="color:white; text-decoration-line:none; font-size:120%;" href="/AdminOrgJed/AdminOrgJed/Index?u=@id.userId&o=@id.organisationId&r=@id.roleId">Projektna Organizacija</a><br /><br />
-        <ul>
-
-            <li id="transakcije">Transakcije</li>
-            <ul id="tra">
-                <li><a href="/AdminOrgJed/ProjekatPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Plan</a></li>
-                <li><a href="/AdminOrgJed/ProjekatAktivnostPlan/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Aktivnosti</a></li>
-            </ul>
-            <li id="izvjestaji">Izvještaji</li>
-            <ul id="izv">
-                <li><a href="/AdminOrgJed/ProjekatAktivnostRealizacija/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Realizacija</a></li>
-            </ul>
-            <li id="admin">Admin</li>
-            <ul id="adm">
-                <li><a href="/AdminOrgJed/Korisnik/Prikaz?u=@id.userId&o=@id.organisationId&r=@id.roleId">Korisnici</a></li>
-            </ul>
-        </ul>
-    </div>
-</div>
-
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Detalji realizacije</h1>
@@ -126,7 +38,7 @@
     <br />
     <br />
 
-    <form method="post" action="/AdminOrgJed/ProjekatAktivnostRealizacija/Detalji?u=@id.userId&o=@id.organisationId&r=@id.roleId">
+    <form method="post" action="/AdminOrgJed/ProjekatAktivnostRealizacija/Detalji">
 
         <table>
             <tr>
@@ -149,10 +61,6 @@
                 <td><label>Datum do</label></td>
                 <td><input id="dat2" type="datetime-local" name="DO" /></td>
             </tr>
-            @*<tr>
-                    <td><label>Prikaži detaljnije</label></td>
-                    <td><input id="cb" type="checkbox"/></td>
-                </tr>*@
         </table>
         <button type="submit" class="btn btn-primary" id="tragaj" name="traziDugme" value="10">Traži</button>
     </form>
@@ -166,12 +74,12 @@
                     <h3>Rezultati projekata</h3>
                     <div id="dugmad">
                         <div id="print_excel" style="display:inline;">
-                            <a href="/AdminOrgJed/ProjekatAktivnostRealizacija/Excel2?uloga=@id.roleId&u=@id.userId&organizacijaId=@id.organisationId&projekatId=@Model.projekatId&OD=@Model.Od&DO=@Model.Do" class="btn btn-info">Export to Excel</a>
+                            <a href="/AdminOrgJed/ProjekatAktivnostRealizacija/Excel2?projekatId=@Model.projekat_Id&OD=@Model.Od&DO=@Model.Do" class="btn btn-info">Export to Excel</a>
                         </div>
                         <li style=" margin:3%; position:relative; display:inline;"><a class="btn" id="fb" style="color:white; background-color:cornflowerblue;">Share on Facebook</a></li>
                         <script>
                             $("#fb").click(function () {
-                                document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + "https://localhost:44343/Report/Index?uloga=@id.roleId&organizacijaId=@Model.organizacijaId&projekatId=@Model.projekatId&OD=@Model.Od&DO=@Model.Do";
+                                document.getElementById("fb").href = "http://www.facebook.com/sharer.php?u=" + "https://localhost:44343/Report/Index?organizacijaId=@Model.organizacijaId&projekatId=@Model.projekat_Id&OD=@Model.Od&DO=@Model.Do";
                             });
                         </script>
                     </div>
@@ -244,10 +152,8 @@
                                     </td>
                                 </tr>
                             }
-
                         </tbody>
                     </table>
-
                 </div>
             </center>
         }

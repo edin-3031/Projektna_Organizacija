@@ -12,11 +12,11 @@ namespace WebApplication1.Models
         [Key]
         public int ProjekatPlan_ID {get;set;}
 
-        public OrganizacionaJedinica? organizacionaJedinica { get; set; }
+        public OrganizacionaJedinica organizacionaJedinica { get; set; }
         [ForeignKey("organizacionaJedinica")]
         public int OrganizacionaJedinica_FK { get; set; }
 
-        public Status? status { get; set; }
+        public Status status { get; set; }
         [ForeignKey("status")]
         public int Status_FK { get; set; }
 

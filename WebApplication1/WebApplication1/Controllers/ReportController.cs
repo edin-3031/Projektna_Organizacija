@@ -6,28 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using WebApplication1.Models.VM;
 using WebApplication1.Data;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Data;
-using WebApplication1.Models;
-using WebApplication1.Models.VM;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Data;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Org.BouncyCastle.Asn1.Misc;
-using WebApplication1.Data;
-using WebApplication1.Models;
-using WebApplication1.Models.VM;
 using Microsoft.AspNetCore.Hosting;
 using SelectPdf;
 using Aspose.Pdf;
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Mvc.Formatters;
+
 
 namespace WebApplication1.Controllers
 {
@@ -232,7 +221,7 @@ namespace WebApplication1.Controllers
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
                         liste = lista_final,
-                        projekatId=projekatId,
+                        projekat_Id = projekatId,
                         Do=DO.Value,
                         Od=OD.Value,
                         organizacijaId=o
@@ -330,7 +319,7 @@ namespace WebApplication1.Controllers
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
                         liste = lista_final,
-                        projekatId = projekatId,
+                        projekat_Id = projekatId,
                         Do = DO.Value,
                         organizacijaId = o
                     };
@@ -426,7 +415,7 @@ namespace WebApplication1.Controllers
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
                         liste = lista_final,
-                        projekatId = projekatId,
+                        projekat_Id = projekatId,
                         Od = OD.Value,
                         organizacijaId = o
                     };
@@ -612,7 +601,7 @@ namespace WebApplication1.Controllers
                 lista_realizacijaVM model = new lista_realizacijaVM
                 {
                     liste = lista_final,
-                    projekatId = projekatId,
+                    projekat_Id = projekatId,
                     Do = DO.Value,
                     Od = OD.Value,
                     organizacijaId = o
@@ -818,7 +807,7 @@ namespace WebApplication1.Controllers
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
                             liste = lista_final,
-                            projekatId = projekatId,
+                            projekat_Id = projekatId,
                             organizacijaId = o
                         };
 
@@ -925,7 +914,7 @@ namespace WebApplication1.Controllers
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
                             liste = lista_final,
-                            projekatId = projekatId,
+                            projekat_Id = projekatId,
                             Do = DO.Value,
                             Od = OD.Value,
                             organizacijaId = o
@@ -1022,7 +1011,7 @@ namespace WebApplication1.Controllers
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
                             liste = lista_final,
-                            projekatId = projekatId,
+                            projekat_Id = projekatId,
                             Do = DO.Value,
                             Od = OD.Value,
                             organizacijaId = o
@@ -1121,7 +1110,7 @@ namespace WebApplication1.Controllers
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
                             liste = lista_final,
-                            projekatId = projekatId,
+                            projekat_Id = projekatId,
                             Do = DO.Value,
                             Od = OD.Value,
                             organizacijaId = o
@@ -1298,7 +1287,7 @@ namespace WebApplication1.Controllers
                 lista_realizacijaVM model = new lista_realizacijaVM
                 {
                     liste = lista_final,
-                    projekatId = projekatId,
+                    projekat_Id = projekatId,
                     organizacijaId = o
                 };
 

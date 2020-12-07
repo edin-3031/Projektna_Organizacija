@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         [Key]
         public int Korisnici_ID { get; set; }
 
-        public Uloge? uloge { get; set; }
+        public Uloge uloge { get; set; }
         [ForeignKey("uloge")]
         public int Uloge_FK { get; set; }
 

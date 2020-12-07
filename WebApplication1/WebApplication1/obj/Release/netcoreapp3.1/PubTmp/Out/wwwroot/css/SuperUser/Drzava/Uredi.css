@@ -1,0 +1,68 @@
+﻿td {
+    padding: 10px;
+}
+
+a, td {
+    /*font-weight: bold;*/
+    text-align-last: center;
+}
+
+li, ul {
+    list-style: none;
+    margin-top: 5%;
+}
+
+ul {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+#sifarnik, #transakcije, #izvjestaji, #admin {
+    font-weight: bold;
+}
+
+a {
+    color: white;
+    text-decoration-line: none;
+}
+
+    a:hover {
+        color: white;
+        text-decoration: none;
+        text-decoration-line: none;
+    }
+
+#kutijaZaMeni {
+    position: fixed;
+    height: 100%;
+    width: 17%;
+    /*            background-color:green;*/
+    display: block;
+    margin-left: -17.8%;
+}
+
+#menu {
+    position: fixed;
+    /*height: 65%;*/
+    width: 15%;
+    margin-left: 0px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    top: 20%;
+    font-size: 1vw;
+    border-radius: 0px 25px 25px 0px;
+}
+
+.err {
+    border: 2px solid red;
+}
+
+span {
+    position: absolute;
+    float: right;
+    margin-left: 1%;
+    background-color: indianred;
+    color: white;
+    font-weight: bold;
+}

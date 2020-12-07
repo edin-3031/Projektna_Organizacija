@@ -12,9 +12,9 @@ namespace WebApplication1.Models
         [Key]
         public int ProjekatAktivnostPlan_ID { get; set; }
 
-        public ProjekatPlan? projekatPlan { get; set; }
-        [ForeignKey("projekatPlan ")]
-        public int ProjekatPlan_FK{ get; set; }
+        public ProjekatPlan projekatPlan { get; set; }
+        [ForeignKey("projekatPlan")]
+        public int ProjekatPlan_FK { get; set; }
 
         public int Sifra { get; set; }
         public string Naziv{ get; set; }

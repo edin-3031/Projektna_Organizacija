@@ -37,7 +37,14 @@ namespace WebApplication1
             //For MySQL
             services.AddTransient<MySqlConnection>(_ => new MySqlConnection(Configuration["ConnectionStrings:DefaultConnection"]));
 
+            services.AddDistributedMemoryCache();
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(600);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -61,6 +68,8 @@ namespace WebApplication1
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();

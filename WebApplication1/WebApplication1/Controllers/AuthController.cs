@@ -4,11 +4,13 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto.Tls;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Models.VM;
 using HashAlgorithm = System.Security.Cryptography.HashAlgorithm;
 
 namespace WebApplication1.Controllers
@@ -30,68 +32,47 @@ namespace WebApplication1.Controllers
 
         public IActionResult AuthProces(string username, string pass)
         {
-            int? role = db.Korisnici.Where(a => a.Korisnicko_Ime == username && a.Lozinka == pass).Select(o => o.Uloge_FK).FirstOrDefault();
-
-            var algo = HashAlgorithm.Create("sha1");
-
-            if (role != 0)
+            LogInVM log = db.Korisnici_OrganizacionaJedinica.Include(a => a.korisnici).Include(a => a.organizacionaJedinica).Include(a => a.organizacionaJedinica.organizacija).Where(a => a.korisnici.Korisnicko_Ime == username && a.korisnici.Lozinka == pass).Include(a => a.korisnici.uloge).Select(x => new LogInVM
             {
-                //priprema za korištenje u svrhu provjere
-                byte[] hash = algo.ComputeHash(Encoding.UTF8.GetBytes(role.ToString()));
-                // hash spreman za provjeru
-                string final = Convert.ToBase64String(hash);
+                organisation = x.organizacionaJedinica.organizacija.Naziv,
+                organisationId = x.organizacionaJedinica.organizacija.Organizacija_ID,
+                orgJed = x.organizacionaJedinica.Naziv,
+                orgJedId = x.organizacionaJedinica.OrganizacionaJedinica_ID,
+                password = x.korisnici.Lozinka,
+                role = x.korisnici.uloge.Naziv,
+                roleId = x.korisnici.uloge.Uloge_ID,
+                user = x.korisnici.Ime.ToString() + " " + x.korisnici.Prezime.ToString(),
+                userId = x.korisnici.Korisnici_ID,
+                username = x.korisnici.Korisnicko_Ime
+            }).FirstOrDefault();
 
-                List<Uloge> uloge = db.Uloge.ToList();
-                foreach (var x in uloge)
+            if (log == null)
+            {
+                string msg = "Niste unijeli ispravne podatke";
+                TempData["poruka"] = msg;
+            }
+            else
+            {
+                HttpContext.Session.SetString("organisation", log.organisation);
+                HttpContext.Session.SetInt32("organisation ID", log.organisationId.Value);
+                HttpContext.Session.SetString("orgJed", log.orgJed);
+                HttpContext.Session.SetInt32("orgJed ID", log.orgJedId.Value);
+                HttpContext.Session.SetString("role", log.role);
+                HttpContext.Session.SetInt32("role ID", log.roleId.Value);
+                HttpContext.Session.SetString("user", log.user);
+                HttpContext.Session.SetInt32("user ID", log.userId.Value);
+                HttpContext.Session.SetString("username", log.username);
+
+                switch (log.role)
                 {
-                    //nova uloga
-                    var temp = x.Uloge_ID.ToString();
-                    //novi hash dobavljenje uloge
-                    var new_hash = algo.ComputeHash(Encoding.UTF8.GetBytes(temp.ToString()));
-                    string new_final = Convert.ToBase64String(new_hash);
-
-                    if (final==new_final)
-                    {
-                        int id = db.Korisnici.Where(a => a.Korisnicko_Ime == username).Select(o => o.Korisnici_ID).FirstOrDefault();
-
-                        var result = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_FK == id).Include("organizacionaJedinica").Select(o => new korisnik_organizacija
-                        {
-                            korisnik_id = o.Korisnici_FK,
-                            organizacaija_id = db.OrganizacionaJedinica.Where(q => q.OrganizacionaJedinica_ID == o.OrganizacionaJedinica_FK).Select(e => e.Organizacija_FK).FirstOrDefault()
-                        }).ToList();
-
-                        korisnik_organizacija k_o;
-
-                        k_o = new korisnik_organizacija
-                        {
-                            korisnik_id = id,
-                            organizacaija_id = result[0].organizacaija_id
-                        };
-
-                        ViewData["poruka"] = "";
-
-                        switch (x.Uloge_ID)
-                        {
-                            case 1: return Redirect("/SuperAdmin/SuperAdmin/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);break;
-                            case 2: return Redirect("/AdminOrg/AdminOrg/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID); break;
-                            case 3: return Redirect("/User/User/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID); break;
-                            case 7: return Redirect("/UserReport/UserReport/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID); break;
-                            case 9: return Redirect("/AdminOrgJed/AdminOrgJed/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID); break;
-                        }
-
-                        //if (x.Uloge_ID == 1)
-                        //    return Redirect("/Admin/Admin/Index?u="+k_o.korisnik_id+"&o="+k_o.organizacaija_id+"&r="+ x.Uloge_ID);
-                        //else if (x.Uloge_ID == 2)
-                        //    return Redirect("/AdminOrg/AdminOrg/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
-                        //else if (x.Uloge_ID == 3)
-                        //    return Redirect("/User/User/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
-                        //else if (x.Uloge_ID == 7)
-                        //    return Redirect("/UserReport/UserReport/Index?u=" + k_o.korisnik_id + "&o=" + k_o.organizacaija_id + "&r=" + x.Uloge_ID);
-                    }
+                    case "SuperAdmin": return Redirect("/SuperAdmin/SuperAdmin/Index");/*break;*/
+                    case "Admin-Org": return Redirect("/AdminOrg/AdminOrg/Index"); /*break;*/
+                    case "User": return Redirect("/User/User/Index"); /*break;*/
+                    case "User-Report": return Redirect("/UserReport/UserReport/Index"); /*break;*/
+                    case "Admin-Org-Jed": return Redirect("/AdminOrgJed/AdminOrgJed/Index"); /*break;*/
                 }
             }
-            string msg = "Niste unijeli ispravne podatke";
-            TempData["poruka"] = msg;
+         
             return Redirect("/Auth/index");
         }
     }
