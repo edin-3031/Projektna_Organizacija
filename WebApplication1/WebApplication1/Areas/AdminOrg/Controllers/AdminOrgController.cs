@@ -13,6 +13,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
     public class AdminOrgController : Controller
     {
         private readonly ApplicationDbContext db;
+        string poruka = "Morate se ponovo prijaviti";
 
         public AdminOrgController(ApplicationDbContext _db)
         {
@@ -22,9 +23,17 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Index()
         {
-            ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Slika).FirstOrDefault();
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Slika).FirstOrDefault();
 
-            return View();
+                return View();
+            }
         }
 
         [Area("AdminOrg")]

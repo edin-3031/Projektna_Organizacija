@@ -14,7 +14,7 @@ namespace WebApplication1.Areas.UserReport.Controllers
     public class UserReportController : Controller
     {
         private readonly ApplicationDbContext db;
-
+        string poruka = "Morate se ponovo prijaviti";
         public UserReportController(ApplicationDbContext _db)
         {
             db = _db;
@@ -23,9 +23,17 @@ namespace WebApplication1.Areas.UserReport.Controllers
         [Area("UserReport")]
         public IActionResult Index()
         {
-            ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Slika).FirstOrDefault();
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Slika).FirstOrDefault();
 
-            return View();
+                return View();
+            }
         }
 
         [Area("UserReport")]

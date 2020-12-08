@@ -23,6 +23,7 @@ namespace WebApplication1.Areas.User.Controllers
     public class ProjekatPlanController : Controller
     {
         private readonly ApplicationDbContext db;
+        string poruka = "Morate se ponovo prijaviti";
 
         public ProjekatPlanController(ApplicationDbContext _db)
         {
@@ -32,44 +33,53 @@ namespace WebApplication1.Areas.User.Controllers
         [Area("User")]
         public IActionResult Excel()
         {
-
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Select(x=>new ProjekatPlan {
-                DatumDo = x.DatumDo,
-                DatumOd = x.DatumOd,
-                Naziv = x.Naziv,
-                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                ProjekatPlan_ID = x.ProjekatPlan_ID,
-                Sifra = x.Sifra,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                Status_FK = x.Status_FK,
-                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
-            }).ToList();
-
-            using (var workbook = new XLWorkbook())
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                var worksheet = workbook.Worksheets.Add("Projekat_Plan");
-                var currentRow = 1;
-                worksheet.Cell(currentRow, 1).Value = "Šifra";
-                worksheet.Cell(currentRow, 2).Value = "Naziv";
-                worksheet.Cell(currentRow, 3).Value = "Datum od";
-                worksheet.Cell(currentRow, 4).Value = "Datum do";
-                worksheet.Cell(currentRow, 5).Value = "Status";
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
 
-                foreach (var x in pp_final)
+                List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Select(x => new ProjekatPlan
                 {
-                    currentRow++;
-                    worksheet.Cell(currentRow, 1).Value = x.Sifra;
-                    worksheet.Cell(currentRow, 2).Value = x.Naziv;
-                    worksheet.Cell(currentRow, 3).Value = x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".";
-                    worksheet.Cell(currentRow, 4).Value = x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".";
-                    worksheet.Cell(currentRow, 5).Value = x.status.Naziv;
-                }
+                    DatumDo = x.DatumDo,
+                    DatumOd = x.DatumOd,
+                    Naziv = x.Naziv,
+                    OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                    ProjekatPlan_ID = x.ProjekatPlan_ID,
+                    Sifra = x.Sifra,
+                    organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                    Status_FK = x.Status_FK,
+                    status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+                }).ToList();
 
-                using (var stream = new MemoryStream())
+                using (var workbook = new XLWorkbook())
                 {
-                    workbook.SaveAs(stream);
-                    var content = stream.ToArray();
-                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Projekat-PlanInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                    var worksheet = workbook.Worksheets.Add("Projekat_Plan");
+                    var currentRow = 1;
+                    worksheet.Cell(currentRow, 1).Value = "Šifra";
+                    worksheet.Cell(currentRow, 2).Value = "Naziv";
+                    worksheet.Cell(currentRow, 3).Value = "Datum od";
+                    worksheet.Cell(currentRow, 4).Value = "Datum do";
+                    worksheet.Cell(currentRow, 5).Value = "Status";
+
+                    foreach (var x in pp_final)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 1).Value = x.Sifra;
+                        worksheet.Cell(currentRow, 2).Value = x.Naziv;
+                        worksheet.Cell(currentRow, 3).Value = x.DatumOd.Date.Day + "." + x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".";
+                        worksheet.Cell(currentRow, 4).Value = x.DatumDo.Date.Day + "." + x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".";
+                        worksheet.Cell(currentRow, 5).Value = x.status.Naziv;
+                    }
+
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Projekat-PlanInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                    }
                 }
             }
         }
@@ -77,25 +87,34 @@ namespace WebApplication1.Areas.User.Controllers
         [Area("User")]
         public IActionResult Prikaz()
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
 
 
-            List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Select(x=>new ProjekatPlan {
-                DatumDo = x.DatumDo,
-                DatumOd = x.DatumOd,
-                Naziv = x.Naziv,
-                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                ProjekatPlan_ID = x.ProjekatPlan_ID,
-                Sifra = x.Sifra,
-                organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                Status_FK = x.Status_FK,
-                status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
-            }).ToList();
+                List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Select(x => new ProjekatPlan
+                {
+                    DatumDo = x.DatumDo,
+                    DatumOd = x.DatumOd,
+                    Naziv = x.Naziv,
+                    OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                    ProjekatPlan_ID = x.ProjekatPlan_ID,
+                    Sifra = x.Sifra,
+                    organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                    Status_FK = x.Status_FK,
+                    status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+                }).ToList();
 
-            ViewData["proj_plan"] = pp_final;
+                ViewData["proj_plan"] = pp_final;
 
-            return View();
+                return View();
+            }
         }
     }
 }

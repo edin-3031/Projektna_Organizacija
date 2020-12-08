@@ -14,6 +14,7 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
     public class ProjekatAktivnostPlanController : Controller
     {
         private readonly ApplicationDbContext db;
+        string poruka = "Morate se ponovo prijaviti";
 
         public ProjekatAktivnostPlanController(ApplicationDbContext _db)
         {
@@ -22,348 +23,398 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Prikaz()
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach(var x in p_p)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                foreach(var y in org_jed)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+                List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
+
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+
+                List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
+                List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
+
+                foreach (var x in p_p)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    foreach (var y in org_jed)
                     {
-                        p_p_final.Add(new ProjekatPlan
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            DatumDo=x.DatumDo,
-                            OrganizacionaJedinica_FK=x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd=x.DatumOd,
-                            Naziv=x.Naziv,
-                            ProjekatPlan_ID=x.ProjekatPlan_ID,
-                            Sifra=x.Sifra
-                        });
+                            p_p_final.Add(new ProjekatPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                                DatumOd = x.DatumOd,
+                                Naziv = x.Naziv,
+                                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                                Sifra = x.Sifra
+                            });
+                        }
                     }
                 }
-            }
 
 
-            List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
+                List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
+                List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
 
-            foreach(var x in temp)
-            {
-                foreach(var y in p_p_final)
+                foreach (var x in temp)
                 {
-                    if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+                    foreach (var y in p_p_final)
                     {
-                        temp_final.Add(new ProjekatAktivnostPlan
+                        if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                         {
-                            DatumDo=x.DatumDo,
-                            DatumOd=x.DatumOd,
-                            JedinicaMjere=x.JedinicaMjere,
-                            Naziv=x.Naziv,
-                            Kolicina=x.Kolicina,
-                            ProjekatAktivnostPlan_ID=x.ProjekatAktivnostPlan_ID,
-                            projekatPlan=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID==x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK=x.ProjekatPlan_FK,
-                            Sifra=x.Sifra
-                        });
+                            temp_final.Add(new ProjekatAktivnostPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                DatumOd = x.DatumOd,
+                                JedinicaMjere = x.JedinicaMjere,
+                                Naziv = x.Naziv,
+                                Kolicina = x.Kolicina,
+                                ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                                projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
+                                ProjekatPlan_FK = x.ProjekatPlan_FK,
+                                Sifra = x.Sifra
+                            });
+                        }
                     }
                 }
+
+                ViewData["pro_aktiv_plan"] = temp_final;
+
+                return View();
             }
-
-            ViewData["pro_aktiv_plan"] = temp_final;
-
-            return View();
         }
         [Area("AdminOrg")]
         public IActionResult Unos()
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                foreach (var y in org_jed)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+
+                List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
+                List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
+
+                foreach (var x in p_p)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    foreach (var y in org_jed)
                     {
-                        p_p_final.Add(new ProjekatPlan
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
-                        });
+                            p_p_final.Add(new ProjekatPlan
+                            {
+                                Naziv = x.Naziv,
+                                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
+                            });
+                        }
                     }
                 }
+
+                ViewData["lista_proj_plan"] = p_p_final;
+
+                return View();
             }
-
-            ViewData["lista_proj_plan"] = p_p_final;
-
-            return View();
         }
         [Area("AdminOrg")]
         public IActionResult UnosSnimi(int projekatPlan, int sifra, string naziv, DateTime Od, DateTime Do, string jedinicaMjere, float kolicina)
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-            ProjekatAktivnostPlan temp = new ProjekatAktivnostPlan
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                DatumDo=Do,
-                DatumOd=Od,
-                JedinicaMjere=jedinicaMjere,
-                Kolicina=kolicina,
-                Naziv=naziv,
-                ProjekatPlan_FK=projekatPlan,
-                Sifra=sifra
-            };
-
-            db.ProjekatAktivnostPlan.Add(temp);
-            db.SaveChanges();
-
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                foreach (var y in org_jed)
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+                ProjekatAktivnostPlan temp = new ProjekatAktivnostPlan
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    DatumDo = Do,
+                    DatumOd = Od,
+                    JedinicaMjere = jedinicaMjere,
+                    Kolicina = kolicina,
+                    Naziv = naziv,
+                    ProjekatPlan_FK = projekatPlan,
+                    Sifra = sifra
+                };
+
+                db.ProjekatAktivnostPlan.Add(temp);
+                db.SaveChanges();
+
+                List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
+
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+
+                List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
+                List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
+
+                foreach (var x in p_p)
+                {
+                    foreach (var y in org_jed)
                     {
-                        p_p_final.Add(new ProjekatPlan
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            DatumDo = x.DatumDo,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd = x.DatumOd,
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
-                        });
+                            p_p_final.Add(new ProjekatPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                                DatumOd = x.DatumOd,
+                                Naziv = x.Naziv,
+                                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                                Sifra = x.Sifra
+                            });
+                        }
                     }
                 }
-            }
 
 
-            List<ProjekatAktivnostPlan> temp_2 = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
+                List<ProjekatAktivnostPlan> temp_2 = db.ProjekatAktivnostPlan.ToList();
+                List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
 
-            foreach (var x in temp_2)
-            {
-                foreach (var y in p_p_final)
+                foreach (var x in temp_2)
                 {
-                    if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+                    foreach (var y in p_p_final)
                     {
-                        temp_final.Add(new ProjekatAktivnostPlan
+                        if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                         {
-                            DatumDo = x.DatumDo,
-                            DatumOd = x.DatumOd,
-                            JedinicaMjere = x.JedinicaMjere,
-                            Naziv = x.Naziv,
-                            Kolicina = x.Kolicina,
-                            ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK = x.ProjekatPlan_FK,
-                            Sifra = x.Sifra
-                        });
+                            temp_final.Add(new ProjekatAktivnostPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                DatumOd = x.DatumOd,
+                                JedinicaMjere = x.JedinicaMjere,
+                                Naziv = x.Naziv,
+                                Kolicina = x.Kolicina,
+                                ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                                projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
+                                ProjekatPlan_FK = x.ProjekatPlan_FK,
+                                Sifra = x.Sifra
+                            });
+                        }
                     }
                 }
+
+                ViewData["pro_aktiv_plan"] = temp_final;
+
+                return View("Prikaz");
             }
-
-            ViewData["pro_aktiv_plan"] = temp_final;
-
-            return View("Prikaz");
         }
         [Area("AdminOrg")]
         public IActionResult Ukloni(int id)
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-            ProjekatAktivnostPlan temp = db.ProjekatAktivnostPlan.Where(x => x.ProjekatAktivnostPlan_ID == id).FirstOrDefault();
-
-            if (temp != null)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                db.ProjekatAktivnostPlan.Remove(temp);
-                db.SaveChanges();
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
             }
-
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
+            else
             {
-                foreach (var y in org_jed)
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+                ProjekatAktivnostPlan temp = db.ProjekatAktivnostPlan.Where(x => x.ProjekatAktivnostPlan_ID == id).FirstOrDefault();
+
+                if (temp != null)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    db.ProjekatAktivnostPlan.Remove(temp);
+                    db.SaveChanges();
+                }
+
+                List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
+
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+
+                List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
+                List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
+
+                foreach (var x in p_p)
+                {
+                    foreach (var y in org_jed)
                     {
-                        p_p_final.Add(new ProjekatPlan
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            DatumDo = x.DatumDo,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd = x.DatumOd,
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
-                        });
+                            p_p_final.Add(new ProjekatPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                                DatumOd = x.DatumOd,
+                                Naziv = x.Naziv,
+                                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                                Sifra = x.Sifra
+                            });
+                        }
                     }
                 }
-            }
 
 
-            List<ProjekatAktivnostPlan> temp_2 = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
+                List<ProjekatAktivnostPlan> temp_2 = db.ProjekatAktivnostPlan.ToList();
+                List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
 
-            foreach (var x in temp_2)
-            {
-                foreach (var y in p_p_final)
+                foreach (var x in temp_2)
                 {
-                    if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+                    foreach (var y in p_p_final)
                     {
-                        temp_final.Add(new ProjekatAktivnostPlan
+                        if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                         {
-                            DatumDo = x.DatumDo,
-                            DatumOd = x.DatumOd,
-                            JedinicaMjere = x.JedinicaMjere,
-                            Naziv = x.Naziv,
-                            Kolicina = x.Kolicina,
-                            ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK = x.ProjekatPlan_FK,
-                            Sifra = x.Sifra
-                        });
+                            temp_final.Add(new ProjekatAktivnostPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                DatumOd = x.DatumOd,
+                                JedinicaMjere = x.JedinicaMjere,
+                                Naziv = x.Naziv,
+                                Kolicina = x.Kolicina,
+                                ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                                projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
+                                ProjekatPlan_FK = x.ProjekatPlan_FK,
+                                Sifra = x.Sifra
+                            });
+                        }
                     }
                 }
+
+                ViewData["pro_aktiv_plan"] = temp_final;
+
+                return View("Prikaz");
             }
-
-            ViewData["pro_aktiv_plan"] = temp_final;
-
-            return View("Prikaz");
         }
+
         [Area("AdminOrg")]
         public IActionResult Uredi(int id)
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-            ProjekatAktivnostPlan pap = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == id).FirstOrDefault();
-            pap.projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == pap.ProjekatPlan_FK).FirstOrDefault();
-            ViewData["projekatAktivnostPlan"] = pap;
-
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-
-            foreach (var x in p_p)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                foreach (var y in org_jed)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+                ProjekatAktivnostPlan pap = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == id).FirstOrDefault();
+                pap.projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == pap.ProjekatPlan_FK).FirstOrDefault();
+                ViewData["projekatAktivnostPlan"] = pap;
+
+                List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
+                List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+
+                foreach (var x in p_p)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    foreach (var y in org_jed)
                     {
-                        p_p_final.Add(new ProjekatPlan
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                        });
+                            p_p_final.Add(new ProjekatPlan
+                            {
+                                Naziv = x.Naziv,
+                                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                            });
+                        }
                     }
                 }
+
+                ViewData["lista_proj_plan"] = p_p_final;
+
+                return View();
             }
-
-            ViewData["lista_proj_plan"] = p_p_final;
-
-            return View();
         }
+
         [Area("AdminOrg")]
         public IActionResult UrediSnimi(int id, DateTime DO, DateTime OD, string jedinicaMjere, float kolicina, string naziv, int projekatPlan_id, int sifra)
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-
-            ProjekatAktivnostPlan p = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == id).FirstOrDefault();
-
-            p.DatumDo = DO;
-            p.DatumOd = OD;
-            p.JedinicaMjere = jedinicaMjere;
-            p.Kolicina = kolicina;
-            p.Naziv = naziv;
-            p.ProjekatPlan_FK = projekatPlan_id;
-            p.Sifra = sifra;
-
-            db.SaveChanges();
-
-            List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-
-            List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
-            List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
-
-            foreach (var x in p_p)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                foreach (var y in org_jed)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+
+                ProjekatAktivnostPlan p = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == id).FirstOrDefault();
+
+                p.DatumDo = DO;
+                p.DatumOd = OD;
+                p.JedinicaMjere = jedinicaMjere;
+                p.Kolicina = kolicina;
+                p.Naziv = naziv;
+                p.ProjekatPlan_FK = projekatPlan_id;
+                p.Sifra = sifra;
+
+                db.SaveChanges();
+
+                List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
+
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+
+                List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();
+                List<ProjekatPlan> p_p_final = new List<ProjekatPlan>();
+
+                foreach (var x in p_p)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    foreach (var y in org_jed)
                     {
-                        p_p_final.Add(new ProjekatPlan
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            DatumDo = x.DatumDo,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
-                            DatumOd = x.DatumOd,
-                            Naziv = x.Naziv,
-                            ProjekatPlan_ID = x.ProjekatPlan_ID,
-                            Sifra = x.Sifra
-                        });
+                            p_p_final.Add(new ProjekatPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                                DatumOd = x.DatumOd,
+                                Naziv = x.Naziv,
+                                ProjekatPlan_ID = x.ProjekatPlan_ID,
+                                Sifra = x.Sifra
+                            });
+                        }
                     }
                 }
-            }
 
 
-            List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
-            List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
+                List<ProjekatAktivnostPlan> temp = db.ProjekatAktivnostPlan.ToList();
+                List<ProjekatAktivnostPlan> temp_final = new List<ProjekatAktivnostPlan>();
 
-            foreach (var x in temp)
-            {
-                foreach (var y in p_p_final)
+                foreach (var x in temp)
                 {
-                    if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+                    foreach (var y in p_p_final)
                     {
-                        temp_final.Add(new ProjekatAktivnostPlan
+                        if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
                         {
-                            DatumDo = x.DatumDo,
-                            DatumOd = x.DatumOd,
-                            JedinicaMjere = x.JedinicaMjere,
-                            Naziv = x.Naziv,
-                            Kolicina = x.Kolicina,
-                            ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                            projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
-                            ProjekatPlan_FK = x.ProjekatPlan_FK,
-                            Sifra = x.Sifra
-                        });
+                            temp_final.Add(new ProjekatAktivnostPlan
+                            {
+                                DatumDo = x.DatumDo,
+                                DatumOd = x.DatumOd,
+                                JedinicaMjere = x.JedinicaMjere,
+                                Naziv = x.Naziv,
+                                Kolicina = x.Kolicina,
+                                ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+                                projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
+                                ProjekatPlan_FK = x.ProjekatPlan_FK,
+                                Sifra = x.Sifra
+                            });
+                        }
                     }
                 }
+
+                ViewData["pro_aktiv_plan"] = temp_final;
+
+                return View("Prikaz");
             }
-
-            ViewData["pro_aktiv_plan"] = temp_final;
-
-            return View("Prikaz");
         }
     }
 }

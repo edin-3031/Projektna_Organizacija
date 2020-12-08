@@ -23,6 +23,8 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
     public class KorisnikOrgController : Controller
     {
         private readonly ApplicationDbContext db;
+        string poruka = "Morate se ponovo prijaviti";
+
         public KorisnikOrgController(ApplicationDbContext _db)
         {
             db = _db;
@@ -31,51 +33,58 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Excel()
         {
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
-
-            foreach (var x in k_o_temp)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                foreach (var y in org_jed)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
+
+                foreach (var x in k_o_temp)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    foreach (var y in org_jed)
                     {
-                        k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            Korisnici_FK = x.Korisnici_FK,
-                            korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-                            Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
-                        });
+                            k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                            {
+                                Korisnici_FK = x.Korisnici_FK,
+                                korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                                Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID,
+                                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
+                            });
+                        }
                     }
                 }
-            }
-            ViewData["kor_org_jed"] = k_o_final;
+                ViewData["kor_org_jed"] = k_o_final;
 
-            using (var workbook = new XLWorkbook())
-            {
-                var worksheet = workbook.Worksheets.Add("Korisnik_organizacionaJedinica");
-                var currentRow = 1;
-                worksheet.Cell(currentRow, 1).Value = "Korisnici-Organizaciona jedinica ID";
-                worksheet.Cell(currentRow, 2).Value = "Korisnik";
-                worksheet.Cell(currentRow, 3).Value = "Organizaciona jedinica";
-
-                foreach (var x in k_o_final)
+                using (var workbook = new XLWorkbook())
                 {
-                    currentRow++;
-                    worksheet.Cell(currentRow, 1).Value = x.Korisnici_OrganizacionaJedinica_ID;
-                    worksheet.Cell(currentRow, 2).Value = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Ime.ToString() + " " + o.Prezime.ToString()).FirstOrDefault();
-                    worksheet.Cell(currentRow, 3).Value = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).Select(o => o.Naziv.ToString()).FirstOrDefault();
-                }
+                    var worksheet = workbook.Worksheets.Add("Korisnik_organizacionaJedinica");
+                    var currentRow = 1;
+                    worksheet.Cell(currentRow, 1).Value = "Korisnici-Organizaciona jedinica ID";
+                    worksheet.Cell(currentRow, 2).Value = "Korisnik";
+                    worksheet.Cell(currentRow, 3).Value = "Organizaciona jedinica";
 
-                using (var stream = new MemoryStream())
-                {
-                    workbook.SaveAs(stream);
-                    var content = stream.ToArray();
-                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Korisnici-OrganizacionaJedinicaInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                    foreach (var x in k_o_final)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 1).Value = x.Korisnici_OrganizacionaJedinica_ID;
+                        worksheet.Cell(currentRow, 2).Value = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Ime.ToString() + " " + o.Prezime.ToString()).FirstOrDefault();
+                        worksheet.Cell(currentRow, 3).Value = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).Select(o => o.Naziv.ToString()).FirstOrDefault();
+                    }
+
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Korisnici-OrganizacionaJedinicaInfo_" + DateTime.Now.Date.Day.ToString() + DateTime.Now.Date.Month.ToString() + DateTime.Now.Date.Year.ToString() + ".xlsx");
+                    }
                 }
             }
         }
@@ -83,216 +92,264 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
         [Area("AdminOrg")]
         public IActionResult Prikaz()
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
-
-            foreach(var x in k_o_temp)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                foreach(var y in org_jed)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
+
+                foreach (var x in k_o_temp)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    foreach (var y in org_jed)
                     {
-                        k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            Korisnici_FK=x.Korisnici_FK,
-                            korisnici=db.Korisnici.Where(a=>a.Korisnici_ID==x.Korisnici_FK).FirstOrDefault(),
-                            Korisnici_OrganizacionaJedinica_ID=x.Korisnici_OrganizacionaJedinica_ID,
-                            OrganizacionaJedinica_FK=x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica=db.OrganizacionaJedinica.Where(a=>a.OrganizacionaJedinica_ID==x.OrganizacionaJedinica_FK).FirstOrDefault()
-                        });
+                            k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                            {
+                                Korisnici_FK = x.Korisnici_FK,
+                                korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                                Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID,
+                                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
+                            });
+                        }
                     }
                 }
-            }
-            ViewData["kor_org_jed"] = k_o_final;
+                ViewData["kor_org_jed"] = k_o_final;
 
-            return View();
+                return View();
+            }
         }
         [Area("AdminOrg")]
         public IActionResult Unos()
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-
-            List<OrganizacionaJedinica> org_jed_temp = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-
-            List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
-            List<Korisnici> k_final = new List<Korisnici>();
-
-            foreach (var x in k_o_temp)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                foreach (var y in org_jed_temp)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+
+                List<OrganizacionaJedinica> org_jed_temp = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+
+                List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
+                List<Korisnici> k_final = new List<Korisnici>();
+
+                foreach (var x in k_o_temp)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    foreach (var y in org_jed_temp)
                     {
-                        k_final.Add(new Korisnici
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            Ime = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Ime).FirstOrDefault(),
-                            Prezime = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Prezime).FirstOrDefault(),
-                            Korisnicko_Ime = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Korisnicko_Ime).FirstOrDefault(),
-                            Lozinka = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Lozinka).FirstOrDefault(),
-                            Mail = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Mail).FirstOrDefault(),
-                            Sifra = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Sifra).FirstOrDefault(),
-                            Telefon = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Telefon).FirstOrDefault(),
-                            Korisnici_ID = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Korisnici_ID).FirstOrDefault(),
-                            Uloge_FK = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Uloge_FK).FirstOrDefault(),
-                            uloge = db.Uloge.Where(a => a.Uloge_ID == (db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Uloge_FK).FirstOrDefault())).FirstOrDefault()
-                        });
+                            k_final.Add(new Korisnici
+                            {
+                                Ime = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Ime).FirstOrDefault(),
+                                Prezime = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Prezime).FirstOrDefault(),
+                                Korisnicko_Ime = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Korisnicko_Ime).FirstOrDefault(),
+                                Lozinka = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Lozinka).FirstOrDefault(),
+                                Mail = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Mail).FirstOrDefault(),
+                                Sifra = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Sifra).FirstOrDefault(),
+                                Telefon = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Telefon).FirstOrDefault(),
+                                Korisnici_ID = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Korisnici_ID).FirstOrDefault(),
+                                Uloge_FK = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Uloge_FK).FirstOrDefault(),
+                                uloge = db.Uloge.Where(a => a.Uloge_ID == (db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).Select(o => o.Uloge_FK).FirstOrDefault())).FirstOrDefault()
+                            });
+                        }
                     }
                 }
+                ViewData["korisnik"] = k_final;
+
+                List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).Select(x => new OrganizacionaJedinica
+                {
+                    OrganizacionaJedinica_ID = x.OrganizacionaJedinica_ID,
+                    Naziv = x.Naziv,
+                }).ToList();
+
+                ViewData["org_jed"] = lista_org_jed;
+
+                return View();
             }
-            ViewData["korisnik"] = k_final;
-
-            List<OrganizacionaJedinica> lista_org_jed = db.OrganizacionaJedinica.Where(a=>a.Organizacija_FK== (int)HttpContext.Session.GetInt32("organisation ID")).Select(x => new OrganizacionaJedinica
-            {
-                OrganizacionaJedinica_ID=x.OrganizacionaJedinica_ID,
-                Naziv=x.Naziv,
-            }).ToList();
-
-            ViewData["org_jed"] = lista_org_jed;
-
-            return View();
         }
+
         [Area("AdminOrg")]
         public IActionResult UnosSnimi(int korisnik, int organizacionaJedinica)
         {
-
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-            Korisnici_OrganizacionaJedinica temp = new Korisnici_OrganizacionaJedinica
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                Korisnici_FK = korisnik,
-                OrganizacionaJedinica_FK = organizacionaJedinica
-            };
-
-            db.Korisnici_OrganizacionaJedinica.Add(temp);
-            db.SaveChanges();
-
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
-
-            foreach (var x in k_o_temp)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
             {
-                foreach (var y in org_jed)
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+                Korisnici_OrganizacionaJedinica temp = new Korisnici_OrganizacionaJedinica
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    Korisnici_FK = korisnik,
+                    OrganizacionaJedinica_FK = organizacionaJedinica
+                };
+
+                db.Korisnici_OrganizacionaJedinica.Add(temp);
+                db.SaveChanges();
+
+
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
+
+                foreach (var x in k_o_temp)
+                {
+                    foreach (var y in org_jed)
                     {
-                        k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            Korisnici_FK = x.Korisnici_FK,
-                            korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-                            Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
-                        });
+                            k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                            {
+                                Korisnici_FK = x.Korisnici_FK,
+                                korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                                Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID,
+                                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
+                            });
+                        }
                     }
                 }
-            }
-            ViewData["kor_org_jed"] = k_o_final;
+                ViewData["kor_org_jed"] = k_o_final;
 
-            return View("Prikaz");
+                return View("Prikaz");
+            }
         }
 
         [Area("AdminOrg")]
         public IActionResult Uredi(int id)
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
 
-            Korisnici_OrganizacionaJedinica temp = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_OrganizacionaJedinica_ID == id).FirstOrDefault();
-            temp.korisnici = db.Korisnici.Where(a => a.Korisnici_ID == temp.Korisnici_FK).FirstOrDefault();
-            temp.organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == temp.OrganizacionaJedinica_FK).FirstOrDefault();
-            ViewData["kor_oj"] = temp;
+                Korisnici_OrganizacionaJedinica temp = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_OrganizacionaJedinica_ID == id).FirstOrDefault();
+                temp.korisnici = db.Korisnici.Where(a => a.Korisnici_ID == temp.Korisnici_FK).FirstOrDefault();
+                temp.organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == temp.OrganizacionaJedinica_FK).FirstOrDefault();
+                ViewData["kor_oj"] = temp;
 
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a=>a.Organizacija_FK== (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-            ViewData["OrganizacionaJedinice"] = org_jed;
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+                ViewData["OrganizacionaJedinice"] = org_jed;
 
-            return View();
+                return View();
+            }
         }
 
         [Area("AdminOrg")]
         public IActionResult UrediSnimi(int k_o_id, int korisnik, int org_jed)
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-
-            Korisnici_OrganizacionaJedinica t = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_OrganizacionaJedinica_ID == k_o_id).FirstOrDefault();
-
-            t.Korisnici_FK = korisnik;
-            t.OrganizacionaJedinica_FK = org_jed;
-
-            db.SaveChanges();
-
-
-            List<OrganizacionaJedinica> org_jed_2 = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
-
-            foreach (var x in k_o_temp)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                foreach (var y in org_jed_2)
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+
+                Korisnici_OrganizacionaJedinica t = db.Korisnici_OrganizacionaJedinica.Where(a => a.Korisnici_OrganizacionaJedinica_ID == k_o_id).FirstOrDefault();
+
+                t.Korisnici_FK = korisnik;
+                t.OrganizacionaJedinica_FK = org_jed;
+
+                db.SaveChanges();
+
+
+                List<OrganizacionaJedinica> org_jed_2 = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
+
+                foreach (var x in k_o_temp)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    foreach (var y in org_jed_2)
                     {
-                        k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            Korisnici_FK = x.Korisnici_FK,
-                            korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-                            Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
-                        });
+                            k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                            {
+                                Korisnici_FK = x.Korisnici_FK,
+                                korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                                Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID,
+                                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
+                            });
+                        }
                     }
                 }
-            }
-            ViewData["kor_org_jed"] = k_o_final;
+                ViewData["kor_org_jed"] = k_o_final;
 
-            return View("Prikaz");
+                return View("Prikaz");
+            }
         }
 
         [Area("AdminOrg")]
         public IActionResult Ukloni(int id)
         {
-            ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
-
-
-            Korisnici_OrganizacionaJedinica temp = db.Korisnici_OrganizacionaJedinica.Where(v => v.Korisnici_OrganizacionaJedinica_ID == id).SingleOrDefault();
-
-            if (temp != null)
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-                db.Korisnici_OrganizacionaJedinica.Remove(temp);
-                db.SaveChanges();
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
             }
-
-            List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
-            List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
-
-            foreach (var x in k_o_temp)
+            else
             {
-                foreach (var y in org_jed)
+                ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+
+                Korisnici_OrganizacionaJedinica temp = db.Korisnici_OrganizacionaJedinica.Where(v => v.Korisnici_OrganizacionaJedinica_ID == id).SingleOrDefault();
+
+                if (temp != null)
                 {
-                    if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
+                    db.Korisnici_OrganizacionaJedinica.Remove(temp);
+                    db.SaveChanges();
+                }
+
+                List<OrganizacionaJedinica> org_jed = db.OrganizacionaJedinica.Where(a => a.Organizacija_FK == (int)HttpContext.Session.GetInt32("organisation ID")).ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_temp = db.Korisnici_OrganizacionaJedinica.ToList();
+                List<Korisnici_OrganizacionaJedinica> k_o_final = new List<Korisnici_OrganizacionaJedinica>();
+
+                foreach (var x in k_o_temp)
+                {
+                    foreach (var y in org_jed)
                     {
-                        k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                        if (x.OrganizacionaJedinica_FK == y.OrganizacionaJedinica_ID)
                         {
-                            Korisnici_FK = x.Korisnici_FK,
-                            korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-                            Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID,
-                            OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
-                            organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
-                        });
+                            k_o_final.Add(new Korisnici_OrganizacionaJedinica
+                            {
+                                Korisnici_FK = x.Korisnici_FK,
+                                korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+                                Korisnici_OrganizacionaJedinica_ID = x.Korisnici_OrganizacionaJedinica_ID,
+                                OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
+                                organizacionaJedinica = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault()
+                            });
+                        }
                     }
                 }
-            }
-            ViewData["kor_org_jed"] = k_o_final;
+                ViewData["kor_org_jed"] = k_o_final;
 
-            return View("Prikaz");
+                return View("Prikaz");
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ namespace WebApplication1.Areas.User.Controllers
     public class UserController : Controller
     {
         private readonly ApplicationDbContext db;
+        string poruka = "Morate se ponovo prijaviti";
 
         public UserController(ApplicationDbContext _db)
         {
@@ -24,9 +25,17 @@ namespace WebApplication1.Areas.User.Controllers
         [Area("User")]
         public IActionResult Index()
         {
-            ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Slika).FirstOrDefault();
+            if (HttpContext.Session.GetInt32("user ID") == null)
+            {
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            else
+            {
+                ViewData["slika"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Slika).FirstOrDefault();
 
-            return View();
+                return View();
+            }
         }
 
         [Area("User")]

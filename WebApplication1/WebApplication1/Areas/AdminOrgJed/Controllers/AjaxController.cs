@@ -14,6 +14,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
     public class AjaxController : Controller
     {
         private readonly ApplicationDbContext db;
+        string poruka = "Morate se ponovo prijaviti";
 
         public AjaxController(ApplicationDbContext _db)
         {
@@ -21,38 +22,46 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
         }
         [Area("AdminOrgJed")]
         public IActionResult DetaljiRealizacija(int idAktivnost, int idProjekat, int idRealizacija, int korisnikId)
+        {
+            if (HttpContext.Session.GetInt32("user ID") == null)
             {
-            List<ProjekatAktivnostRealizacija> lista_realizacije = db.ProjekatAktivnostRealizacija.ToList();
-
-            List<DetaljiRealizacijaVM> _lista = new List<DetaljiRealizacijaVM>();
-
-
-            foreach (var x in lista_realizacije)
-            {
-                if(x.ProjekatAktivnostPlan_FK==idAktivnost)
-                {
-                    _lista.Add(new DetaljiRealizacijaVM
-                    {
-                        datum=x.Datum.Date,
-                        idAktivnost=idAktivnost,
-                        idProjekat=idProjekat,
-                        idRealizacija=idRealizacija,
-                        idUser=korisnikId,
-                        kolicina=x.Kolicina,
-                        korisnik=db.Korisnici.Where(a=>a.Korisnici_ID== HttpContext.Session.GetInt32("user ID")).Select(o=>o.Ime.ToString()+" "+o.Prezime.ToString()).FirstOrDefault(),
-                        NazivAktivnosti=db.ProjekatAktivnostPlan.Where(a=>a.ProjekatAktivnostPlan_ID==idAktivnost).Select(o=>o.Naziv).FirstOrDefault(),
-                        NazivProjekta=db.ProjekatPlan.Where(a=>a.ProjekatPlan_ID==idProjekat).Select(o=>o.Naziv).FirstOrDefault(),
-                        opis=x.Opis
-                    });
-                }
+                TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
             }
-
-            lista_DetaljiRealizacijaVM model = new lista_DetaljiRealizacijaVM
+            else
             {
-                lista = _lista
-            };
+                List<ProjekatAktivnostRealizacija> lista_realizacije = db.ProjekatAktivnostRealizacija.ToList();
 
-            return PartialView(model);
+                List<DetaljiRealizacijaVM> _lista = new List<DetaljiRealizacijaVM>();
+
+
+                foreach (var x in lista_realizacije)
+                {
+                    if (x.ProjekatAktivnostPlan_FK == idAktivnost)
+                    {
+                        _lista.Add(new DetaljiRealizacijaVM
+                        {
+                            datum = x.Datum.Date,
+                            idAktivnost = idAktivnost,
+                            idProjekat = idProjekat,
+                            idRealizacija = idRealizacija,
+                            idUser = korisnikId,
+                            kolicina = x.Kolicina,
+                            korisnik = db.Korisnici.Where(a => a.Korisnici_ID == HttpContext.Session.GetInt32("user ID")).Select(o => o.Ime.ToString() + " " + o.Prezime.ToString()).FirstOrDefault(),
+                            NazivAktivnosti = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == idAktivnost).Select(o => o.Naziv).FirstOrDefault(),
+                            NazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == idProjekat).Select(o => o.Naziv).FirstOrDefault(),
+                            opis = x.Opis
+                        });
+                    }
+                }
+
+                lista_DetaljiRealizacijaVM model = new lista_DetaljiRealizacijaVM
+                {
+                    lista = _lista
+                };
+
+                return PartialView(model);
+            }
         }
     }
 }
