@@ -74,11 +74,11 @@
             </tr>
             <tr>
                 <td><label>Datum od</label></td>
-                <td><input id="dat2" type="datetime-local" name="OD" /></td>
+                <td><input id="dat2" type="datetime-local" name="datOD" /></td>
             </tr>
             <tr>
                 <td><label>Datum do</label></td>
-                <td><input id="dat2" type="datetime-local" name="DO" /></td>
+                <td><input id="dat2" type="datetime-local" name="datDO" /></td>
             </tr>
         </table>
         <button type="submit" class="btn btn-primary" id="tragaj" name="traziDugme" value="10">Traži</button>
@@ -93,7 +93,11 @@
                     <h3>Rezultati projekata</h3>
                     <div id="dugmad">
                         <div id="print_excel" style="display:inline;">
-                            <a href="/User/ProjekatAktivnostRealizacija/Excel2?uloga=@roleId&u=@userId&organizacijaId=@organizacijaId&projekatId=@Model.projekat_Id&OD=@Model.Od&DO=@Model.Do" class="btn btn-info">Export to Excel</a>
+                            @{ 
+                                DateTime datum_od = Model.Od.Date;
+                                DateTime datum_do = Model.Do.Date;
+                            }
+                            <a href="/User/ProjekatAktivnostRealizacija/Excel2?uloga=@(roleId)&u=@(userId)&organizacijaId=@(organizacijaId)&projekatId=@(Model.projekat_Id)&datumOD=@(datum_od)&datumDO=@(datum_do)" class="btn btn-info">Export to Excel</a>
                         </div>
                         <li style=" margin:3%; position:relative; display:inline;"><a class="btn" id="fb" style="color:white; background-color:cornflowerblue;">Share on Facebook</a></li>
                         <script>

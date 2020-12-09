@@ -144,11 +144,1114 @@ namespace WebApplication1.Areas.User.Controllers
             if (DO.Value.Year == 1)
                 DO = null;
 
+            //List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
+
+
+            //if (projekatId == 0 && (OD != null || DO != null))
+            //{
+            //    List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
+
+            //    List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
+            //    List<ProjekatAktivnostPlan> pap_temp_2_par = new List<ProjekatAktivnostPlan>();
+
+            //    foreach (var x in pap_temp_par)
+            //    {
+            //        foreach (var y in pp_temp)
+            //        {
+            //            if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+            //            {
+            //                pap_temp_2_par.Add(new ProjekatAktivnostPlan
+            //                {
+            //                    DatumDo = x.DatumDo,
+            //                    ProjekatPlan_FK = x.ProjekatPlan_FK,
+            //                    DatumOd = x.DatumOd,
+            //                    JedinicaMjere = x.JedinicaMjere,
+            //                    Kolicina = x.Kolicina,
+            //                    Naziv = x.Naziv,
+            //                    ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+            //                    Sifra = x.Sifra,
+            //                    projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
+            //                });
+            //            }
+            //        }
+            //    }
+
+            //    List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+            //    List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
+
+            //    foreach (var x in par_temp)
+            //    {
+            //        foreach (var y in pap_temp_2_par)
+            //        {
+            //            if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
+            //            {
+            //                par_temp_2_par.Add(new par_final_VM
+            //                {
+            //                    Datum = x.Datum,
+            //                    Kolicina = x.Kolicina,
+            //                    Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+            //                    Korisnici_FK = x.Korisnici_FK,
+            //                    Opis = x.Opis,
+            //                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+            //                    ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+            //                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+            //                    proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+            //                    OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == (int)HttpContext.Session.GetInt32("orgJed ID")).FirstOrDefault()
+            //                });
+            //            }
+            //        }
+            //    }
+            //    List<ProjekatAktivnostRealizacija> par = new List<ProjekatAktivnostRealizacija>();
+            //    foreach (var t in par_temp_2_par)
+            //    {
+            //        par.Add(new ProjekatAktivnostRealizacija
+            //        {
+            //            Datum = t.Datum,
+            //            Kolicina = t.Kolicina,
+            //            korisnici = t.Korisnici,
+            //            Korisnici_FK = t.Korisnici_FK,
+            //            Opis = t.Opis,
+            //            projekatAktivnostPlan = t.ProjekatAktivnostPlan_all,
+            //            ProjekatAktivnostPlan_FK = t.ProjekatAktivnostPlan_FK,
+            //            ProjekatAktivnostRealizacija_ID = t.ProjekatAktivnostRealizacija_ID
+            //        });
+            //    }
+
+
+            //    if (OD != null && DO != null)
+            //    {
+
+            //        List<RealizacijaVM> lista = new List<RealizacijaVM>();
+            //        List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+            //        List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+            //        foreach (var x in par)
+            //        {
+            //            bool povecan = false;
+
+            //            if (lista.Count == 0)
+            //            {
+            //                lista.Add(new RealizacijaVM
+            //                {
+            //                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                    datum = x.Datum,
+            //                    korisnikId = x.Korisnici_FK,
+            //                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                    odradjeno = x.Kolicina,
+            //                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                    projekatId = x.ProjekatAktivnostPlan_FK,
+            //                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                });
+            //                lista_temp.Add(new RealizacijaVM
+            //                {
+            //                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                    datum = x.Datum,
+            //                    korisnikId = x.Korisnici_FK,
+            //                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                    odradjeno = x.Kolicina,
+            //                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                    projekatId = x.ProjekatAktivnostPlan_FK,
+            //                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                });
+            //            }
+            //            else
+            //            {
+            //                foreach (var t in lista)
+            //                {
+            //                    if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+            //                    {
+            //                        t.odradjeno += x.Kolicina;
+            //                        povecan = true;
+            //                        break;
+            //                    }
+            //                }
+            //                if (!povecan)
+            //                {
+            //                    lista.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                }
+            //            }
+            //        }
+
+            //        foreach (var x in lista)
+            //        {
+            //            if ((x.datum.Year <= DO.Value.Year && x.datum.Year >= OD.Value.Year) ||
+            //                ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month <= DO.Value.Month && x.datum.Month >= OD.Value.Month)) ||
+            //                ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month == DO.Value.Month && x.datum.Month == OD.Value.Month) && (x.datum.Day <= DO.Value.Day && x.datum.Day >= OD.Value.Day)))
+            //            {
+            //                lista_final.Add(new RealizacijaVM
+            //                {
+            //                    datum = x.datum,
+            //                    aktivnostId = x.aktivnostId,
+            //                    korisnikId = x.korisnikId,
+            //                    nazivProjekta = x.nazivProjekta,
+            //                    naziv_aktivnosti = x.naziv_aktivnosti,
+            //                    odradjeno = x.odradjeno,
+            //                    planirano = x.planirano,
+            //                    projekatId = x.projekatId,
+            //                    realizacijaId = x.realizacijaId
+            //                });
+            //            }
+            //        }
+
+            //        lista_realizacijaVM model = new lista_realizacijaVM
+            //        {
+            //            liste = lista_final,
+            //            Do = DO.Value,
+            //            Od = OD.Value,
+            //            organizacijaId = organizacijaId,
+            //            projekat_Id = projekatId
+            //        };
+
+            //        return model;
+            //    }
+            //    else if (DO != null)
+            //    {
+
+
+            //        List<RealizacijaVM> lista = new List<RealizacijaVM>();
+            //        List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+            //        List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+            //        foreach (var x in par)
+            //        {
+            //            bool povecan = false;
+
+            //            if (lista.Count == 0)
+            //            {
+            //                lista.Add(new RealizacijaVM
+            //                {
+            //                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                    datum = x.Datum,
+            //                    korisnikId = x.Korisnici_FK,
+            //                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                    odradjeno = x.Kolicina,
+            //                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                    projekatId = x.ProjekatAktivnostPlan_FK,
+            //                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                });
+            //                lista_temp.Add(new RealizacijaVM
+            //                {
+            //                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                    datum = x.Datum,
+            //                    korisnikId = x.Korisnici_FK,
+            //                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                    odradjeno = x.Kolicina,
+            //                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                    projekatId = x.ProjekatAktivnostPlan_FK,
+            //                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                });
+            //            }
+            //            else
+            //            {
+            //                foreach (var t in lista)
+            //                {
+            //                    if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+            //                    {
+            //                        t.odradjeno += x.Kolicina;
+            //                        povecan = true;
+            //                        break;
+            //                    }
+            //                }
+            //                if (!povecan)
+            //                {
+            //                    lista.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                }
+            //            }
+            //        }
+
+            //        foreach (var x in lista)
+            //        {
+            //            if (x.datum.Year <= DO.Value.Year && x.datum.Month <= DO.Value.Month && x.datum.Day <= DO.Value.Day)
+            //            {
+            //                lista_final.Add(new RealizacijaVM
+            //                {
+            //                    datum = x.datum,
+            //                    aktivnostId = x.aktivnostId,
+            //                    korisnikId = x.korisnikId,
+            //                    nazivProjekta = x.nazivProjekta,
+            //                    naziv_aktivnosti = x.naziv_aktivnosti,
+            //                    odradjeno = x.odradjeno,
+            //                    planirano = x.planirano,
+            //                    projekatId = x.projekatId,
+            //                    realizacijaId = x.realizacijaId
+            //                });
+            //            }
+            //        }
+
+            //        lista_realizacijaVM model = new lista_realizacijaVM
+            //        {
+            //            liste = lista_final,
+            //            Do = DO.Value,
+            //            organizacijaId = organizacijaId,
+            //            projekat_Id = projekatId
+            //        };
+
+            //        return model;
+            //    }
+            //    else if (OD != null)
+            //    {
+
+            //        List<RealizacijaVM> lista = new List<RealizacijaVM>();
+            //        List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+            //        List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+            //        foreach (var x in par)
+            //        {
+            //            bool povecan = false;
+
+            //            if (lista.Count == 0)
+            //            {
+            //                lista.Add(new RealizacijaVM
+            //                {
+            //                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                    datum = x.Datum,
+            //                    korisnikId = x.Korisnici_FK,
+            //                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                    odradjeno = x.Kolicina,
+            //                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                    projekatId = x.ProjekatAktivnostPlan_FK,
+            //                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                });
+            //                lista_temp.Add(new RealizacijaVM
+            //                {
+            //                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                    datum = x.Datum,
+            //                    korisnikId = x.Korisnici_FK,
+            //                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                    odradjeno = x.Kolicina,
+            //                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                    projekatId = x.ProjekatAktivnostPlan_FK,
+            //                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                });
+            //            }
+            //            else
+            //            {
+            //                foreach (var t in lista)
+            //                {
+            //                    if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+            //                    {
+            //                        t.odradjeno += x.Kolicina;
+            //                        povecan = true;
+            //                        break;
+            //                    }
+            //                }
+            //                if (!povecan)
+            //                {
+            //                    lista.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                }
+            //            }
+            //        }
+
+            //        foreach (var x in lista)
+            //        {
+            //            if (x.datum.Year >= OD.Value.Year && x.datum.Month >= OD.Value.Month && x.datum.Day >= OD.Value.Day)
+            //            {
+            //                lista_final.Add(new RealizacijaVM
+            //                {
+            //                    datum = x.datum,
+            //                    aktivnostId = x.aktivnostId,
+            //                    korisnikId = x.korisnikId,
+            //                    nazivProjekta = x.nazivProjekta,
+            //                    naziv_aktivnosti = x.naziv_aktivnosti,
+            //                    odradjeno = x.odradjeno,
+            //                    planirano = x.planirano,
+            //                    projekatId = x.projekatId,
+            //                    realizacijaId = x.realizacijaId
+            //                });
+            //            }
+            //        }
+
+            //        lista_realizacijaVM model = new lista_realizacijaVM
+            //        {
+            //            liste = lista_final,
+            //            Od = OD.Value,
+            //            Do=DO.Value,
+            //            organizacijaId = organizacijaId,
+            //            projekat_Id = projekatId
+            //        };
+
+            //        return model;
+            //    }
+            //}
+
+            //else if (projekatId == 0 && (OD != null && DO != null))
+            //{
+            //    List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
+            //    {
+            //        Datum = x.Datum,
+            //        Kolicina = x.Kolicina,
+            //        korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+            //        Korisnici_FK = x.Korisnici_FK,
+            //        Opis = x.Opis,
+            //        projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+            //        ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+            //        ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+            //    }).ToList();
+
+            //    List<RealizacijaVM> lista = new List<RealizacijaVM>();
+            //    List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+            //    List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+            //    foreach (var x in par)
+            //    {
+            //        bool povecan = false;
+
+            //        if (lista.Count == 0)
+            //        {
+            //            lista.Add(new RealizacijaVM
+            //            {
+            //                aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                datum = x.Datum,
+            //                korisnikId = x.Korisnici_FK,
+            //                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                odradjeno = x.Kolicina,
+            //                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                projekatId = x.ProjekatAktivnostPlan_FK,
+            //                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //            });
+            //            lista_temp.Add(new RealizacijaVM
+            //            {
+            //                aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                datum = x.Datum,
+            //                korisnikId = x.Korisnici_FK,
+            //                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                odradjeno = x.Kolicina,
+            //                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                projekatId = x.ProjekatAktivnostPlan_FK,
+            //                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //            });
+            //        }
+            //        else
+            //        {
+            //            foreach (var t in lista)
+            //            {
+            //                if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+            //                {
+            //                    t.odradjeno += x.Kolicina;
+            //                    povecan = true;
+            //                    break;
+            //                }
+            //            }
+            //            if (!povecan)
+            //            {
+            //                lista.Add(new RealizacijaVM
+            //                {
+            //                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                    datum = x.Datum,
+            //                    korisnikId = x.Korisnici_FK,
+            //                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                    odradjeno = x.Kolicina,
+            //                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                    projekatId = x.ProjekatAktivnostPlan_FK,
+            //                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                });
+            //            }
+            //        }
+            //    }
+
+            //    foreach (var x in lista)
+            //    {
+
+            //        lista_final.Add(new RealizacijaVM
+            //        {
+            //            datum = x.datum,
+            //            aktivnostId = x.aktivnostId,
+            //            korisnikId = x.korisnikId,
+            //            nazivProjekta = x.nazivProjekta,
+            //            naziv_aktivnosti = x.naziv_aktivnosti,
+            //            odradjeno = x.odradjeno,
+            //            planirano = x.planirano,
+            //            projekatId = x.projekatId,
+            //            realizacijaId = x.realizacijaId
+            //        });
+
+            //    }
+
+            //    lista_realizacijaVM model = new lista_realizacijaVM
+            //    {
+            //        liste = lista_final,
+            //        Do = DO.Value,
+            //        Od = OD.Value,
+            //        organizacijaId = organizacijaId,
+            //        projekat_Id = projekatId
+            //    };
+
+            //    ViewData["lista_projekata"] = lista;
+            //    return model;
+            //}
+
+            //else if (projekatId >= 1)
+            //{
+            //    ProjekatPlan p_temp = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == projekatId).FirstOrDefault();
+            //    OrganizacionaJedinica o_j_temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == p_temp.OrganizacionaJedinica_FK).FirstOrDefault();
+
+            //    RealizacijaDetaljiSuma suma = new RealizacijaDetaljiSuma
+            //    {
+            //        naziv_projekta = db.ProjekatPlan.Where(x => x.ProjekatPlan_ID == projekatId).Select(o => o.Naziv).FirstOrDefault(),
+            //        ostvareno = 0,
+            //        planirano = 0,
+            //        procenti = 0,
+            //        ProjekatId = projekatId,
+            //        organizacionaJedinica = o_j_temp.Naziv,
+            //        organizacionaJedinicaId = o_j_temp.OrganizacionaJedinica_ID
+            //    };
+
+            //    List<ProjekatAktivnostPlan> pap = db.ProjekatAktivnostPlan.Where(y => y.ProjekatPlan_FK == projekatId).Select(x => new ProjekatAktivnostPlan
+            //    {
+            //        DatumDo = x.DatumDo,
+            //        DatumOd = x.DatumOd,
+            //        JedinicaMjere = x.JedinicaMjere,
+            //        Kolicina = x.Kolicina,
+            //        Naziv = x.Naziv,
+            //        ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+            //        projekatPlan = db.ProjekatPlan.Where(v => v.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
+            //        ProjekatPlan_FK = x.ProjekatPlan_FK,
+            //        Sifra = x.Sifra
+            //    }).ToList();
+
+            //    List<ProjekatAktivnostRealizacija> lista_par = db.ProjekatAktivnostRealizacija.ToList();
+            //    List<ProjekatAktivnostRealizacija> par = new List<ProjekatAktivnostRealizacija>();
+
+            //    foreach (var x in pap)
+            //    {
+            //        foreach (var y in lista_par)
+            //        {
+            //            if (x.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK)
+            //            {
+            //                par.Add(new ProjekatAktivnostRealizacija
+            //                {
+            //                    Datum = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == y.ProjekatAktivnostRealizacija_ID).Select(o => o.Datum).FirstOrDefault(),
+            //                    Kolicina = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == y.ProjekatAktivnostRealizacija_ID).Select(o => o.Kolicina).FirstOrDefault(),
+            //                    Opis = db.ProjekatAktivnostRealizacija.Where(a => a.ProjekatAktivnostRealizacija_ID == y.ProjekatAktivnostRealizacija_ID).Select(o => o.Opis).FirstOrDefault(),
+            //                    ProjekatAktivnostRealizacija_ID = y.ProjekatAktivnostRealizacija_ID,
+            //                    ProjekatAktivnostPlan_FK = y.ProjekatAktivnostPlan_FK,
+            //                    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == y.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+            //                    Korisnici_FK = y.Korisnici_FK,
+            //                    korisnici = db.Korisnici.Where(a => a.Korisnici_ID == y.Korisnici_FK).FirstOrDefault()
+            //                });
+            //            }
+            //        }
+            //    }
+
+            //    if (pap != null)
+            //    {
+            //        int brojac = db.ProjekatAktivnostPlan.Where(s => s.ProjekatPlan_FK == projekatId).Count();
+
+            //        if (OD == null && DO == null)
+            //        {
+            //            List<RealizacijaVM> lista = new List<RealizacijaVM>();
+            //            List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+            //            foreach (var x in par)
+            //            {
+            //                bool povecan = false;
+
+            //                if (lista.Count == 0)
+            //                {
+            //                    lista.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                    lista_temp.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                }
+            //                else
+            //                {
+            //                    foreach (var t in lista)
+            //                    {
+            //                        if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+            //                        {
+            //                            t.odradjeno += x.Kolicina;
+            //                            povecan = true;
+            //                            break;
+            //                        }
+            //                    }
+            //                    if (!povecan)
+            //                    {
+            //                        lista.Add(new RealizacijaVM
+            //                        {
+            //                            aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                            datum = x.Datum,
+            //                            korisnikId = x.Korisnici_FK,
+            //                            naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                            odradjeno = x.Kolicina,
+            //                            planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                            nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                            projekatId = x.ProjekatAktivnostPlan_FK,
+            //                            realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                        });
+            //                    }
+            //                }
+            //            }
+
+            //            lista_realizacijaVM model = new lista_realizacijaVM
+            //            {
+            //                liste = lista,
+            //                organizacijaId = organizacijaId,
+            //                projekat_Id = projekatId
+            //            };
+
+            //            foreach (var x in model.liste)
+            //            {
+            //                suma.ostvareno += x.odradjeno;
+            //                suma.planirano += x.planirano;
+            //                suma.procenti += (x.odradjeno / x.planirano) * 100;
+            //            }
+
+            //            suma.procenti /= model.liste.Count();
+
+            //            ViewData["suma"] = suma;
+
+            //            return model;
+            //        }
+
+            //        else if (OD != null && DO == null)
+            //        {
+
+            //            List<RealizacijaVM> lista = new List<RealizacijaVM>();
+            //            List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+            //            List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+            //            foreach (var x in par)
+            //            {
+            //                bool povecan = false;
+
+            //                if (lista.Count == 0)
+            //                {
+            //                    lista.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                    lista_temp.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                }
+            //                else
+            //                {
+            //                    foreach (var t in lista)
+            //                    {
+            //                        if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+            //                        {
+            //                            t.odradjeno += x.Kolicina;
+            //                            povecan = true;
+            //                            break;
+            //                        }
+            //                    }
+            //                    if (!povecan)
+            //                    {
+            //                        lista.Add(new RealizacijaVM
+            //                        {
+            //                            aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                            datum = x.Datum,
+            //                            korisnikId = x.Korisnici_FK,
+            //                            naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                            odradjeno = x.Kolicina,
+            //                            planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                            nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                            projekatId = x.ProjekatAktivnostPlan_FK,
+            //                            realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                        });
+            //                    }
+            //                }
+            //            }
+
+            //            foreach (var x in lista)
+            //            {
+            //                if (x.datum.Year >= OD.Value.Year && x.datum.Month >= OD.Value.Month && x.datum.Day >= OD.Value.Day)
+            //                {
+            //                    lista_final.Add(new RealizacijaVM
+            //                    {
+            //                        datum = x.datum,
+            //                        aktivnostId = x.aktivnostId,
+            //                        korisnikId = x.korisnikId,
+            //                        nazivProjekta = x.nazivProjekta,
+            //                        naziv_aktivnosti = x.naziv_aktivnosti,
+            //                        odradjeno = x.odradjeno,
+            //                        planirano = x.planirano,
+            //                        projekatId = x.projekatId,
+            //                        realizacijaId = x.realizacijaId
+            //                    });
+            //                }
+            //            }
+
+            //            lista_realizacijaVM model = new lista_realizacijaVM
+            //            {
+            //                liste = lista_final,
+            //                Od = OD.Value,
+            //                organizacijaId = organizacijaId,
+            //                projekat_Id = projekatId
+            //            };
+
+            //            return model;
+            //        }
+
+            //        else if (DO != null && OD == null)
+            //        {
+            //            List<RealizacijaVM> lista = new List<RealizacijaVM>();
+            //            List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+            //            List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+            //            foreach (var x in par)
+            //            {
+            //                bool povecan = false;
+
+            //                if (lista.Count == 0)
+            //                {
+            //                    lista.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                    lista_temp.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                }
+            //                else
+            //                {
+            //                    foreach (var t in lista)
+            //                    {
+            //                        if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+            //                        {
+            //                            t.odradjeno += x.Kolicina;
+            //                            povecan = true;
+            //                            break;
+            //                        }
+            //                    }
+            //                    if (!povecan)
+            //                    {
+            //                        lista.Add(new RealizacijaVM
+            //                        {
+            //                            aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                            datum = x.Datum,
+            //                            korisnikId = x.Korisnici_FK,
+            //                            naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                            odradjeno = x.Kolicina,
+            //                            planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                            nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                            projekatId = x.ProjekatAktivnostPlan_FK,
+            //                            realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                        });
+            //                    }
+            //                }
+            //            }
+
+            //            foreach (var x in lista)
+            //            {
+            //                if (x.datum.Year <= DO.Value.Year && x.datum.Month <= DO.Value.Month && x.datum.Day <= DO.Value.Day)
+            //                {
+            //                    lista_final.Add(new RealizacijaVM
+            //                    {
+            //                        datum = x.datum,
+            //                        aktivnostId = x.aktivnostId,
+            //                        korisnikId = x.korisnikId,
+            //                        nazivProjekta = x.nazivProjekta,
+            //                        naziv_aktivnosti = x.naziv_aktivnosti,
+            //                        odradjeno = x.odradjeno,
+            //                        planirano = x.planirano,
+            //                        projekatId = x.projekatId,
+            //                        realizacijaId = x.realizacijaId
+            //                    });
+            //                }
+            //            }
+
+            //            lista_realizacijaVM model = new lista_realizacijaVM
+            //            {
+            //                liste = lista_final,
+            //                Do = DO.Value,
+            //                organizacijaId = organizacijaId,
+            //                projekat_Id = projekatId
+            //            };
+
+            //            return model;
+            //        }
+
+            //        else
+            //        {
+            //            List<RealizacijaVM> lista = new List<RealizacijaVM>();
+            //            List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+            //            List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+            //            foreach (var x in par)
+            //            {
+            //                bool povecan = false;
+
+            //                if (lista.Count == 0)
+            //                {
+            //                    lista.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                    lista_temp.Add(new RealizacijaVM
+            //                    {
+            //                        aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                        datum = x.Datum,
+            //                        korisnikId = x.Korisnici_FK,
+            //                        naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                        odradjeno = x.Kolicina,
+            //                        planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                        nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                        projekatId = x.ProjekatAktivnostPlan_FK,
+            //                        realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                    });
+            //                }
+            //                else
+            //                {
+            //                    foreach (var t in lista)
+            //                    {
+            //                        if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+            //                        {
+            //                            t.odradjeno += x.Kolicina;
+            //                            povecan = true;
+            //                            break;
+            //                        }
+            //                    }
+            //                    if (!povecan)
+            //                    {
+            //                        lista.Add(new RealizacijaVM
+            //                        {
+            //                            aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                            datum = x.Datum,
+            //                            korisnikId = x.Korisnici_FK,
+            //                            naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                            odradjeno = x.Kolicina,
+            //                            planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                            nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                            projekatId = x.ProjekatAktivnostPlan_FK,
+            //                            realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                        });
+            //                    }
+            //                }
+            //            }
+
+            //            foreach (var x in lista)
+            //            {
+            //                if ((x.datum.Year <= DO.Value.Year && x.datum.Year >= OD.Value.Year) ||
+            //                    ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month <= DO.Value.Month && x.datum.Month >= OD.Value.Month)) ||
+            //                    ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month == DO.Value.Month && x.datum.Month == OD.Value.Month) && (x.datum.Day <= DO.Value.Day && x.datum.Day >= OD.Value.Day)))
+            //                {
+            //                    lista_final.Add(new RealizacijaVM
+            //                    {
+            //                        datum = x.datum,
+            //                        aktivnostId = x.aktivnostId,
+            //                        korisnikId = x.korisnikId,
+            //                        nazivProjekta = x.nazivProjekta,
+            //                        naziv_aktivnosti = x.naziv_aktivnosti,
+            //                        odradjeno = x.odradjeno,
+            //                        planirano = x.planirano,
+            //                        projekatId = x.projekatId,
+            //                        realizacijaId = x.realizacijaId
+            //                    });
+            //                }
+            //            }
+
+            //            lista_realizacijaVM model = new lista_realizacijaVM
+            //            {
+            //                liste = lista_final,
+            //                Do = DO.Value,
+            //                Od = OD.Value,
+            //                organizacijaId = organizacijaId,
+            //                projekat_Id = projekatId
+            //            };
+
+            //            return model;
+            //        }
+            //    }
+            //}
+
+            //if (traziDugme == 10 && projekatId == 0 && OD == null && DO == null)
+            //{
+            //    //List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
+            //    //{
+            //    //    Datum = x.Datum,
+            //    //    Kolicina = x.Kolicina,
+            //    //    korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+            //    //    Korisnici_FK = x.Korisnici_FK,
+            //    //    Opis = x.Opis,
+            //    //    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+            //    //    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+            //    //    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+            //    //}).ToList();
+
+
+            //    List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
+
+            //    List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
+            //    List<ProjekatAktivnostPlan> pap_temp_2_par = new List<ProjekatAktivnostPlan>();
+
+            //    foreach (var x in pap_temp_par)
+            //    {
+            //        foreach (var y in pp_temp)
+            //        {
+            //            if (x.ProjekatPlan_FK == y.ProjekatPlan_ID)
+            //            {
+            //                pap_temp_2_par.Add(new ProjekatAktivnostPlan
+            //                {
+            //                    DatumDo = x.DatumDo,
+            //                    ProjekatPlan_FK = x.ProjekatPlan_FK,
+            //                    DatumOd = x.DatumOd,
+            //                    JedinicaMjere = x.JedinicaMjere,
+            //                    Kolicina = x.Kolicina,
+            //                    Naziv = x.Naziv,
+            //                    ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
+            //                    Sifra = x.Sifra,
+            //                    projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault()
+            //                });
+            //            }
+            //        }
+            //    }
+
+            //    List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+            //    List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
+
+            //    foreach (var x in par_temp)
+            //    {
+            //        foreach (var y in pap_temp_2_par)
+            //        {
+            //            if (x.ProjekatAktivnostPlan_FK == y.ProjekatAktivnostPlan_ID)
+            //            {
+            //                par_temp_2_par.Add(new par_final_VM
+            //                {
+            //                    Datum = x.Datum,
+            //                    Kolicina = x.Kolicina,
+            //                    Korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
+            //                    Korisnici_FK = x.Korisnici_FK,
+            //                    Opis = x.Opis,
+            //                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+            //                    ProjekatAktivnostPlan_all = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
+            //                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+            //                    proj_plan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == y.ProjekatPlan_FK).FirstOrDefault(),
+            //                    OrgJed = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == (int)HttpContext.Session.GetInt32("orgJed ID")).FirstOrDefault()
+            //                });
+            //            }
+            //        }
+            //    }
+            //    List<ProjekatAktivnostRealizacija> par = new List<ProjekatAktivnostRealizacija>();
+            //    foreach (var t in par_temp_2_par)
+            //    {
+            //        par.Add(new ProjekatAktivnostRealizacija
+            //        {
+            //            Datum = t.Datum,
+            //            Kolicina = t.Kolicina,
+            //            korisnici = t.Korisnici,
+            //            Korisnici_FK = t.Korisnici_FK,
+            //            Opis = t.Opis,
+            //            projekatAktivnostPlan = t.ProjekatAktivnostPlan_all,
+            //            ProjekatAktivnostPlan_FK = t.ProjekatAktivnostPlan_FK,
+            //            ProjekatAktivnostRealizacija_ID = t.ProjekatAktivnostRealizacija_ID
+            //        });
+            //    }
+
+            //    List<RealizacijaVM> lista = new List<RealizacijaVM>();
+            //    List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
+            //    List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
+
+            //    foreach (var x in par)
+            //    {
+            //        bool povecan = false;
+
+            //        if (lista.Count == 0)
+            //        {
+            //            lista.Add(new RealizacijaVM
+            //            {
+            //                aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                datum = x.Datum,
+            //                korisnikId = x.Korisnici_FK,
+            //                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                odradjeno = x.Kolicina,
+            //                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                projekatId = x.ProjekatAktivnostPlan_FK,
+            //                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //            });
+            //            lista_temp.Add(new RealizacijaVM
+            //            {
+            //                aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                datum = x.Datum,
+            //                korisnikId = x.Korisnici_FK,
+            //                naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                odradjeno = x.Kolicina,
+            //                planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                projekatId = x.ProjekatAktivnostPlan_FK,
+            //                realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //            });
+            //        }
+            //        else
+            //        {
+            //            foreach (var t in lista)
+            //            {
+            //                if (t.aktivnostId == x.ProjekatAktivnostPlan_FK)
+            //                {
+            //                    t.odradjeno += x.Kolicina;
+            //                    povecan = true;
+            //                    break;
+            //                }
+            //            }
+            //            if (!povecan)
+            //            {
+            //                lista.Add(new RealizacijaVM
+            //                {
+            //                    aktivnostId = x.ProjekatAktivnostPlan_FK,
+            //                    datum = x.Datum,
+            //                    korisnikId = x.Korisnici_FK,
+            //                    naziv_aktivnosti = x.projekatAktivnostPlan.Naziv,
+            //                    odradjeno = x.Kolicina,
+            //                    planirano = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK && a.ProjekatPlan_FK == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Kolicina).FirstOrDefault(),
+            //                    nazivProjekta = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == x.projekatAktivnostPlan.ProjekatPlan_FK).Select(o => o.Naziv).FirstOrDefault(),
+            //                    projekatId = x.ProjekatAktivnostPlan_FK,
+            //                    realizacijaId = x.ProjekatAktivnostRealizacija_ID
+            //                });
+            //            }
+            //        }
+            //    }
+
+            //    foreach (var x in lista)
+            //    {
+
+            //        lista_final.Add(new RealizacijaVM
+            //        {
+            //            datum = x.datum,
+            //            aktivnostId = x.aktivnostId,
+            //            korisnikId = x.korisnikId,
+            //            nazivProjekta = x.nazivProjekta,
+            //            naziv_aktivnosti = x.naziv_aktivnosti,
+            //            odradjeno = x.odradjeno,
+            //            planirano = x.planirano,
+            //            projekatId = x.projekatId,
+            //            realizacijaId = x.realizacijaId
+            //        });
+            //    }
+
+            //    lista_realizacijaVM model = new lista_realizacijaVM
+            //    {
+            //        liste = lista_final,
+            //        organizacijaId = organizacijaId,
+            //        projekat_Id = projekatId
+            //    };
+
+            //    return model;
+            //}
+
+            //lista_realizacijaVM model2 = new lista_realizacijaVM()
+            //{
+            //    liste = null
+            //};
+            //return model2;
+
+
+            byte[] logo = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
+
+            ViewData["logo"] = logo;
+
+
             List<ProjekatPlan> pp_temp = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
+            ViewData["projekti"] = pp_temp;
 
             if (projekatId == 0 && (OD != null || DO != null))
             {
+
                 List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
                 List<ProjekatAktivnostPlan> pap_temp_par = db.ProjekatAktivnostPlan.ToList();
@@ -311,7 +1414,7 @@ namespace WebApplication1.Areas.User.Controllers
                         liste = lista_final,
                         Do = DO.Value,
                         Od = OD.Value,
-                        organizacijaId = organizacijaId,
+                        organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                         projekat_Id = projekatId
                     };
 
@@ -408,7 +1511,7 @@ namespace WebApplication1.Areas.User.Controllers
                     {
                         liste = lista_final,
                         Do = DO.Value,
-                        organizacijaId = organizacijaId,
+                        organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                         projekat_Id = projekatId
                     };
 
@@ -504,7 +1607,7 @@ namespace WebApplication1.Areas.User.Controllers
                     {
                         liste = lista_final,
                         Od = OD.Value,
-                        organizacijaId = organizacijaId,
+                        organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                         projekat_Id = projekatId
                     };
 
@@ -613,7 +1716,7 @@ namespace WebApplication1.Areas.User.Controllers
                     liste = lista_final,
                     Do = DO.Value,
                     Od = OD.Value,
-                    organizacijaId = organizacijaId,
+                    organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                     projekat_Id = projekatId
                 };
 
@@ -746,7 +1849,7 @@ namespace WebApplication1.Areas.User.Controllers
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
                             liste = lista,
-                            organizacijaId = organizacijaId,
+                            organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                             projekat_Id = projekatId
                         };
 
@@ -854,7 +1957,7 @@ namespace WebApplication1.Areas.User.Controllers
                         {
                             liste = lista_final,
                             Od = OD.Value,
-                            organizacijaId = organizacijaId,
+                            organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                             projekat_Id = projekatId
                         };
 
@@ -950,7 +2053,7 @@ namespace WebApplication1.Areas.User.Controllers
                         {
                             liste = lista_final,
                             Do = DO.Value,
-                            organizacijaId = organizacijaId,
+                            organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                             projekat_Id = projekatId
                         };
 
@@ -1049,7 +2152,7 @@ namespace WebApplication1.Areas.User.Controllers
                             liste = lista_final,
                             Do = DO.Value,
                             Od = OD.Value,
-                            organizacijaId = organizacijaId,
+                            organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                             projekat_Id = projekatId
                         };
 
@@ -1060,18 +2163,6 @@ namespace WebApplication1.Areas.User.Controllers
 
             if (traziDugme == 10 && projekatId == 0 && OD == null && DO == null)
             {
-                //List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
-                //{
-                //    Datum = x.Datum,
-                //    Kolicina = x.Kolicina,
-                //    korisnici = db.Korisnici.Where(a => a.Korisnici_ID == x.Korisnici_FK).FirstOrDefault(),
-                //    Korisnici_FK = x.Korisnici_FK,
-                //    Opis = x.Opis,
-                //    projekatAktivnostPlan = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == x.ProjekatAktivnostPlan_FK).FirstOrDefault(),
-                //    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
-                //    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
-                //}).ToList();
-
 
                 List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
 
@@ -1225,8 +2316,9 @@ namespace WebApplication1.Areas.User.Controllers
                 lista_realizacijaVM model = new lista_realizacijaVM
                 {
                     liste = lista_final,
-                    organizacijaId = organizacijaId,
-                    projekat_Id = projekatId
+                    organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
+                    projekat_Id = projekatId,
+
                 };
 
                 return model;
@@ -1238,9 +2330,8 @@ namespace WebApplication1.Areas.User.Controllers
             };
             return model2;
         }
-
         [Area("User")]
-        public IActionResult Excel2(int uloga, int organizacijaId, int projekatId, DateTime OD, DateTime DO)
+        public IActionResult Excel2(int uloga,int u, int organizacijaId, int projekatId, DateTime datumOD, DateTime datumDO)
         {
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
@@ -1249,7 +2340,7 @@ namespace WebApplication1.Areas.User.Controllers
             }
             else
             {
-                lista_realizacijaVM m_final = dobaviPodatke(uloga, organizacijaId, projekatId, OD, DO);
+                lista_realizacijaVM m_final = dobaviPodatke(uloga, organizacijaId, projekatId, datumOD, datumDO);
 
                 using (var workbook = new XLWorkbook())
                 {
@@ -1421,7 +2512,7 @@ namespace WebApplication1.Areas.User.Controllers
         }
 
         [Area("User")]
-        public IActionResult Detalji(int projekatId = 0, DateTime? OD = null, DateTime? DO = null, int traziDugme = 0)
+        public IActionResult Detalji(int projekatId = 0, DateTime? datOD = null, DateTime? datDO = null, int traziDugme = 0)
         {
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
@@ -1439,7 +2530,7 @@ namespace WebApplication1.Areas.User.Controllers
 
                 ViewData["projekti"] = pp_temp;
 
-                if (projekatId == 0 && (OD != null || DO != null))
+                if (projekatId == 0 && (datOD != null || datDO != null))
                 {
 
                     List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();
@@ -1511,7 +2602,7 @@ namespace WebApplication1.Areas.User.Controllers
                     }
 
 
-                    if (OD != null && DO != null)
+                    if (datOD != null && datDO != null)
                     {
 
                         List<RealizacijaVM> lista = new List<RealizacijaVM>();
@@ -1580,9 +2671,9 @@ namespace WebApplication1.Areas.User.Controllers
 
                         foreach (var x in lista)
                         {
-                            if ((x.datum.Year <= DO.Value.Year && x.datum.Year >= OD.Value.Year) ||
-                                ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month <= DO.Value.Month && x.datum.Month >= OD.Value.Month)) ||
-                                ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month == DO.Value.Month && x.datum.Month == OD.Value.Month) && (x.datum.Day <= DO.Value.Day && x.datum.Day >= OD.Value.Day)))
+                            if ((x.datum.Year <= datDO.Value.Year && x.datum.Year >= datOD.Value.Year) ||
+                                ((x.datum.Year == datDO.Value.Year && x.datum.Year == datOD.Value.Year) && (x.datum.Month <= datDO.Value.Month && x.datum.Month >= datOD.Value.Month)) ||
+                                ((x.datum.Year == datDO.Value.Year && x.datum.Year == datOD.Value.Year) && (x.datum.Month == datDO.Value.Month && x.datum.Month == datOD.Value.Month) && (x.datum.Day <= datDO.Value.Day && x.datum.Day >= datOD.Value.Day)))
                             {
                                 lista_final.Add(new RealizacijaVM
                                 {
@@ -1602,15 +2693,15 @@ namespace WebApplication1.Areas.User.Controllers
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
                             liste = lista_final,
-                            Do = DO.Value,
-                            Od = OD.Value,
+                            Do = datDO.Value,
+                            Od = datOD.Value,
                             organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                             projekat_Id = projekatId
                         };
 
                         return View(model);
                     }
-                    else if (DO != null)
+                    else if (datDO != null)
                     {
 
 
@@ -1680,7 +2771,7 @@ namespace WebApplication1.Areas.User.Controllers
 
                         foreach (var x in lista)
                         {
-                            if (x.datum.Year <= DO.Value.Year && x.datum.Month <= DO.Value.Month && x.datum.Day <= DO.Value.Day)
+                            if (x.datum.Year <= datDO.Value.Year && x.datum.Month <= datDO.Value.Month && x.datum.Day <= datDO.Value.Day)
                             {
                                 lista_final.Add(new RealizacijaVM
                                 {
@@ -1700,14 +2791,14 @@ namespace WebApplication1.Areas.User.Controllers
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
                             liste = lista_final,
-                            Do = DO.Value,
+                            Do = datDO.Value,
                             organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                             projekat_Id = projekatId
                         };
 
                         return View(model);
                     }
-                    else if (OD != null)
+                    else if (datOD != null)
                     {
 
                         List<RealizacijaVM> lista = new List<RealizacijaVM>();
@@ -1776,7 +2867,7 @@ namespace WebApplication1.Areas.User.Controllers
 
                         foreach (var x in lista)
                         {
-                            if (x.datum.Year >= OD.Value.Year && x.datum.Month >= OD.Value.Month && x.datum.Day >= OD.Value.Day)
+                            if (x.datum.Year >= datOD.Value.Year && x.datum.Month >= datOD.Value.Month && x.datum.Day >= datOD.Value.Day)
                             {
                                 lista_final.Add(new RealizacijaVM
                                 {
@@ -1796,7 +2887,7 @@ namespace WebApplication1.Areas.User.Controllers
                         lista_realizacijaVM model = new lista_realizacijaVM
                         {
                             liste = lista_final,
-                            Od = OD.Value,
+                            Od = datOD.Value,
                             organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                             projekat_Id = projekatId
                         };
@@ -1805,7 +2896,7 @@ namespace WebApplication1.Areas.User.Controllers
                     }
                 }
 
-                else if (projekatId == 0 && (OD != null && DO != null))
+                else if (projekatId == 0 && (datOD != null && datDO != null))
                 {
                     List<ProjekatAktivnostRealizacija> par = db.ProjekatAktivnostRealizacija.Select(x => new ProjekatAktivnostRealizacija
                     {
@@ -1904,8 +2995,8 @@ namespace WebApplication1.Areas.User.Controllers
                     lista_realizacijaVM model = new lista_realizacijaVM
                     {
                         liste = lista_final,
-                        Do = DO.Value,
-                        Od = OD.Value,
+                        Do = datDO.Value,
+                        Od = datOD.Value,
                         organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                         projekat_Id = projekatId
                     };
@@ -1971,7 +3062,7 @@ namespace WebApplication1.Areas.User.Controllers
                     {
                         int brojac = db.ProjekatAktivnostPlan.Where(s => s.ProjekatPlan_FK == projekatId).Count();
 
-                        if (OD == null && DO == null)
+                        if (datOD == null && datDO == null)
                         {
                             List<RealizacijaVM> lista = new List<RealizacijaVM>();
                             List<RealizacijaVM> lista_temp = new List<RealizacijaVM>();
@@ -2057,7 +3148,7 @@ namespace WebApplication1.Areas.User.Controllers
                             return View(model);
                         }
 
-                        else if (OD != null && DO == null)
+                        else if (datOD != null && datDO == null)
                         {
 
                             List<RealizacijaVM> lista = new List<RealizacijaVM>();
@@ -2126,7 +3217,7 @@ namespace WebApplication1.Areas.User.Controllers
 
                             foreach (var x in lista)
                             {
-                                if (x.datum.Year >= OD.Value.Year && x.datum.Month >= OD.Value.Month && x.datum.Day >= OD.Value.Day)
+                                if (x.datum.Year >= datOD.Value.Year && x.datum.Month >= datOD.Value.Month && x.datum.Day >= datOD.Value.Day)
                                 {
                                     lista_final.Add(new RealizacijaVM
                                     {
@@ -2146,7 +3237,7 @@ namespace WebApplication1.Areas.User.Controllers
                             lista_realizacijaVM model = new lista_realizacijaVM
                             {
                                 liste = lista_final,
-                                Od = OD.Value,
+                                Od = datOD.Value,
                                 organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                                 projekat_Id = projekatId
                             };
@@ -2154,7 +3245,7 @@ namespace WebApplication1.Areas.User.Controllers
                             return View(model);
                         }
 
-                        else if (DO != null && OD == null)
+                        else if (datDO != null && datOD == null)
                         {
                             List<RealizacijaVM> lista = new List<RealizacijaVM>();
                             List<RealizacijaVM> lista_final = new List<RealizacijaVM>();
@@ -2222,7 +3313,7 @@ namespace WebApplication1.Areas.User.Controllers
 
                             foreach (var x in lista)
                             {
-                                if (x.datum.Year <= DO.Value.Year && x.datum.Month <= DO.Value.Month && x.datum.Day <= DO.Value.Day)
+                                if (x.datum.Year <= datDO.Value.Year && x.datum.Month <= datDO.Value.Month && x.datum.Day <= datDO.Value.Day)
                                 {
                                     lista_final.Add(new RealizacijaVM
                                     {
@@ -2242,7 +3333,7 @@ namespace WebApplication1.Areas.User.Controllers
                             lista_realizacijaVM model = new lista_realizacijaVM
                             {
                                 liste = lista_final,
-                                Do = DO.Value,
+                                Do = datDO.Value,
                                 organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                                 projekat_Id = projekatId
                             };
@@ -2318,9 +3409,9 @@ namespace WebApplication1.Areas.User.Controllers
 
                             foreach (var x in lista)
                             {
-                                if ((x.datum.Year <= DO.Value.Year && x.datum.Year >= OD.Value.Year) ||
-                                    ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month <= DO.Value.Month && x.datum.Month >= OD.Value.Month)) ||
-                                    ((x.datum.Year == DO.Value.Year && x.datum.Year == OD.Value.Year) && (x.datum.Month == DO.Value.Month && x.datum.Month == OD.Value.Month) && (x.datum.Day <= DO.Value.Day && x.datum.Day >= OD.Value.Day)))
+                                if ((x.datum.Year <= datDO.Value.Year && x.datum.Year >= datOD.Value.Year) ||
+                                    ((x.datum.Year == datDO.Value.Year && x.datum.Year == datOD.Value.Year) && (x.datum.Month <= datDO.Value.Month && x.datum.Month >= datOD.Value.Month)) ||
+                                    ((x.datum.Year == datDO.Value.Year && x.datum.Year == datOD.Value.Year) && (x.datum.Month == datDO.Value.Month && x.datum.Month == datOD.Value.Month) && (x.datum.Day <= datDO.Value.Day && x.datum.Day >= datOD.Value.Day)))
                                 {
                                     lista_final.Add(new RealizacijaVM
                                     {
@@ -2340,8 +3431,8 @@ namespace WebApplication1.Areas.User.Controllers
                             lista_realizacijaVM model = new lista_realizacijaVM
                             {
                                 liste = lista_final,
-                                Do = DO.Value,
-                                Od = OD.Value,
+                                Do = datDO.Value,
+                                Od = datOD.Value,
                                 organizacijaId = (int)HttpContext.Session.GetInt32("organisation ID"),
                                 projekat_Id = projekatId
                             };
@@ -2351,7 +3442,7 @@ namespace WebApplication1.Areas.User.Controllers
                     }
                 }
 
-                if (traziDugme == 10 && projekatId == 0 && OD == null && DO == null)
+                if (traziDugme == 10 && projekatId == 0 && datOD == null && datDO == null)
                 {
 
                     List<ProjekatPlan> pp_temp_par = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).ToList();

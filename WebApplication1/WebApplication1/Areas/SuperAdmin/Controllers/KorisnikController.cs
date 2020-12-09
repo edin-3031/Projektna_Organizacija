@@ -106,7 +106,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             }
         }
         [Area("SuperAdmin")]
-        public IActionResult Unos()
+        public IActionResult Unos(bool? postoji=null, int?uloga=null, int? sifra=null, string? ime = null, string? prezime = null, string? telefon = null, string? mail = null, string? lozinka = null, string? username = null)
         {
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
@@ -125,7 +125,21 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
 
                 ViewData["uloge"] = lista_uloge;
 
-                return View("Unos");
+                KorisniciVM model = new KorisniciVM
+                {
+                    Ime=ime,
+                    Korisnicko_Ime=username,
+                    Lozinka=lozinka,
+                    Mail=mail,
+                    Postoji=postoji,
+                    Prezime=prezime,
+                    Sifra=sifra,
+                    Telefon=telefon,
+                    Uloge_FK=uloga,
+                    Uloge=db.Uloge.Where(a=>a.Uloge_ID==uloga).FirstOrDefault()
+                };
+
+                return View("Unos", model);
             }
         }
         [Area("SuperAdmin")]
@@ -138,22 +152,44 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             }
             else
             {
-                Korisnici temp = new Korisnici
+                List<KorisniciVM> list_test = db.Korisnici.Select(x => new KorisniciVM
                 {
-                    Ime = ime,
-                    Sifra = sifra,
-                    Lozinka = lozinka,
-                    Mail = mail,
-                    Prezime = prezime,
-                    Telefon = telefon,
-                    Uloge_FK = uloga,
-                    Korisnicko_Ime = username
-                };
+                    Korisnicko_Ime = x.Korisnicko_Ime
+                }).ToList();
+                
+                bool postoji = false;
+                
+                foreach(var x in list_test)
+                {
+                    if (x.Korisnicko_Ime == username)
+                    {
+                        postoji = true;
+                        break;
+                    }
+                }
 
-                db.Korisnici.Add(temp);
-                db.SaveChanges();
+                if (postoji)
+                {
+                    return Redirect("/SuperAdmin/Korisnik/Unos?postoji=" + postoji + "&uloga=" + uloga + "&sifra=" + sifra + "&ime=" + ime + "&prezime=" + prezime + "&telefon=" + telefon + "&mail=" + telefon + "&mail=" + mail + "&lozinka=" + lozinka + "&username=" + username);
+                }
+                else
+                {
+                    Korisnici temp = new Korisnici
+                    {
+                        Ime = ime,
+                        Sifra = sifra,
+                        Lozinka = lozinka,
+                        Mail = mail,
+                        Prezime = prezime,
+                        Telefon = telefon,
+                        Uloge_FK = uloga,
+                        Korisnicko_Ime = username
+                    };
 
+                    db.Korisnici.Add(temp);
+                    db.SaveChanges();
 
+                }
 
                 List<Korisnici> lista_korisnici = db.Korisnici.ToList();
 
