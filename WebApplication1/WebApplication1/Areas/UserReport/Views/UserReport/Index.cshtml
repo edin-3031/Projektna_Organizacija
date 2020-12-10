@@ -9,17 +9,6 @@
 
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
-
-    var organizacija = Context.Session.GetString("organisation");
-    var organizacijaId = Context.Session.GetInt32("organisation ID");
-    var organizacionaJedinica = Context.Session.GetString("orgJed");
-    var organizacionaJedinicaId = Context.Session.GetInt32("orgJed ID");
-    var password = Context.Session.GetString("password");
-    var role = Context.Session.GetString("role");
-    var roleId = Context.Session.GetInt32("role ID");
-    var user = Context.Session.GetString("user");
-    var userId = Context.Session.GetInt32("user ID");
-    var username = Context.Session.GetString("username");
 }
 
 <style>
@@ -34,25 +23,3 @@
 </style>
 
 <img style="height:45vw; width:81vw;" src="@imgsrc" />
-
-<br />
-<h1>Organizacija: @organizacija</h1>
-<br />
-<h1>Organizacija ID: @organizacijaId</h1>
-<br />
-<h1>Organizaciona Jedinica: @organizacionaJedinica</h1>
-<br />
-<h1>Organizaciona Jedinica ID: @organizacionaJedinicaId</h1>
-<br />
-<h1>Lozinka: @password</h1>
-<br />
-<h1>Uloga: @role</h1>
-<br />
-<h1>Uloga ID: @roleId</h1>
-<br />
-<h1>Korisnik: @user</h1>
-<br />
-<h1>Korisnik ID: @userId</h1>
-<br />
-<h1>Korisničko ime: @username</h1>
-<br />
