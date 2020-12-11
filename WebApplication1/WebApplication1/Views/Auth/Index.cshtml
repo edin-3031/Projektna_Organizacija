@@ -1,37 +1,56 @@
 ﻿@{
     Layout = null;
-
     string poruka = (string)TempData["poruka"];
 }
 <html>
 <head>
     <title>Moji Projekti</title>
     <link rel="icon" href="~/Pictures/iconTest2.png" />
-    <link rel="stylesheet" href="~/css/AuthStyle.css"/>
+    <link rel="stylesheet" href="~/css/AuthStyle.css" />
     <script src="jquery-3.5.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="header"><img src="~/Pictures/iconTest2.png" id="slika_logo"><p id="naslov">Moji Projekti</p></div>
-    <div align="center" id="kontejner">
-        <form id="login" method="post" action="/Auth/AuthProces">
-            <div id="kontejner2">
-                <label>Korisničko ime</label><br />
-                <input type="text" name="username" autofocus /><br />
-                <label>Lozinka</label><br />
-                <input type="password" name="pass" /><br /><br />
-            </div>
-            <button class="btn btn-danger" id="go" type="submit"><p id="go_text">Prijavi se</p></button>
-        </form>
-        @if (poruka != null)
-        {
-            <center>
-                <div id="msg"><p id="poruka_greske">@poruka</p></div>
-            </center>
-            <script>
-                $("#msg").hide().slideDown(1000).delay(2000).slideUp(1000);
-            </script>
-        }
+    <div id="podloga">
+        <div id="header"><img src="~/Pictures/iconTest2.png" id="slika_logo"><p id="naslov">Moji Projekti</p></div>
+
+        <div align="center" id="kontejner">
+
+            <form id="login" method="post" action="/Auth/AuthProces">
+
+                <div id="kontejner2">
+                    <label>Korisničko ime</label><br />
+                    <input type="text" name="username" autofocus /><br />
+                    <label>Lozinka</label><br />
+                    <input type="password" name="pass" /><br /><br />
+                </div>
+                <button class="btn btn-danger" id="go" type="submit"><p id="go_text">Prijavi se</p></button>
+            </form>
+
+            @if (poruka != null)
+            {
+                <center>
+                    <div id="msg"><p id="poruka_greske">@poruka</p></div>
+                </center>
+            }
+
+        </div>
     </div>
+    <div id="tekst_i_animacija">
+        <div class="loader"></div>
+        <p id="tekst_ucitava">Loading...</p>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#tekst_i_animacija").hide();
+        });
+
+        $("#go").click(function () {
+            $("#tekst_i_animacija").show();
+            document.getElementById("podloga").style.filter = "blur(10px)";
+        });
+    </script>
+
+    <script src="~/js/AuthScript.js"></script>
 </body>
 </html>

@@ -45,12 +45,6 @@ label {
     margin-bottom: 3%;
 }
 
-    #go:focus {
-        border-left: 5px solid black;
-        border-top: 5px solid black;
-        border-right: 5px solid black;
-    }
-
 #go_text {
     font-size: 3.5vw;
     font-weight: bold;
@@ -128,4 +122,48 @@ label {
     margin: 0%;
     font-size: 3vw;
     position:relative;
+}
+.loader {
+    position: relative;
+    border: 3.5vw solid #c2fdc5;
+    border-top: 3.5vw solid #28a524;
+    border-radius: 50%;
+    width: 8vw;
+    height: 8vw;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#tekst_ucitava {
+    position: relative;
+    text-align: center;
+    font-family: Agency FB;
+    font-size: 5vw;
+    font-weight: bold;
+    width: 100%;
+    margin: auto;
+}
+
+#tekst_i_animacija {
+    position: absolute;
+    height: 30%;
+    width: 30%;
+    margin-left: 35%;
+    margin-top: 8vw;
+}
+
+#podloga {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
