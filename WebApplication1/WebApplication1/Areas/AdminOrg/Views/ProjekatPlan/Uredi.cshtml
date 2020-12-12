@@ -11,90 +11,155 @@
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
+<style>
+
+    .loader {
+        position: relative;
+        border: 2.5vw solid #c2fdc5;
+        border-top: 2.5vw solid #28a524;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #tekst_ucitava {
+        position: relative;
+        text-align: center;
+        font-family: Agency FB;
+        font-size: 5vw;
+        font-weight: bold;
+        width: 100%;
+        margin: auto;
+    }
+
+    #tekst_i_animacija {
+        position: absolute;
+        height: 30%;
+        width: 30%;
+        margin-left: 25%;
+        margin-top: 8vw;
+    }
+
+    #podloga {
+        position: absolute;
+        width: 70%;
+        height: 100%;
+        margin-top: 5%;
+    }
+</style>
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Uređivanje Plana Projekta</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
-    <form method="post" action="/AdminOrg/ProjekatPlan/UrediSnimi">
+    <div id="podloga">
+        <form method="post" action="/AdminOrg/ProjekatPlan/UrediSnimi">
 
-        <input hidden="hidden" name="id" value="@p.ProjekatPlan_ID" />
+            <input hidden="hidden" name="id" value="@p.ProjekatPlan_ID" />
 
-        <table>
-            <tr>
-                <td>
-                    <label>
-                        Naziv
-                    </label>
-                </td>
-                <td>
-                    <input name="naziv" value="@p.Naziv" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Šifra
-                    </label>
-                </td>
-                <td>
-                    <input name="sifra" value="@p.Sifra" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Organizaciona jedinica
-                    </label>
-                </td>
-                <td>
-                    <select name="org_jed">
-                        <option value="@p.OrganizacionaJedinica_FK">@p.organizacionaJedinica.Naziv</option>
-                        @foreach (var x in lista_org_jed)
-                        {
-                            <option value="@x.OrganizacionaJedinica_ID">@x.Naziv</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Datum od
-                    </label>
-                </td>
-                <td>
-                    <input type="datetime" name="OD" value="@p.DatumOd">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Datum do
-                    </label>
-                </td>
-                <td>
-                    <input type="datetime" name="DO" value="@p.DatumDo">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Status
-                    </label>
-                </td>
-                <td>
-                    <select name="status_id">
-                        <option value="@p.Status_FK">@p.status.Naziv</option>
-                        @foreach (var x in stat_lista)
-                        {
-                            <option value="@x.StatusID">@x.Naziv</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-        </table>
+            <table>
+                <tr>
+                    <td>
+                        <label>
+                            Naziv
+                        </label>
+                    </td>
+                    <td>
+                        <input name="naziv" value="@p.Naziv" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Šifra
+                        </label>
+                    </td>
+                    <td>
+                        <input name="sifra" value="@p.Sifra" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Organizaciona jedinica
+                        </label>
+                    </td>
+                    <td>
+                        <select name="org_jed">
+                            <option value="@p.OrganizacionaJedinica_FK">@p.organizacionaJedinica.Naziv</option>
+                            @foreach (var x in lista_org_jed)
+                            {
+                                <option value="@x.OrganizacionaJedinica_ID">@x.Naziv</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Datum od
+                        </label>
+                    </td>
+                    <td>
+                        <input type="datetime" name="OD" value="@p.DatumOd">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Datum do
+                        </label>
+                    </td>
+                    <td>
+                        <input type="datetime" name="DO" value="@p.DatumDo">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Status
+                        </label>
+                    </td>
+                    <td>
+                        <select name="status_id">
+                            <option value="@p.Status_FK">@p.status.Naziv</option>
+                            @foreach (var x in stat_lista)
+                            {
+                                <option value="@x.StatusID">@x.Naziv</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </table>
 
-        <button class="btn btn-primary">Snimi</button>
-    </form>
+            <button class="btn btn-primary" id="go">Snimi</button>
+        </form>
+    </div>
+    <div id="tekst_i_animacija">
+        <div class="loader"></div>
+        <p id="tekst_ucitava">Loading...</p>
+    </div>
 </center>
+<script>
+        $(document).ready(function () {
+            $("#tekst_i_animacija").hide();
+        });
+
+        $("#go").click(function () {
+            $("#tekst_i_animacija").show();
+            document.getElementById("podloga").style.filter = "blur(10px)";
+            document.getElementById("zaglavlje").style.filter = "blur(10px)";
+        });
+</script>

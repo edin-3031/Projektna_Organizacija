@@ -11,77 +11,144 @@
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
+<style>
+
+    .loader {
+        position: relative;
+        border: 2.5vw solid #c2fdc5;
+        border-top: 2.5vw solid #28a524;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #tekst_ucitava {
+        position: relative;
+        text-align: center;
+        font-family: Agency FB;
+        font-size: 5vw;
+        font-weight: bold;
+        width: 100%;
+        margin: auto;
+    }
+
+    #tekst_i_animacija {
+        position: absolute;
+        height: 30%;
+        width: 30%;
+        margin-left: 25%;
+        margin-top: 8vw;
+    }
+
+    #podloga {
+        position: absolute;
+        width: 70%;
+        height: 100%;
+        margin-top: 5%;
+    }
+</style>
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Unos Organizacione Jedinice</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
-    </div><br /><br />
-    <form method="post" action="/AdminOrg/OrganizacionaJedinica/UnosSnimi?">
-        <table>
-            <tr>
-                <td>
-                    <label>
-                        Organizacija
-                    </label>
-                </td>
-                <td>
-                    <input readonly="readonly" value="@organicija.Naziv" />
-                    <input hidden="hidden" name="organizacija" value="@organicija.Organizacija_ID" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        PTT
-                    </label>
-                </td>
-                <td>
-                    <select name="ptt">
-                        <option>---Odaberi---</option>
-                        @foreach (var x in lista_ptt)
-                        {
-                            <option value="@x.PTT_ID">@x.Naziv</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Država
-                    </label>
-                </td>
-                <td>
-                    <select name="drzava">
-                        <option>---Odaberi---</option>
-                        @foreach (var x in lista_drzava)
-                        {
-                            <option value="@x.Drzava_ID">@x.Naziv</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Naziv
-                    </label>
-                </td>
-                <td>
-                    <input type="text" name="naziv_org_jed" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Adresa
-                    </label>
-                </td>
-                <td>
-                    <input type="text" name="adresa" />
-                </td>
-            </tr>
-        </table>
-        <button type="submit" class="btn btn-primary">Spremi</button>
-    </form>
+    </div>
+    <br />
+    <br />
+    <div id="podloga">
+        <form method="post" action="/AdminOrg/OrganizacionaJedinica/UnosSnimi?">
+            <table>
+                <tr>
+                    <td>
+                        <label>
+                            Organizacija
+                        </label>
+                    </td>
+                    <td>
+                        <input readonly="readonly" value="@organicija.Naziv" />
+                        <input hidden="hidden" name="organizacija" value="@organicija.Organizacija_ID" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            PTT
+                        </label>
+                    </td>
+                    <td>
+                        <select name="ptt">
+                            <option>---Odaberi---</option>
+                            @foreach (var x in lista_ptt)
+                            {
+                                <option value="@x.PTT_ID">@x.Naziv</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Država
+                        </label>
+                    </td>
+                    <td>
+                        <select name="drzava">
+                            <option>---Odaberi---</option>
+                            @foreach (var x in lista_drzava)
+                            {
+                                <option value="@x.Drzava_ID">@x.Naziv</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Naziv
+                        </label>
+                    </td>
+                    <td>
+                        <input type="text" name="naziv_org_jed" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Adresa
+                        </label>
+                    </td>
+                    <td>
+                        <input type="text" name="adresa" />
+                    </td>
+                </tr>
+            </table>
+            <button type="submit" class="btn btn-primary" id="go">Spremi</button>
+        </form>
+    </div>
+    <div id="tekst_i_animacija">
+        <div class="loader"></div>
+        <p id="tekst_ucitava">Loading...</p>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#tekst_i_animacija").hide();
+        });
+
+        $("#go").click(function () {
+            $("#tekst_i_animacija").show();
+            document.getElementById("podloga").style.filter = "blur(10px)";
+            document.getElementById("zaglavlje").style.filter = "blur(10px)";
+        });
+    </script>
 </center>

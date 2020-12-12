@@ -11,79 +11,146 @@
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
+
+<style>
+
+    .loader {
+        position: relative;
+        border: 2.5vw solid #c2fdc5;
+        border-top: 2.5vw solid #28a524;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #tekst_ucitava {
+        position: relative;
+        text-align: center;
+        font-family: Agency FB;
+        font-size: 5vw;
+        font-weight: bold;
+        width: 100%;
+        margin: auto;
+    }
+
+    #tekst_i_animacija {
+        position: absolute;
+        height: 30%;
+        width: 30%;
+        margin-left: 25%;
+        margin-top: 8vw;
+    }
+
+    #podloga {
+        position: absolute;
+        width: 70%;
+        height: 100%;
+        margin-top: 5%;
+    }
+</style>
+
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Uređivanje Organizacionu jedinicu</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div><br /><br />
-    <form method="post" action="/AdminOrg/OrganizacionaJedinica/UrediSnimi">
-        <input hidden="hidden" name="id" value="@o_j.OrganizacionaJedinica_ID"/>
-        <input hidden="hidden" name="organizacija" value="@o_j.Organizacija_FK"/>
-        
-        <table>
-            <tr>
-                <td>
-                    <label>
-                        Naziv
-                    </label>
-                </td>
-                <td>
-                    <input name="naziv" value="@o_j.Naziv" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Organizacija
-                    </label>
-                </td>
-                <td>
-                    <input readonly="readonly" value="@o_j.organizacija.Naziv" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Adresa
-                    </label>
-                </td>
-                <td>
-                    <input name="adresa" value="@o_j.Adresa" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Država
-                    </label>
-                </td>
-                <td>
-                    <select name="drzava">
-                        <option value="@o_j.Drzava_FK">@o_j.drzava.Naziv</option>
-                        @foreach (var x in drzave_lista)
-                        {
-                            <option value="@x.Drzava_ID">@x.Naziv</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        PTT
-                    </label>
-                </td>
-                <td>
-                    <select name="ptt">
-                        <option value="@o_j.PTT_FK">@o_j.ptt.Naziv</option>
-                        @foreach (var x in ptt_lista)
-                        {
-                            <option value="@x.PTT_ID">@x.Naziv</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-        </table>
-        <button type="submit" class="btn btn-primary">Snimi</button>
-    </form>
+    <div id="podloga">
+        <form method="post" action="/AdminOrg/OrganizacionaJedinica/UrediSnimi">
+            <input hidden="hidden" name="id" value="@o_j.OrganizacionaJedinica_ID" />
+            <input hidden="hidden" name="organizacija" value="@o_j.Organizacija_FK" />
+
+            <table>
+                <tr>
+                    <td>
+                        <label>
+                            Naziv
+                        </label>
+                    </td>
+                    <td>
+                        <input name="naziv" value="@o_j.Naziv" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Organizacija
+                        </label>
+                    </td>
+                    <td>
+                        <input readonly="readonly" value="@o_j.organizacija.Naziv" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Adresa
+                        </label>
+                    </td>
+                    <td>
+                        <input name="adresa" value="@o_j.Adresa" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Država
+                        </label>
+                    </td>
+                    <td>
+                        <select name="drzava">
+                            <option value="@o_j.Drzava_FK">@o_j.drzava.Naziv</option>
+                            @foreach (var x in drzave_lista)
+                            {
+                                <option value="@x.Drzava_ID">@x.Naziv</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            PTT
+                        </label>
+                    </td>
+                    <td>
+                        <select name="ptt">
+                            <option value="@o_j.PTT_FK">@o_j.ptt.Naziv</option>
+                            @foreach (var x in ptt_lista)
+                            {
+                                <option value="@x.PTT_ID">@x.Naziv</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit" class="btn btn-primary" id="go">Snimi</button>
+        </form>
+    </div>
+    <div id="tekst_i_animacija">
+        <div class="loader"></div>
+        <p id="tekst_ucitava">Loading...</p>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#tekst_i_animacija").hide();
+        });
+
+        $("#go").click(function () {
+            $("#tekst_i_animacija").show();
+            document.getElementById("podloga").style.filter = "blur(10px)";
+            document.getElementById("zaglavlje").style.filter = "blur(10px)";
+        });
+    </script>
 </center>

@@ -5,6 +5,22 @@
     List<OrganizacionaJedinica> lista_org_jed = (List<OrganizacionaJedinica>)ViewData["org_jed"];
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
 }
+
+<style>
+    .err {
+        border: 2px solid red;
+    }
+    
+    span {
+        position: absolute;
+        float: right;
+        margin-left: 1%;
+        background-color: indianred;
+        color: white;
+        font-weight: bold;
+    }
+</style>
+
 <center>
     <h1>Unos Korisnika - Organizacione Jedinice</h1>
     <form method="post" action="/SuperAdmin/KorisnikOrg/UnosSnimi">
@@ -16,13 +32,13 @@
                     </label>
                 </td>
                 <td>
-                    <select name="korisnik">
-                        <option>---Odaberi---</option>
+                    <select name="korisnik" id="korisnik_select" onselect="provjera('korisnik_select')" onchange="provjera('korisnik_select')" onblur="provjera('username_input')" >
+                        <option value="0">---Odaberi---</option>
                         @foreach (var x in lista_korisnici)
                         {
                             <option value="@x.Korisnici_ID">@(x.Ime + " " + x.Prezime)</option>
                         }
-                    </select>
+                    </select><span id="korisnik_select_span"></span>
                 </td>
             </tr>
             <tr>
@@ -32,16 +48,64 @@
                     </label>
                 </td>
                 <td>
-                    <select name="organizacionaJedinica">
-                        <option>---Odaberi---</option>
+                    <select name="organizacionaJedinica" id="orgJed_select" onselect="provjera('orgJed_select')" onchange="provjera('orgJed_select')" onblur="provjera('username_input')" >
+                        <option value="0">---Odaberi---</option>
                         @foreach (var x in lista_org_jed)
                         {
                             <option value="@x.OrganizacionaJedinica_ID">@x.Naziv</option>
                         }
-                    </select>
+                    </select><span id="orgJed_select_span"></span>
                 </td>
             </tr>
         </table>
-        <button class="btn btn-success" type="submit">Dodaj nove</button>
+        <button class="btn btn-primary" id="snimi_btn" type="submit">Snimi</button>
+        <script>
+            $(document).ready(function () {
+                document.getElementById("snimi_btn").disabled = true;
+            });
+
+            var prvi, drugi = false;
+
+            function provjera(id) {
+
+                var selected = document.getElementById(id).value;
+
+                if (id === "korisnik_select") {
+
+                    if (selected == 0) {
+                        document.getElementById(id).classList.add('err');
+                        document.getElementById("korisnik_select_span").innerHTML = "Morate odabrati jedno polje";
+                        document.getElementById("korisnik_select_span").classList.add("err");
+                        document.getElementById("snimi_btn").disabled = true;
+                        prvi = false;
+                    }
+                    else if (selected > 0) {
+                        document.getElementById(id).classList.remove('err');
+                        document.getElementById("korisnik_select_span").innerHTML = "";
+                        document.getElementById("korisnik_select_span").classList.remove("err");
+                        prvi = true;
+                    }
+                }
+
+                else if (id === "orgJed_select") {
+                    if (selected == 0) {
+                        document.getElementById(id).classList.add('err');
+                        document.getElementById("orgJed_select_span").innerHTML = "Morate odabrati jedno polje";
+                        document.getElementById("orgJed_select_span").classList.add("err");
+                        document.getElementById("snimi_btn").disabled = true;
+                        drugi = false;
+                    }
+                    else if (selected > 0) {
+                        document.getElementById(id).classList.remove('err');
+                        document.getElementById("orgJed_select_span").innerHTML = "";
+                        document.getElementById("orgJed_select_span").classList.remove("err");
+                        drugi = true;
+                    }
+                }
+                if (prvi === true && drugi === true) {
+                    document.getElementById("snimi_btn").disabled = false;
+                }
+            }
+        </script>
     </form>
 </center>

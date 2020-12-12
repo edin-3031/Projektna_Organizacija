@@ -1,15 +1,4 @@
-<html>
-<div id="podloga"></div>
-
-<div id="tekst_i_animacija">
-        <div class="loader"></div>
-        <p id="tekst_ucitava">Loading...</p>
-</div>
-</html>
-
-<style>
-
-    .loader {
+﻿.loader {
     position: relative;
     border: 2.5vw solid #c2fdc5;
     border-top: 2.5vw solid #28a524;
@@ -20,7 +9,7 @@
     margin: auto;
 }
 
-@@keyframes spin {
+@keyframes spin {
     0% {
         transform: rotate(0deg);
     }
@@ -52,21 +41,5 @@
     position: absolute;
     width: 70%;
     height: 100%;
-    margin-top:5%;
+    margin-top: 5%;
 }
-
-</style>
-
-
-
-<script>
-        $(document).ready(function () {
-            $("#tekst_i_animacija").hide();
-        });
-
-        $("#go").click(function () {
-            $("#tekst_i_animacija").show();
-            document.getElementById("podloga").style.filter = "blur(10px)";
-            document.getElementById("zaglavlje").style.filter = "blur(10px)";
-        });
-</script>

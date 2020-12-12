@@ -10,92 +10,160 @@
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
+<style>
+
+    .loader {
+        position: relative;
+        border: 2.5vw solid #c2fdc5;
+        border-top: 2.5vw solid #28a524;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #tekst_ucitava {
+        position: relative;
+        text-align: center;
+        font-family: Agency FB;
+        font-size: 5vw;
+        font-weight: bold;
+        width: 100%;
+        margin: auto;
+    }
+
+    #tekst_i_animacija {
+        position: absolute;
+        height: 30%;
+        width: 30%;
+        margin-left: 25%;
+        margin-top: 8vw;
+    }
+
+    #podloga {
+        position: absolute;
+        width: 70%;
+        height: 100%;
+        margin-top: 5%;
+    }
+</style>
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Uređivanje Projektne Aktivnosti</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
-    </div><br /><br />
-    <form method="post" action="/AdminOrg/ProjekatAktivnostPlan/UrediSnimi">
-        <input hidden="hidden" name="id" value="@pap.ProjekatAktivnostPlan_ID" />
-        <table>
-            <tr>
-                <td>
-                    <label>
-                        Naziv
-                    </label>
-                </td>
-                <td>
-                    <input name="naziv" value="@pap.Naziv" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Šifra
-                    </label>
-                </td>
-                <td>
-                    <input name="sifra" value="@pap.Sifra" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Projekat
-                    </label>
-                </td>
-                <td>
-                    <select name="projekatPlan_id">
-                        <option value="@pap.ProjekatPlan_FK">@pap.projekatPlan.Naziv</option>
-                        @foreach (var x in lista_pp)
-                        {
-                            <option value="@x.ProjekatPlan_ID">@x.Naziv (@x.organizacionaJedinica.Naziv)</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Količina
-                    </label>
-                </td>
-                <td>
-                    <input name="kolicina" value="@pap.Kolicina" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Jedinica mjere
-                    </label>
-                </td>
-                <td>
-                    <input name="jedinicaMjere" value="@pap.JedinicaMjere" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Datum od
-                    </label>
-                </td>
-                <td>
-                    <input name="OD" type="datetime" value="@pap.DatumOd" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Datum do
-                    </label>
-                </td>
-                <td>
-                    <input name="DO" type="datetime" value="@pap.DatumDo" />
-                </td>
-            </tr>
-        </table>
+    </div>
+    <br />
+    <br />
+    <div id="podloga">
+        <form method="post" action="/AdminOrg/ProjekatAktivnostPlan/UrediSnimi">
+            <input hidden="hidden" name="id" value="@pap.ProjekatAktivnostPlan_ID" />
+            <table>
+                <tr>
+                    <td>
+                        <label>
+                            Naziv
+                        </label>
+                    </td>
+                    <td>
+                        <input name="naziv" value="@pap.Naziv" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Šifra
+                        </label>
+                    </td>
+                    <td>
+                        <input name="sifra" value="@pap.Sifra" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Projekat
+                        </label>
+                    </td>
+                    <td>
+                        <select name="projekatPlan_id">
+                            <option value="@pap.ProjekatPlan_FK">@pap.projekatPlan.Naziv</option>
+                            @foreach (var x in lista_pp)
+                            {
+                                <option value="@x.ProjekatPlan_ID">@x.Naziv (@x.organizacionaJedinica.Naziv)</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Količina
+                        </label>
+                    </td>
+                    <td>
+                        <input name="kolicina" value="@pap.Kolicina" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Jedinica mjere
+                        </label>
+                    </td>
+                    <td>
+                        <input name="jedinicaMjere" value="@pap.JedinicaMjere" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Datum od
+                        </label>
+                    </td>
+                    <td>
+                        <input name="OD" type="datetime" value="@pap.DatumOd" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Datum do
+                        </label>
+                    </td>
+                    <td>
+                        <input name="DO" type="datetime" value="@pap.DatumDo" />
+                    </td>
+                </tr>
+            </table>
 
-        <button type="submit" class="btn btn-primary">Snimi</button>
-    </form>
+            <button type="submit" class="btn btn-primary" id="go">Snimi</button>
+        </form>
+    </div>
+    <div id="tekst_i_animacija">
+        <div class="loader"></div>
+        <p id="tekst_ucitava">Loading...</p>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#tekst_i_animacija").hide();
+        });
+
+        $("#go").click(function () {
+            $("#tekst_i_animacija").show();
+            document.getElementById("podloga").style.filter = "blur(10px)";
+            document.getElementById("zaglavlje").style.filter = "blur(10px)";
+        });
+    </script>
 </center>

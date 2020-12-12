@@ -7,8 +7,7 @@
 
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
 
-    var brojac = 0;
-    var korisnik = "";
+    var usernameOK = false;
 }
 <head>
     <style>
@@ -41,6 +40,7 @@
                     document.getElementById("sifra_span").innerHTML = "Unos moraju biti brojevi";
                     document.getElementById("sifra_span").classList.add("err");
                     prvi = false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
 
                 else if (sifra === "") {
@@ -48,6 +48,7 @@
                     document.getElementById("sifra_span").innerHTML = "Polje nesmije biti prazno";
                     document.getElementById("sifra_span").classList.add("err");
                     prvi = false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
 
                 else if ((!isNaN(sifra)) || sifra != "") {
@@ -56,6 +57,9 @@
                     document.getElementById("sifra_span").classList.remove("err");
                     prvi = true;
                 }
+                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && @usernameOK==true) {
+                document.getElementById("snimi_korisnik_unos").disabled = false;
+            }
             }
             else if (id === "ime_input") {
                 var ime = document.getElementById(id).value;
@@ -65,6 +69,7 @@
                     document.getElementById("ime_span").innerHTML = "Polje nesmije biti prazno";
                     document.getElementById("ime_span").classList.add("err");
                     drugi = false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
                 else if (ime != "") {
                     document.getElementById(id).classList.remove('err');
@@ -72,6 +77,9 @@
                     document.getElementById("ime_span").classList.remove("err");
                     drugi = true;
                 }
+                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && @usernameOK==true) {
+                document.getElementById("snimi_korisnik_unos").disabled = false;
+            }
             }
             else if (id === "prezime_input") {
                 var prezime = document.getElementById(id).value;
@@ -81,6 +89,7 @@
                     document.getElementById("prezime_span").innerHTML = "Polje nesmije biti prazno";
                     document.getElementById("prezime_span").classList.add("err");
                     treci = false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
                 else if (prezime != "") {
                     document.getElementById(id).classList.remove('err');
@@ -88,6 +97,9 @@
                     document.getElementById("prezime_span").classList.remove("err");
                     treci = true;
                 }
+                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && @usernameOK==true) {
+                document.getElementById("snimi_korisnik_unos").disabled = false;
+            }
             }
             else if (id === "telefon_input") {
                 var telefon = document.getElementById(id).value;
@@ -97,6 +109,7 @@
                     document.getElementById("telefon_span").innerHTML = "Unos moraju biti brojevi";
                     document.getElementById("telefon_span").classList.add("err");
                     cetvrti = false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
 
                 else if (telefon === "") {
@@ -104,6 +117,7 @@
                     document.getElementById("telefon_span").innerHTML = "Polje nesmije biti prazno";
                     document.getElementById("telefon_span").classList.add("err");
                     cetvrti = false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
 
                 else if ((!isNaN(telefon)) || telefon != "") {
@@ -112,6 +126,9 @@
                     document.getElementById("telefon_span").classList.remove("err");
                     cetvrti = true;
                 }
+                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && @usernameOK==true) {
+                document.getElementById("snimi_korisnik_unos").disabled = false;
+            }
             }
             else if (id === "mail_input") {
                 var mail = document.getElementById(id).value;
@@ -121,6 +138,7 @@
                     document.getElementById("mail_span").innerHTML = "Polje nesmije biti prazno";
                     document.getElementById("mail_span").classList.add("err");
                     peti = false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
                 else if (mail != "") {
                     document.getElementById(id).classList.remove('err');
@@ -128,6 +146,9 @@
                     document.getElementById("mail_span").classList.remove("err");
                     peti = true;
                 }
+                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && @usernameOK==true) {
+                document.getElementById("snimi_korisnik_unos").disabled = false;
+            }
             }
             else if (id === "username_input") {
                 var username = document.getElementById(id).value;
@@ -136,13 +157,18 @@
                     document.getElementById(id).classList.add('err');
                     document.getElementById("username_span").innerHTML = "Polje nesmije biti prazno";
                     document.getElementById("username_span").classList.add("err");
+                    @usernameOK=false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
                 else if (username != "") {
                     document.getElementById(id).classList.remove('err');
                     document.getElementById("username_span").innerHTML = "";
                     document.getElementById("username_span").classList.remove("err");
-                    document.getElementById("snimi_korisnik_unos").disabled = false;
+                    @usernameOK=true;
                 }
+                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && @usernameOK==true) {
+                document.getElementById("snimi_korisnik_unos").disabled = false;
+            }
             }
             else if (id === "pass_input") {
                 var pass = document.getElementById(id).value;
@@ -152,12 +178,14 @@
                     document.getElementById("pass_span").innerHTML = "Polje nesmije biti prazno";
                     document.getElementById("pass_span").classList.add("err");
                     sesti = false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
                 else if (pass.length < 8) {
                     document.getElementById(id).classList.add('err');
                     document.getElementById("pass_span").innerHTML = "Lozinka mora imati najmanje 8 karaktera";
                     document.getElementById("pass_span").classList.add("err");
                     sesti = false;
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                 }
                 else if (pass != "" && pass.length >= 8) {
                     document.getElementById(id).classList.remove('err');
@@ -165,14 +193,18 @@
                     document.getElementById("pass_span").classList.remove("err");
                     sesti = true;
                 }
+                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && @usernameOK==true) {
+                document.getElementById("snimi_korisnik_unos").disabled = false;
+            }
             }
             else if (id === "uloga_select") {
                 var selected = document.getElementById(id).value;
 
-                if (selected === 0) {
+                if (selected == 0) {
                     document.getElementById(id).classList.add('err');
                     document.getElementById("select_span").innerHTML = "Morate odabrati jedno polje";
                     document.getElementById("select_span").classList.add("err");
+                    document.getElementById("snimi_korisnik_unos").disabled = true;
                     sedmi = false;
                 }
                 else if (selected > 0) {
@@ -181,12 +213,9 @@
                     document.getElementById("select_span").classList.remove("err");
                     sedmi = true;
                 }
-            }
-            if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true) {
+                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && @usernameOK==true) {
                 document.getElementById("snimi_korisnik_unos").disabled = false;
             }
-            else {
-                document.getElementById("snimi_korisnik_unos").disabled = true;
             }
         }
     </script>
@@ -340,7 +369,7 @@
                             <label>Uloga</label>
                         </td>
                         <td>
-                            <select name="uloga" id="uloga_select" onchange="provjera('uloga_select')" onblur="provjera('uloga_select')">
+                            <select name="uloga" id="uloga_select" onselect="provjera('uloga_select')" onchange="provjera('uloga_select')" onblur="provjera('uloga_select')">
                                 <option value="@Model.Uloge_FK">@Model.Uloge.Naziv</option>
                                 @foreach (var x in lista_uloge)
                                 {

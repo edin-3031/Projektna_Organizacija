@@ -1,7 +1,7 @@
 ﻿@using WebApplication1.Models;
 @using WebApplication1.Models.VM;
 @{
-    List<OrganizacionaJedinicaVM> lista = (List< OrganizacionaJedinicaVM>)ViewData["org_jed"];
+    List<OrganizacionaJedinicaVM> lista = (List<OrganizacionaJedinicaVM>)ViewData["org_jed"];
 
     Layout = "~/Views/Shared/_Layout_admin_org.cshtml";
 
@@ -9,42 +9,91 @@
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
+
+<style>
+
+    .loader {
+        position: relative;
+        border: 2.5vw solid #c2fdc5;
+        border-top: 2.5vw solid #28a524;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #tekst_ucitava {
+        position: relative;
+        text-align: center;
+        font-family: Agency FB;
+        font-size: 5vw;
+        font-weight: bold;
+        width: 100%;
+        margin: auto;
+    }
+
+    #tekst_i_animacija {
+        position: absolute;
+        height: 30%;
+        width: 30%;
+        margin-left: 25%;
+        margin-top: 8vw;
+    }
+
+    #podloga {
+        position: absolute;
+        width: 70%;
+        height: 100%;
+        margin-top: 5%;
+    }
+</style>
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Prikaz Organizacionih Jedinica</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
-
-    <div id="dugmad">
-        <div id="dodaj">
-            <a href="/AdminOrg/OrganizacionaJedinica/Unos" class="btn btn-success">Unesi novu</a>
+    <div id="podloga">
+        <div id="dugmad">
+            <div id="dodaj">
+                <a href="/AdminOrg/OrganizacionaJedinica/Unos" class="btn btn-success">Unesi novu</a>
+            </div>
         </div>
-    </div>
 
-    <table class="table">
-        <thead>
-        <th>Naziv</th>
-        <th>Organizacija</th>
-        <th>PTT</th>
-        <th>Država</th>
-        <th>Adresa</th>
-        <th>Akcija</th>
-        </thead>
-        <tbody>
-            @foreach (var x in lista)
-            {
-                <tr>
-                    <td>@x.Naziv</td>
-                    <td>@x.Organizacija_naziv</td>
-                    <td>@x.PTT_naziv</td>
-                    <td>@x.Drzava_naziv</td>
-                    <td>@x.Adresa</td>
-                    <td>
-                        <a href="/AdminOrg/OrganizacionaJedinica/Uredi?id=@x.OrganizacionaJedinica_ID" class="btn btn-primary">Uredi</a>
-                        <a id="ukloni_@x.OrganizacionaJedinica_ID" class="btn btn-danger" style="color:white">Ukloni</a>
+        <table class="table">
+            <thead>
+            <th>Naziv</th>
+            <th>Organizacija</th>
+            <th>PTT</th>
+            <th>Država</th>
+            <th>Adresa</th>
+            <th>Akcija</th>
+            </thead>
+            <tbody>
+                @foreach (var x in lista)
+                {
+                    <tr>
+                        <td>@x.Naziv</td>
+                        <td>@x.Organizacija_naziv</td>
+                        <td>@x.PTT_naziv</td>
+                        <td>@x.Drzava_naziv</td>
+                        <td>@x.Adresa</td>
+                        <td>
+                            <a href="/AdminOrg/OrganizacionaJedinica/Uredi?id=@x.OrganizacionaJedinica_ID" class="btn btn-primary">Uredi</a>
+                            <a id="ukloni_@x.OrganizacionaJedinica_ID" class="btn btn-danger" style="color:white">Ukloni</a>
 
-                        <span style="color:black; position:absolute;float:right;margin-left:1%;" id="poruka_@x.OrganizacionaJedinica_ID">Sigurni? <a href="/AdminOrg/OrganizacionaJedinica/Ukloni?id=@x.OrganizacionaJedinica_ID" style="color:black; font-weight:bold;">Da</a> <a id="no_@x.OrganizacionaJedinica_ID" style="color:black;cursor:pointer; font-weight:bold;">Ne</a></span>
-                        <script>
+                            <span style="color:black; position:absolute;float:right;margin-left:1%;" id="poruka_@x.OrganizacionaJedinica_ID">Sigurni? <a href="/AdminOrg/OrganizacionaJedinica/Ukloni?id=@x.OrganizacionaJedinica_ID" style="color:black; font-weight:bold;">Da</a> <a id="no_@x.OrganizacionaJedinica_ID" style="color:black;cursor:pointer; font-weight:bold;">Ne</a></span>
+                            <script>
                             $("#poruka_@x.OrganizacionaJedinica_ID").hide();
 
                             $("#ukloni_@x.OrganizacionaJedinica_ID").click(function () {
@@ -55,10 +104,21 @@
                             $("#no_@x.OrganizacionaJedinica_ID").click(function () {
                                 $("#poruka_@x.OrganizacionaJedinica_ID").slideUp();
                             });
-                        </script>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                            </script>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="tekst_i_animacija">
+        <div class="loader"></div>
+        <p id="tekst_ucitava">Loading...</p>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#tekst_i_animacija").show().delay(2000).hide();
+        });
+    </script>
 </center>

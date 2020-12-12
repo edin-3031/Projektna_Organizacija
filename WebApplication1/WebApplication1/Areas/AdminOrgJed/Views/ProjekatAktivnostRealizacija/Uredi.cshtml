@@ -9,6 +9,55 @@
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
+
+<style>
+
+    .loader {
+        position: relative;
+        border: 2.5vw solid #c2fdc5;
+        border-top: 2.5vw solid #28a524;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #tekst_ucitava {
+        position: relative;
+        text-align: center;
+        font-family: Agency FB;
+        font-size: 5vw;
+        font-weight: bold;
+        width: 100%;
+        margin: auto;
+    }
+
+    #tekst_i_animacija {
+        position: absolute;
+        height: 30%;
+        width: 30%;
+        margin-left: 25%;
+        margin-top: 8vw;
+    }
+
+    #podloga {
+        position: absolute;
+        width: 70%;
+        height: 100%;
+        margin-top: 5%;
+    }
+</style>
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Uređivanje realizacije</h1>
@@ -16,27 +65,45 @@
     </div>
     <br />
     <br />
-    <form method="post" action="/AdminOrgJed/ProjekatAktivnostRealizacija/UrediSnimi">
-        <table>
-            <tr>
-                <input type="text" hidden="hidden" name="realizacijaId" value="@temp.ProjekatAktivnostRealizacija_ID"/>
-                <input type="text" hidden="hidden" name="aktivnostId" value="@temp.ProjekatAktivnostPlan_FK"/>
-                <td><label>Naziv aktivnosti</label></td>
-                <td><input name="projekat" readonly="readonly" value="@temp.projekatAktivnostPlan.Naziv" /></td>
-            </tr>
-            <tr>
-                <td><label>Količina</label></td>
-                <td><input value="@temp.Kolicina" name="kolicina" /></td>
-            </tr>
-            <tr>
-                <td><label>Datum</label></td>
-                <td><input type="datetime" value="@temp.Datum.Date" name="datum" /></td>
-            </tr>
-            <tr>
-                <td><label>Opis</label></td>
-                <td><input type="text" value="@temp.Opis" name="opis" /></td>
-            </tr>
-        </table>
-        <button class="btn btn-primary">Snimi</button>
-    </form>
+    <div id="podloga">
+        <form method="post" action="/AdminOrgJed/ProjekatAktivnostRealizacija/UrediSnimi">
+            <table>
+                <tr>
+                    <input type="text" hidden="hidden" name="realizacijaId" value="@temp.ProjekatAktivnostRealizacija_ID" />
+                    <input type="text" hidden="hidden" name="aktivnostId" value="@temp.ProjekatAktivnostPlan_FK" />
+                    <td><label>Naziv aktivnosti</label></td>
+                    <td><input name="projekat" readonly="readonly" value="@temp.projekatAktivnostPlan.Naziv" /></td>
+                </tr>
+                <tr>
+                    <td><label>Količina</label></td>
+                    <td><input value="@temp.Kolicina" name="kolicina" /></td>
+                </tr>
+                <tr>
+                    <td><label>Datum</label></td>
+                    <td><input type="datetime" value="@temp.Datum.Date" name="datum" /></td>
+                </tr>
+                <tr>
+                    <td><label>Opis</label></td>
+                    <td><input type="text" value="@temp.Opis" name="opis" /></td>
+                </tr>
+            </table>
+            <button class="btn btn-primary" id="go">Snimi</button>
+        </form>
+    </div>
+    <div id="tekst_i_animacija">
+        <div class="loader"></div>
+        <p id="tekst_ucitava">Loading...</p>
+    </div>
 </center>
+
+<script>
+        $(document).ready(function () {
+            $("#tekst_i_animacija").hide();
+        });
+
+        $("#go").click(function () {
+            $("#tekst_i_animacija").show();
+            document.getElementById("podloga").style.filter = "blur(10px)";
+            document.getElementById("zaglavlje").style.filter = "blur(10px)";
+        });
+</script>

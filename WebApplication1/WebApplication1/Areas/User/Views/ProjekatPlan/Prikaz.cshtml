@@ -56,35 +56,81 @@
         color: white;
         font-weight: bold;
     }
+    .loader {
+        position: relative;
+        border: 2.5vw solid #c2fdc5;
+        border-top: 2.5vw solid #28a524;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #tekst_ucitava {
+        position: relative;
+        text-align: center;
+        font-family: Agency FB;
+        font-size: 5vw;
+        font-weight: bold;
+        width: 100%;
+        margin: auto;
+    }
+
+    #tekst_i_animacija {
+        position: absolute;
+        height: 30%;
+        width: 30%;
+        margin-left: 25%;
+        margin-top: 8vw;
+    }
+
+    #podloga {
+        position: absolute;
+        width: 70%;
+        height: 100%;
+        margin-top: 5%;
+    }
 </style>
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Prikaz Projektnih Planova</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
-    <div id="dugmad">
-        <div id="print_excel">
-            <a href="/User/ProjekatPlan/Excel" class="btn btn-info">Export to Excel</a>
+    <div id="podloga">
+        <div id="dugmad">
+            <div id="print_excel">
+                <a href="/User/ProjekatPlan/Excel" class="btn btn-info">Export to Excel</a>
+            </div>
         </div>
-    </div>
-    <table class="table">
-        <thead>
-        <th>Šifra</th>
-        <th>Naziv</th>
-        <th>Datum od</th>
-        <th>Datum do</th>
-        <th>Status</th>
-        </thead>
-        <tbody>
-            @foreach (var x in lista)
-            {
-                <tr>
-                    <td>@x.Sifra</td>
-                    <td>@x.Naziv</td>
-                    <td>@(x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".")</td>
-                    <td>@(x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".")</td>
-                    <td id="status_@x.ProjekatPlan_ID">@x.status.Naziv</td>
-                    <script>
+        <table class="table">
+            <thead>
+            <th>Šifra</th>
+            <th>Naziv</th>
+            <th>Datum od</th>
+            <th>Datum do</th>
+            <th>Status</th>
+            </thead>
+            <tbody>
+                @foreach (var x in lista)
+                {
+                    <tr>
+                        <td>@x.Sifra</td>
+                        <td>@x.Naziv</td>
+                        <td>@(x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".")</td>
+                        <td>@(x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".")</td>
+                        <td id="status_@x.ProjekatPlan_ID">@x.status.Naziv</td>
+                        <script>
                         var element = document.getElementById("status_@x.ProjekatPlan_ID");
 
                         if (element.innerText == "Aktivan") {
@@ -96,9 +142,19 @@
                         else if (element.innerText == "Završen") {
                             element.classList.add("zavrs");
                         }
-                    </script>
-                </tr>
-            }
-        </tbody>
-    </table>
+                        </script>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="tekst_i_animacija">
+        <div class="loader"></div>
+        <p id="tekst_ucitava">Loading...</p>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#tekst_i_animacija").show().delay(2000).hide();
+        });
+    </script>
 </center>
