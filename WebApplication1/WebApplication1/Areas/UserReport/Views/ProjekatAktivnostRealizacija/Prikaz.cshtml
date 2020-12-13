@@ -11,11 +11,60 @@
     var base64 = Convert.ToBase64String(pic);
     var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
 }
+<style>
+
+    .loader {
+        position: relative;
+        border: 2.5vw solid #c2fdc5;
+        border-top: 2.5vw solid #28a524;
+        border-radius: 50%;
+        width: 8vw;
+        height: 8vw;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #tekst_ucitava {
+        position: relative;
+        text-align: center;
+        font-family: Agency FB;
+        font-size: 5vw;
+        font-weight: bold;
+        width: 100%;
+        margin: auto;
+    }
+
+    #tekst_i_animacija {
+        position: absolute;
+        height: 30%;
+        width: 30%;
+        margin-left: 25%;
+        margin-top: 8vw;
+    }
+
+    #podloga {
+        position: absolute;
+        width: 70%;
+        height: 100%;
+        margin-top: 5%;
+    }
+</style>
 <center>
     <div id="zaglavlje" style="width:100%">
         <h1 style="position:relative; display:inline;">Prikaz Realizacija</h1>
         <img style="height:7vw; width:7vw; position:relative; float:right; display:inline;" src="@imgsrc" />
     </div>
+
     <div id="dugmad">
 
         <div id="detalji">
@@ -25,8 +74,9 @@
         <div></div>
         <div></div>
     </div>
-    <table class="table">
-        <thead>
+    <div id="podloga">
+        <table class="table">
+            <thead>
             <th>Projekat plan</th>
             <th>Projekat aktivnost plan</th>
             <th>Organizaciona jedinica</th>
@@ -34,20 +84,32 @@
             <th>Datum</th>
             <th>Količina</th>
             <th>Opis</th>
-        </thead>
-        <tbody>
-            @foreach (var x in lista)
-            {
-                <tr>
-                    <td>@x.proj_plan.Naziv</td>
-                    <td>@x.ProjekatAktivnostPlan_all.Naziv</td>
-                    <td>@x.OrgJed.Naziv</td>
-                    <td>@(x.Korisnici.Ime+" "+x.Korisnici.Prezime)</td>
-                    <td>@(x.Datum.Date.Day+"."+ x.Datum.Date.Month + "." + x.Datum.Date.Year + ".")</td>
-                    <td>@x.Kolicina</td>
-                    <td>@x.Opis</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var x in lista)
+                {
+                    <tr>
+                        <td>@x.proj_plan.Naziv</td>
+                        <td>@x.ProjekatAktivnostPlan_all.Naziv</td>
+                        <td>@x.OrgJed.Naziv</td>
+                        <td>@(x.Korisnici.Ime+" "+x.Korisnici.Prezime)</td>
+                        <td>@(x.Datum.Date.Day+"."+ x.Datum.Date.Month + "." + x.Datum.Date.Year + ".")</td>
+                        <td>@x.Kolicina</td>
+                        <td>@x.Opis</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="podloga"></div>
+
+    <div id="tekst_i_animacija">
+        <div class="loader"></div>
+        <p id="tekst_ucitava">Loading...</p>
+    </div>
 </center>
+<script>
+    $(document).ready(function () {
+        $("#tekst_i_animacija").show().delay(2000).hide();
+    });
+</script>
