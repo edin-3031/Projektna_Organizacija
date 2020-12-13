@@ -1,3 +1,22 @@
+HTML
+<td><input onkeypress="provjera('sfr')" onchange="provjera('sfr')" onblur="provjera('sfr')" id="sfr" type="text" name="sifra" /><span id="sifra_span"></span></td>
+
+
+CSS
+.err {
+    border: 2px solid red;
+}
+
+span {
+    position: absolute;
+    float: right;
+    margin-left: 1%;
+    background-color: indianred;
+    color: white;
+    font-weight: bold;
+}
+
+
     <script>
         $(document).ready(function() {
             document.getElementById("snimi_korisnik_unos").disabled = true;
@@ -181,6 +200,73 @@
 
 
 
+
+
+
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        document.getElementById("go").disabled = true;
+    });
+
+    function provjera(id) {
+        var prvi, drugi, treci, cetvrti, peti, sesti, sedmi, osmi, deveti = false;
+        if (id === "input_sifra") {
+            var sifra = document.getElementById(id).value;
+
+
+        }
+        else if (id === "input_ime") {
+            var ime = document.getElementById(id).value;
+
+
+        }
+        else if (id === "input_prezime") {
+            var prezime = document.getElementById(id).value;
+
+
+        }
+        else if (id === "input_telefon") {
+            var telefon = document.getElementById(id).value;
+
+
+        }
+        else if (id === "input_mail") {
+            var mail = document.getElementById(id).value;
+
+
+        }
+        else if (id === "input_username") {
+            var username = document.getElementById(id).value;
+
+
+        }
+        else if (id === "input_pass") {
+            var pass = document.getElementById(id).value;
+
+
+        }
+        else if (id === "select_orgeJed") {
+            var orgJed = document.getElementById(id).value;
+
+
+        }
+        else if (id === "select_uloga") {
+            var uloga = document.getElementById(id).value;
+
+
+        }
+        if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && osmi === true) {
+            document.getElementById("snimi_korisnik_unos").disabled = false;
+        }
+    }
+
+</script>
 
 
 

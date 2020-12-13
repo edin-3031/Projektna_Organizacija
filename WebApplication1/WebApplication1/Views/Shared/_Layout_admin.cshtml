@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Http
 @{
-    string username = Context.Session.GetString("username");
+    string user = Context.Session.GetString("user");
 }
 
 <!DOCTYPE html>
@@ -99,8 +99,8 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <partial name="_LoginPartial" />
                         <ul class="navbar-nav flex-grow-1" style="float:right">
-                            <li style="display:inline;margin:0px;">@username</li>
-                            <li style="display:inline;margin:0px; margin-left:80%;"><a class="btn btn-danger" href="/SuperAdmin/SuperAdmin/LogOut">Odjavi se</a></li>
+                            <li style="display:inline;margin:0px;">Dobrodošli <b>@user</b></li>
+                            <li style="display:inline;margin:0px; margin-left:70%;"><a class="btn btn-danger" href="/SuperAdmin/SuperAdmin/LogOut">Odjavi se</a></li>
                         </ul>
                     </div>
                 </div>
