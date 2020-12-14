@@ -17,7 +17,7 @@ using Aspose.Pdf;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Http;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Areas.AdminOrgJed.Controllers
 {
@@ -174,7 +174,17 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     }
                 }
 
-                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.Include(a => a.korisnici).Include(a => a.projekatAktivnostPlan).Select(x => new ProjekatAktivnostRealizacija
+                {
+                    Datum = x.Datum,
+                    korisnici = x.korisnici,
+                    Kolicina = x.Kolicina,
+                    Korisnici_FK = x.Korisnici_FK,
+                    Opis = x.Opis,
+                    projekatAktivnostPlan = x.projekatAktivnostPlan,
+                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                }).ToList();
                 List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
 
                 foreach (var x in par_temp)
@@ -635,7 +645,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     organizacionaJedinicaId = o_j_temp.OrganizacionaJedinica_ID
                 };
 
-                List<ProjekatAktivnostPlan> pap = db.ProjekatAktivnostPlan.Where(y => y.ProjekatPlan_FK == projekatId).Select(x => new ProjekatAktivnostPlan
+                List<ProjekatAktivnostPlan> pap = db.ProjekatAktivnostPlan.Where(y => y.ProjekatPlan_FK == projekatId).Include(a => a.projekatPlan).Select(x => new ProjekatAktivnostPlan
                 {
                     DatumDo = x.DatumDo,
                     DatumOd = x.DatumOd,
@@ -643,7 +653,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     Kolicina = x.Kolicina,
                     Naziv = x.Naziv,
                     ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                    projekatPlan = db.ProjekatPlan.Where(v => v.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
+                    projekatPlan = x.projekatPlan,
                     ProjekatPlan_FK = x.ProjekatPlan_FK,
                     Sifra = x.Sifra
                 }).ToList();
@@ -1085,7 +1095,17 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     }
                 }
 
-                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.Include(a => a.korisnici).Include(a => a.projekatAktivnostPlan).Select(x => new ProjekatAktivnostRealizacija
+                {
+                    Datum = x.Datum,
+                    korisnici = x.korisnici,
+                    Kolicina = x.Kolicina,
+                    Korisnici_FK = x.Korisnici_FK,
+                    Opis = x.Opis,
+                    projekatAktivnostPlan = x.projekatAktivnostPlan,
+                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                }).ToList();
                 List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
 
                 foreach (var x in par_temp)
@@ -1304,7 +1324,17 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     }
                 }
 
-                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.Include(a => a.korisnici).Include(a => a.projekatAktivnostPlan).Select(x => new ProjekatAktivnostRealizacija
+                {
+                    Datum = x.Datum,
+                    korisnici = x.korisnici,
+                    Kolicina = x.Kolicina,
+                    Korisnici_FK = x.Korisnici_FK,
+                    Opis = x.Opis,
+                    projekatAktivnostPlan = x.projekatAktivnostPlan,
+                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                }).ToList();
                 List<par_final_VM> par_temp_2 = new List<par_final_VM>();
 
                 foreach (var x in par_temp)
@@ -1449,7 +1479,17 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         }
                     }
 
-                    List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                    List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.Include(a => a.korisnici).Include(a => a.projekatAktivnostPlan).Select(x => new ProjekatAktivnostRealizacija
+                    {
+                        Datum = x.Datum,
+                        korisnici = x.korisnici,
+                        Kolicina = x.Kolicina,
+                        Korisnici_FK = x.Korisnici_FK,
+                        Opis = x.Opis,
+                        projekatAktivnostPlan = x.projekatAktivnostPlan,
+                        ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                        ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                    }).ToList();
                     List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
 
                     foreach (var x in par_temp)
@@ -1910,7 +1950,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         organizacionaJedinicaId = o_j_temp.OrganizacionaJedinica_ID
                     };
 
-                    List<ProjekatAktivnostPlan> pap = db.ProjekatAktivnostPlan.Where(y => y.ProjekatPlan_FK == projekatId).Select(x => new ProjekatAktivnostPlan
+                    List<ProjekatAktivnostPlan> pap = db.ProjekatAktivnostPlan.Where(y => y.ProjekatPlan_FK == projekatId).Include(a=>a.projekatPlan).Select(x => new ProjekatAktivnostPlan
                     {
                         DatumDo = x.DatumDo,
                         DatumOd = x.DatumOd,
@@ -1918,7 +1958,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         Kolicina = x.Kolicina,
                         Naziv = x.Naziv,
                         ProjekatAktivnostPlan_ID = x.ProjekatAktivnostPlan_ID,
-                        projekatPlan = db.ProjekatPlan.Where(v => v.ProjekatPlan_ID == x.ProjekatPlan_FK).FirstOrDefault(),
+                        projekatPlan = x.projekatPlan,
                         ProjekatPlan_FK = x.ProjekatPlan_FK,
                         Sifra = x.Sifra
                     }).ToList();
@@ -2360,7 +2400,17 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         }
                     }
 
-                    List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                    List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.Include(a => a.korisnici).Include(a => a.projekatAktivnostPlan).Select(x => new ProjekatAktivnostRealizacija
+                    {
+                        Datum = x.Datum,
+                        korisnici = x.korisnici,
+                        Kolicina = x.Kolicina,
+                        Korisnici_FK = x.Korisnici_FK,
+                        Opis = x.Opis,
+                        projekatAktivnostPlan = x.projekatAktivnostPlan,
+                        ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                        ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                    }).ToList();
                     List<par_final_VM> par_temp_2_par = new List<par_final_VM>();
 
                     foreach (var x in par_temp)
@@ -2539,7 +2589,16 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     }
                 }
 
-                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.Include(a=>a.korisnici).Include(a=>a.projekatAktivnostPlan).Select(x=> new ProjekatAktivnostRealizacija { 
+                    Datum=x.Datum,
+                    korisnici=x.korisnici,
+                    Kolicina=x.Kolicina,
+                    Korisnici_FK=x.Korisnici_FK,
+                    Opis=x.Opis,
+                    projekatAktivnostPlan=x.projekatAktivnostPlan,
+                    ProjekatAktivnostPlan_FK=x.ProjekatAktivnostPlan_FK,
+                    ProjekatAktivnostRealizacija_ID=x.ProjekatAktivnostRealizacija_ID
+                }).ToList();
                 List<par_final_VM> par_temp_2 = new List<par_final_VM>();
 
                 foreach (var x in par_temp)
@@ -2682,7 +2741,17 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     }
                 }
 
-                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.Include(a => a.korisnici).Include(a => a.projekatAktivnostPlan).Select(x => new ProjekatAktivnostRealizacija
+                {
+                    Datum = x.Datum,
+                    korisnici = x.korisnici,
+                    Kolicina = x.Kolicina,
+                    Korisnici_FK = x.Korisnici_FK,
+                    Opis = x.Opis,
+                    projekatAktivnostPlan = x.projekatAktivnostPlan,
+                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                }).ToList();
                 List<par_final_VM> par_temp_2 = new List<par_final_VM>();
 
                 foreach (var x in par_temp)
@@ -2760,7 +2829,17 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     }
                 }
 
-                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.Include(a => a.korisnici).Include(a => a.projekatAktivnostPlan).Select(x => new ProjekatAktivnostRealizacija
+                {
+                    Datum = x.Datum,
+                    korisnici = x.korisnici,
+                    Kolicina = x.Kolicina,
+                    Korisnici_FK = x.Korisnici_FK,
+                    Opis = x.Opis,
+                    projekatAktivnostPlan = x.projekatAktivnostPlan,
+                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                }).ToList();
                 List<par_final_VM> par_temp_2 = new List<par_final_VM>();
 
                 foreach (var x in par_temp)
@@ -2860,7 +2939,17 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     }
                 }
 
-                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.ToList();
+                List<ProjekatAktivnostRealizacija> par_temp = db.ProjekatAktivnostRealizacija.Include(a => a.korisnici).Include(a => a.projekatAktivnostPlan).Select(x => new ProjekatAktivnostRealizacija
+                {
+                    Datum = x.Datum,
+                    korisnici = x.korisnici,
+                    Kolicina = x.Kolicina,
+                    Korisnici_FK = x.Korisnici_FK,
+                    Opis = x.Opis,
+                    projekatAktivnostPlan = x.projekatAktivnostPlan,
+                    ProjekatAktivnostPlan_FK = x.ProjekatAktivnostPlan_FK,
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                }).ToList();
                 List<par_final_VM> par_temp_2 = new List<par_final_VM>();
 
                 foreach (var x in par_temp)

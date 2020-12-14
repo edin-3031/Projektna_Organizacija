@@ -256,8 +256,6 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 List<Uloge> uloge = db.Uloge.ToList();
                 ViewData["uloge"] = uloge;
 
-                ViewData["postoji"] = postoji;
-
                 return View();
             }
         }
@@ -265,8 +263,6 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
         [Area("SuperAdmin")]
         public IActionResult UrediSnimi(int id, string ime, string korisnicko_ime, string lozinka, string mail, string prezime, int sifra, string telefon, int uloga)
         {
-            bool postoji = false;
-
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
@@ -274,70 +270,30 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             }
             else
             {
-                List<KorisniciVM> t = db.Korisnici.Select(a => new KorisniciVM
+                Korisnici k = db.Korisnici.Where(a => a.Korisnici_ID == id).FirstOrDefault();
+
+                k.Ime = ime;
+                k.Korisnicko_Ime = korisnicko_ime;
+                k.Lozinka = lozinka;
+                k.Mail = mail;
+                k.Prezime = prezime;
+                k.Sifra = sifra;
+                k.Telefon = telefon;
+                k.Uloge_FK = uloga;
+
+                db.SaveChanges();
+
+
+                List<Korisnici> lista_korisnici = db.Korisnici.ToList();
+
+                foreach (var x in lista_korisnici)
                 {
-                    Korisnicko_Ime=a.Korisnicko_Ime
-                }).ToList();
+                    x.uloge = db.Uloge.Where(a => a.Uloge_ID == x.Uloge_FK).FirstOrDefault();
+                };
 
-                foreach(var x in t)
-                {
-                    if (x.Korisnicko_Ime == korisnicko_ime)
-                    {
-                        postoji = true;
-                        break;
-                    }
-                }
-                if (postoji)
-                {
-                    Korisnici temp = new Korisnici
-                    {
-                        Ime = ime,
-                        Korisnici_ID = id,
-                        Korisnicko_Ime = korisnicko_ime,
-                        Lozinka = lozinka,
-                        Mail = mail,
-                        Prezime = prezime,
-                        Sifra = sifra,
-                        Telefon = telefon,
-                        Uloge_FK = uloga,
-                        uloge = db.Uloge.Where(a => a.Uloge_ID == uloga).FirstOrDefault()
-                    };
-                    ViewData["korisnik"] = temp;
+                ViewData["korisnik"] = lista_korisnici;
 
-                    ViewData["uloge"] = db.Uloge.ToList();
-
-                    ViewData["postoji"] = postoji;
-
-                    return Redirect("/SuperAdmin/Korisnik/Uredi?id="+id+"&postoji="+postoji);
-                }
-                else if (!postoji)
-                {
-                    Korisnici k = db.Korisnici.Where(a => a.Korisnici_ID == id).FirstOrDefault();
-
-                    k.Ime = ime;
-                    k.Korisnicko_Ime = korisnicko_ime;
-                    k.Lozinka = lozinka;
-                    k.Mail = mail;
-                    k.Prezime = prezime;
-                    k.Sifra = sifra;
-                    k.Telefon = telefon;
-                    k.Uloge_FK = uloga;
-
-                    db.SaveChanges();
-
-
-                    List<Korisnici> lista_korisnici = db.Korisnici.ToList();
-
-                    foreach (var x in lista_korisnici)
-                    {
-                        x.uloge = db.Uloge.Where(a => a.Uloge_ID == x.Uloge_FK).FirstOrDefault();
-                    };
-
-                    ViewData["korisnik"] = lista_korisnici;
-
-                    return View("Prikaz");
-                }
-                return View("Error");
+                return View("Prikaz");
             }
         }
     }

@@ -246,7 +246,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                         ProjekatPlan_id = x.projekatAktivnostPlan.projekatPlan.ProjekatPlan_ID,
                         ProjekatPlan_naziv = x.projekatAktivnostPlan.projekatPlan.Naziv,
                         Opis = x.Opis,
-                        ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                        ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                        OrgJed_id=x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.OrganizacionaJedinica_ID,
+                        OrgJed_naziv=x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.Naziv
                     }).ToList();
 
                     //List<RealizacijaVM> lista = new List<RealizacijaVM>();
@@ -1104,7 +1106,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                         ProjekatAktivnostPlan_naziv = x.projekatAktivnostPlan.Naziv,
                         ProjekatPlan_id = x.projekatAktivnostPlan.projekatPlan.ProjekatPlan_ID,
                         ProjekatPlan_naziv = x.projekatAktivnostPlan.projekatPlan.Naziv,
-                        ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                        ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                        OrgJed_id = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.OrganizacionaJedinica_ID,
+                        OrgJed_naziv = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.Naziv
                     }).ToList();
 
                     List<RealizacijaVM> lista = new List<RealizacijaVM>();
@@ -1222,7 +1226,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                     Opis = x.Opis,
                     ProjekatAktivnostPlan_id = x.ProjekatAktivnostPlan_FK,
                     ProjekatAktivnostPlan_naziv = x.projekatAktivnostPlan.Naziv,
-                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                    OrgJed_id = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.OrganizacionaJedinica_ID,
+                    OrgJed_naziv = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.Naziv
                 }).ToList();
                 ViewData["lista_relizacija"] = lista;
 
@@ -1291,7 +1297,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                     Opis = x.Opis,
                     ProjekatAktivnostPlan_id = x.ProjekatAktivnostPlan_FK,
                     ProjekatAktivnostPlan_naziv = x.projekatAktivnostPlan.Naziv,
-                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                    OrgJed_id = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.OrganizacionaJedinica_ID,
+                    OrgJed_naziv = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.Naziv
                 }).ToList();
                 ViewData["lista_relizacija"] = lista;
 
@@ -1325,7 +1333,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                     Opis = x.Opis,
                     ProjekatAktivnostPlan_id = x.ProjekatAktivnostPlan_FK,
                     ProjekatAktivnostPlan_naziv = x.projekatAktivnostPlan.Naziv,
-                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                    OrgJed_id = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.OrganizacionaJedinica_ID,
+                    OrgJed_naziv = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.Naziv
                 }).ToList();
                 ViewData["lista_relizacija"] = lista;
 
@@ -1379,7 +1389,9 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                     Opis = x.Opis,
                     ProjekatAktivnostPlan_id = x.ProjekatAktivnostPlan_FK,
                     ProjekatAktivnostPlan_naziv = x.projekatAktivnostPlan.Naziv,
-                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID
+                    ProjekatAktivnostRealizacija_ID = x.ProjekatAktivnostRealizacija_ID,
+                    OrgJed_id = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.OrganizacionaJedinica_ID,
+                    OrgJed_naziv = x.projekatAktivnostPlan.projekatPlan.organizacionaJedinica.Naziv
                 }).ToList();
                 ViewData["lista_relizacija"] = lista;
 

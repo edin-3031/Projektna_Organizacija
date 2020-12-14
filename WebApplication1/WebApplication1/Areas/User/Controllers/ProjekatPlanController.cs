@@ -17,6 +17,7 @@ using SelectPdf;
 using Aspose.Pdf;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Areas.User.Controllers
 {
@@ -41,7 +42,7 @@ namespace WebApplication1.Areas.User.Controllers
             else
             {
 
-                List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Select(x => new ProjekatPlan
+                List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Include(a => a.organizacionaJedinica).Include(a => a.status).Select(x => new ProjekatPlan
                 {
                     DatumDo = x.DatumDo,
                     DatumOd = x.DatumOd,
@@ -49,9 +50,9 @@ namespace WebApplication1.Areas.User.Controllers
                     OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
                     ProjekatPlan_ID = x.ProjekatPlan_ID,
                     Sifra = x.Sifra,
-                    organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                    organizacionaJedinica = x.organizacionaJedinica,
                     Status_FK = x.Status_FK,
-                    status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+                    status = x.status
                 }).ToList();
 
                 using (var workbook = new XLWorkbook())
@@ -96,9 +97,7 @@ namespace WebApplication1.Areas.User.Controllers
             {
                 ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-
-
-                List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Select(x => new ProjekatPlan
+                List<ProjekatPlan> pp_final = db.ProjekatPlan.Where(a => a.OrganizacionaJedinica_FK == (int)HttpContext.Session.GetInt32("orgJed ID")).Include(a=>a.organizacionaJedinica).Include(a=>a.status).Select(x => new ProjekatPlan
                 {
                     DatumDo = x.DatumDo,
                     DatumOd = x.DatumOd,
@@ -106,9 +105,9 @@ namespace WebApplication1.Areas.User.Controllers
                     OrganizacionaJedinica_FK = x.OrganizacionaJedinica_FK,
                     ProjekatPlan_ID = x.ProjekatPlan_ID,
                     Sifra = x.Sifra,
-                    organizacionaJedinica = db.OrganizacionaJedinica.Where(d => d.OrganizacionaJedinica_ID == x.OrganizacionaJedinica_FK).FirstOrDefault(),
+                    organizacionaJedinica = x.organizacionaJedinica,
                     Status_FK = x.Status_FK,
-                    status = db.Status.Where(a => a.StatusID == x.Status_FK).FirstOrDefault()
+                    status = x.status
                 }).ToList();
 
                 ViewData["proj_plan"] = pp_final;

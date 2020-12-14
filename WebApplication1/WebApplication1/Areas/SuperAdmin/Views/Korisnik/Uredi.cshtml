@@ -8,206 +8,7 @@
     List<Uloge> uloge = (List<Uloge>)ViewData["uloge"];
 
     Korisnici kor = (Korisnici)ViewData["korisnik"];
-
-    bool postoji = (bool)ViewData["postoji"];
 }
-<style>
-    .err {
-        border: 2px solid red;
-    }
-
-    span {
-        position: absolute;
-        float: right;
-        margin-left: 1%;
-        background-color: indianred;
-        color: white;
-        font-weight: bold;
-    }
-</style>
-<head>
-    <script>
-
-        $(document).ready(function () {
-            document.getElementById("snimi").disabled = false;
-        });
-
-        var prvi, drugi, treci, cetvrti, peti, sesti, sedmi, osmi = true;
-
-        function provjera(id) {
-            if (id == "ime_input") {
-                var ime = document.getElementById(id).value;
-
-                if (ime === "") {
-                    document.getElementById(id).classList.add('err');
-                    document.getElementById("ime_span").innerHTML = "Polje nesmije biti prazno";
-                    document.getElementById("ime_span").classList.add("err");
-                    prvi = false;
-                    document.getElementById("snimi").disabled = true;
-                }
-                else if (ime != "") {
-                    document.getElementById(id).classList.remove('err');
-                    document.getElementById("ime_span").innerHTML = "";
-                    document.getElementById("ime_span").classList.remove("err");
-                    prvi = true;
-                }
-                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && osmi === true) {
-                    document.getElementById("snimi").disabled = false;
-                }
-            }
-            else if (id == "prezime_input") {
-                var prezime = document.getElementById(id).value;
-
-                if (prezime === "") {
-                    document.getElementById(id).classList.add('err');
-                    document.getElementById("prezime_span").innerHTML = "Polje nesmije biti prazno";
-                    document.getElementById("prezime_span").classList.add("err");
-                    document.getElementById("snimi").disabled = true;
-                    drugi = false;
-                }
-                else if (prezime != "") {
-                    document.getElementById(id).classList.remove('err');
-                    document.getElementById("prezime_span").innerHTML = "";
-                    document.getElementById("prezime_span").classList.remove("err");
-                    drugi = true;
-                }
-                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && osmi === true) {
-                    document.getElementById("snimi").disabled = false;
-                }
-            }
-            else if (id == "lozinka_input") {
-                var sifra = document.getElementById(id).value;
-
-                if (sifra === "") {
-                    document.getElementById(id).classList.add('err');
-                    document.getElementById("pass_span").innerHTML = "Polje nesmije biti prazno";
-                    document.getElementById("pass_span").classList.add("err");
-                    document.getElementById("snimi").disabled = true;
-                    treci = false;
-                }
-                else if (sifra.length < 8) {
-                    document.getElementById(id).classList.add('err');
-                    document.getElementById("pass_span").innerHTML = "Lozinka mora imati najmanje 8 karaktera";
-                    document.getElementById("pass_span").classList.add("err");
-                    treci = false;
-                    document.getElementById("snimi").disabled = true;
-                }
-                else if (sifra != "") {
-                    document.getElementById(id).classList.remove('err');
-                    document.getElementById("pass_span").innerHTML = "";
-                    document.getElementById("pass_span").classList.remove("err");
-                    treci = true;
-                }
-                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && osmi === true) {
-                    document.getElementById("snimi").disabled = false;
-                }
-            }
-            else if (id == "korisnickoIme_input") {
-                var username = document.getElementById(id).value;
-
-                if (username === "") {
-                    document.getElementById(id).classList.add('err');
-                    document.getElementById("username_span").innerHTML = "Polje nesmije biti prazno";
-                    document.getElementById("username_span").classList.add("err");
-                    document.getElementById("snimi").disabled = true;
-                    cetvrti = false;
-                }
-                else if (username != "") {
-                    document.getElementById(id).classList.remove('err');
-                    document.getElementById("username_span").innerHTML = "";
-                    document.getElementById("username_span").classList.remove("err");
-                    cetvrti = true;
-                }
-                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && osmi === true) {
-                    document.getElementById("snimi").disabled = false;
-                }
-            }
-            else if (id == "sifra_input") {
-                var lozinka = document.getElementById(id).value;
-
-                if (lozinka === "") {
-                    document.getElementById(id).classList.add('err');
-                    document.getElementById("sifra_span").innerHTML = "Polje nesmije biti prazno";
-                    document.getElementById("sifra_span").classList.add("err");
-                    document.getElementById("snimi").disabled = true;
-                    peti = false;
-                }
-                else if (lozinka != "") {
-                    document.getElementById(id).classList.remove('err');
-                    document.getElementById("sifra_span").innerHTML = "";
-                    document.getElementById("sifra_span").classList.remove("err");
-                    peti = true;
-                }
-                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && osmi === true) {
-                    document.getElementById("snimi").disabled = false;
-                }
-            }
-            else if (id == "mail_input") {
-                var mail = document.getElementById(id).value;
-
-                if (mail === "") {
-                    document.getElementById(id).classList.add('err');
-                    document.getElementById("mail_span").innerHTML = "Polje nesmije biti prazno";
-                    document.getElementById("mail_span").classList.add("err");
-                    document.getElementById("snimi").disabled = true;
-                    sesti = false;
-                }
-                else if (mail != "") {
-                    document.getElementById(id).classList.remove('err');
-                    document.getElementById("mail_span").innerHTML = "";
-                    document.getElementById("mail_span").classList.remove("err");
-                    sesti = true;
-                }
-                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && osmi === true) {
-                    document.getElementById("snimi").disabled = false;
-                }
-            }
-            else if (id == "telefon_input") {
-                var telefon = document.getElementById(id).value;
-
-                if (telefon === "") {
-                    document.getElementById(id).classList.add('err');
-                    document.getElementById("telefon_span").innerHTML = "Polje nesmije biti prazno";
-                    document.getElementById("telefon_span").classList.add("err");
-                    document.getElementById("snimi").disabled = true;
-                    sedmi = false;
-                }
-                else if (telefon != "") {
-                    document.getElementById(id).classList.remove('err');
-                    document.getElementById("telefon_span").innerHTML = "";
-                    document.getElementById("telefon_span").classList.remove("err");
-                    sedmi = true;
-                }
-                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && osmi === true) {
-                    document.getElementById("snimi").disabled = false;
-                }
-            }
-            else if (id === "uloga_select") {
-                var selected = document.getElementById(id).value;
-
-                if (selected == 0) {
-                    document.getElementById(id).classList.add('err');
-                    document.getElementById("select_span").innerHTML = "Morate odabrati jedno polje";
-                    document.getElementById("select_span").classList.add("err");
-                    document.getElementById("snimi_korisnik_unos").disabled = true;
-                    document.getElementById("snimi").disabled = true;
-                    osmi = false;
-                }
-                else if (selected > 0) {
-                    document.getElementById(id).classList.remove('err');
-                    document.getElementById("select_span").innerHTML = "";
-                    document.getElementById("select_span").classList.remove("err");
-                    osmi = true;
-                }
-                if (prvi === true && drugi === true && treci === true && cetvrti === true && peti === true && sesti === true && sedmi === true && osmi === true) {
-                    document.getElementById("snimi").disabled = false;
-                }
-            }
-        }
-    </script>
-</head>
-@if (postoji)
-{
     <center>
         <form method="post" action="/SuperAdmin/Korisnik/UrediSnimi">
 
@@ -219,7 +20,7 @@
                         <label>Ime</label>
                     </td>
                     <td>
-                        <input type="text" name="ime" value="@kor.Ime" id="ime_input" onkeypress="provjera('ime_input')" onchange="provjera('ime_input')" onblur="provjera('ime_input')" /><span id="ime_span"></span>
+                        <input type="text" name="ime" value="@kor.Ime"/>
                     </td>
                 </tr>
                 <tr>
@@ -227,7 +28,7 @@
                         <label>Prezime</label>
                     </td>
                     <td>
-                        <input type="text" name="prezime" value="@kor.Prezime" id="prezime_input" onkeypress="provjera('prezime_input')" onchange="provjera('prezime_input')" onblur="provjera('prezime_input')" /><span id="prezime_span"></span>
+                        <input type="text" name="prezime" value="@kor.Prezime"/>
                     </td>
                 </tr>
                 <tr>
@@ -235,7 +36,7 @@
                         <label>Šifra</label>
                     </td>
                     <td>
-                        <input type="text" name="sifra" value="@kor.Sifra" id="sifra_input" onkeypress="provjera('sifra_input')" onchange="provjera('sifra_input')" onblur="provjera('sifra_input')" /><span id="sifra_span"></span>
+                        <input type="text" name="sifra" value="@kor.Sifra">
                     </td>
                 </tr>
                 <tr>
@@ -243,14 +44,8 @@
                         <label>Korisničko ime</label>
                     </td>
                     <td>
-                        <input type="text" name="korisnicko_ime" value="@kor.Korisnicko_Ime" id="korisnickoIme_input" onkeypress="provjera('korisnickoIme_input')" onchange="provjera('korisnickoIme_input')" onblur="provjera('korisnickoIme_input')" />
-                        <span id="username_span"></span>
+                        <input type="text" name="korisnicko_ime" value="@kor.Korisnicko_Ime" />
 
-                        <script>
-                            document.getElementById("korisnickoIme_input").classList.add('err');
-                            document.getElementById("username_span").innerHTML = "Korisničko ime je već u upotrebi";
-                            document.getElementById("username_span").classList.add("err");
-                        </script>
                     </td>
                 </tr>
                 <tr>
@@ -258,7 +53,7 @@
                         <label>Lozinka</label>
                     </td>
                     <td>
-                        <input type="text" name="lozinka" value="@kor.Lozinka" id="lozinka_input" onkeypress="provjera('lozinka_input')" onchange="provjera('lozinka_input')" onblur="provjera('lozinka_input')" /><span id="pass_span"></span>
+                        <input type="text" name="lozinka" value="@kor.Lozinka" />
                     </td>
                 </tr>
                 <tr>
@@ -266,7 +61,7 @@
                         <label>Mail</label>
                     </td>
                     <td>
-                        <input type="text" name="mail" value="@kor.Mail" id="mail_input" onkeypress="provjera('mail_input')" onchange="provjera('mail_input')" onblur="provjera('mail_input')" /><span id="mail_span"></span>
+                        <input type="text" name="mail" value="@kor.Mail" />
                     </td>
                 </tr>
                 <tr>
@@ -274,7 +69,7 @@
                         <label>Telefon</label>
                     </td>
                     <td>
-                        <input type="text" name="telefon" value="@kor.Telefon" id="telefon_input" onkeypress="provjera('telefon_input')" onchange="provjera('telefon_input')" onblur="provjera('telefon_input')" /><span id="telefon_span"></span>
+                        <input type="text" name="telefon" value="@kor.Telefon" />
                     </td>
                 </tr>
                 <tr>
@@ -282,14 +77,13 @@
                         <label>Uloga</label>
                     </td>
                     <td>
-                        <select name="uloga" id="uloga_select" onselect="provjera('uloga_select')" onchange="provjera('uloga_select')" onblur="provjera('uloga_select')">
+                        <select name="uloga">
                             <option value="@kor.Uloge_FK">@kor.uloge.Naziv</option>
                             @foreach (var x in uloge)
                             {
                                 <option value="@x.Uloge_ID">@x.Naziv</option>
                             }
                         </select>
-                        <span id="select_span"></span>
                     </td>
                 </tr>
             </table>
@@ -299,90 +93,3 @@
 
         </form>
     </center>
-}
-@if (!postoji)
-{<center>
-        <form method="post" action="/SuperAdmin/Korisnik/UrediSnimi">
-
-            <input name="id" hidden="hidden" value="@k.Korisnici_ID" />
-
-            <table>
-                <tr>
-                    <td>
-                        <label>Ime</label>
-                    </td>
-                    <td>
-                        <input type="text" name="ime" value="@k.Ime" id="ime_input" onkeypress="provjera('ime_input')" onchange="provjera('ime_input')" onblur="provjera('ime_input')" /><span id="ime_span"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Prezime</label>
-                    </td>
-                    <td>
-                        <input type="text" name="prezime" value="@k.Prezime" id="prezime_input" onkeypress="provjera('prezime_input')" onchange="provjera('prezime_input')" onblur="provjera('prezime_input')" /><span id="prezime_span"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Šifra</label>
-                    </td>
-                    <td>
-                        <input type="text" name="sifra" value="@k.Sifra" id="sifra_input" onkeypress="provjera('sifra_input')" onchange="provjera('sifra_input')" onblur="provjera('sifra_input')" /><span id="sifra_span"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Korisničko ime</label>
-                    </td>
-                    <td>
-                        <input type="text" name="korisnicko_ime" value="@k.Korisnicko_Ime" id="korisnickoIme_input" onkeypress="provjera('korisnickoIme_input')" onchange="provjera('korisnickoIme_input')" onblur="provjera('korisnickoIme_input')" /><span id="username_span"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Lozinka</label>
-                    </td>
-                    <td>
-                        <input type="text" name="lozinka" value="@k.Lozinka" id="lozinka_input" onkeypress="provjera('lozinka_input')" onchange="provjera('lozinka_input')" onblur="provjera('lozinka_input')" /><span id="pass_span"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Mail</label>
-                    </td>
-                    <td>
-                        <input type="text" name="mail" value="@k.Mail" id="mail_input" onkeypress="provjera('mail_input')" onchange="provjera('mail_input')" onblur="provjera('mail_input')" /><span id="mail_span"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Telefon</label>
-                    </td>
-                    <td>
-                        <input type="text" name="telefon" value="@k.Telefon" id="telefon_input" onkeypress="provjera('telefon_input')" onchange="provjera('telefon_input')" onblur="provjera('telefon_input')" /><span id="telefon_span"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Uloga</label>
-                    </td>
-                    <td>
-                        <select name="uloga" id="uloga_select" onselect="provjera('uloga_select')" onchange="provjera('uloga_select')" onblur="provjera('uloga_select')">
-                            <option value="@k.Uloge_FK">@k.uloge.Naziv</option>
-                            @foreach (var x in uloge)
-                            {
-                                <option value="@x.Uloge_ID">@x.Naziv</option>
-                            }
-                        </select>
-                        <span id="select_span"></span>
-                    </td>
-                </tr>
-            </table>
-
-            <button class="btn btn-primary" id="snimi">Snimi</button>
-
-
-        </form>
-    </center>
-}

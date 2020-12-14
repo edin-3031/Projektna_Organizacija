@@ -7,7 +7,7 @@ using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Models.VM;
 using Microsoft.AspNetCore.Http;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Areas.AdminOrg.Controllers
 {
@@ -303,8 +303,17 @@ namespace WebApplication1.Areas.AdminOrg.Controllers
             {
                 ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
 
-                ProjekatAktivnostPlan pap = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == id).FirstOrDefault();
-                pap.projekatPlan = db.ProjekatPlan.Where(a => a.ProjekatPlan_ID == pap.ProjekatPlan_FK).FirstOrDefault();
+                ProjekatAktivnostPlan pap = db.ProjekatAktivnostPlan.Where(a => a.ProjekatAktivnostPlan_ID == id).Include(a=>a.projekatPlan).Select(x=>new ProjekatAktivnostPlan { 
+                    DatumDo=x.DatumDo,
+                    DatumOd=x.DatumOd,
+                    JedinicaMjere=x.JedinicaMjere,
+                    Kolicina=x.Kolicina,
+                    Naziv=x.Naziv,
+                    ProjekatAktivnostPlan_ID=x.ProjekatAktivnostPlan_ID,
+                    projekatPlan=x.projekatPlan,
+                    ProjekatPlan_FK=x.projekatPlan.ProjekatPlan_ID,
+                    Sifra=x.Sifra
+                }).FirstOrDefault();
                 ViewData["projekatAktivnostPlan"] = pap;
 
                 List<ProjekatPlan> p_p = db.ProjekatPlan.ToList();

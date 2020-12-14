@@ -5,6 +5,24 @@
 
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
 }
+<style>
+    .aktiv {
+        background-color: lawngreen;
+        font-weight: bold;
+    }
+
+    .prek {
+        background-color: dodgerblue;
+        color: white;
+        font-weight: bold;
+    }
+
+    .zavrs {
+        background-color: orangered;
+        color: white;
+        font-weight: bold;
+    }
+</style>
 <center>
     <h1>Prikaz Projetnih Planova</h1>
     <div id="dugmad">
@@ -34,7 +52,7 @@
                     <td>@x.OrganizacionaJedinica_naziv</td>
                     <td>@(x.DatumOd.Date.Day+"."+ x.DatumOd.Date.Month + "." + x.DatumOd.Date.Year + ".")</td>
                     <td>@(x.DatumDo.Date.Day+"."+ x.DatumDo.Date.Month + "." + x.DatumDo.Date.Year + ".")</td>
-                    <td id="status_@x.ProjekatPlan_ID">@x.Status_naziv</td>
+                    <td id="status_@x.ProjekatPlan_ID">@x.Status_naziv.ToString()</td>
                     <script>
                         var element = document.getElementById("status_@x.ProjekatPlan_ID");
 

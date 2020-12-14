@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Http
 @{
-    string username = Context.Session.GetString("username");
+    string user = Context.Session.GetString("user");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -163,8 +163,8 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <partial name="_LoginPartial" />
                         <ul class="navbar-nav flex-grow-1" style="float:right">
-                            <li style="display:inline;margin:0px;">@username</li>
-                            <li style="display:inline;margin:0px; margin-left:80%;"><a class="btn btn-danger" href="/User/User/LogOut">Odjavi se</a></li>
+                            <li style="display:inline;margin:0px;">Dobrodošli <b>@user</b></li>
+                            <li style="display:inline;margin:0px; margin-left:70%;"><a class="btn btn-danger" href="/SuperAdmin/SuperAdmin/LogOut">Odjavi se</a></li>
                         </ul>
                     </div>
                 </div>
@@ -172,6 +172,9 @@
         </header>
         <div style="margin-left:17%; width:100%" class="container">
             <div id="kutijaZaMeni">
+
+                <a href="/User/User/Index"><img style="position: absolute; height: 7vw; width: 7vw; float: left; margin: 1%; top: -1.7%;" src="~/Pictures/iconTest2.png" id="slika_logo" /></a>
+
                 <div id="menu">
                     <br />
                     <a style="color:white; text-decoration-line:none; font-size:120%;" href="/User/User/Index">Projektna Organizacija</a><br /><br />
@@ -185,7 +188,7 @@
                         <ul id="izv">
                             <li><a href="/User/ProjekatAktivnostRealizacija/Prikaz">Realizacija</a></li>
                         </ul>
-    
+
                     </ul>
                 </div>
             </div>

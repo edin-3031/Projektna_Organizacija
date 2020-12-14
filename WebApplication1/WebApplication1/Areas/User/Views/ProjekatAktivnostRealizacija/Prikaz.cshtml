@@ -94,7 +94,7 @@
                     <tr>
                         <td>@x.proj_plan.Naziv</td>
                         <td>@x.ProjekatAktivnostPlan_all.Naziv</td>
-                        <td>@(x.Korisnici.Ime+" "+x.Korisnici.Prezime)</td>
+                        <td>@(x.Korisnici.Ime.ToString()+" "+x.Korisnici.Prezime.ToString())</td>
                         <td>@(x.Datum.Date.Day+"."+ x.Datum.Date.Month + "." + x.Datum.Date.Year + ".")</td>
                         <td>@x.Kolicina</td>
                         <td>@x.Opis</td>
