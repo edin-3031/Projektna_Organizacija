@@ -25,6 +25,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
     {
         private readonly ApplicationDbContext db;
         public string poruka = "Morate se ponovo prijaviti";
+        public string poruka2 = "Nemate pravo pristupa";
 
 
         public OrganizacionaJedinicaController(ApplicationDbContext _db)
@@ -40,6 +41,12 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -86,6 +93,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 List<OrganizacionaJedinicaVM> lista_org_jed = db.OrganizacionaJedinica.Include(a => a.drzava).Include(a => a.ptt).Include(a => a.organizacija).Select(x => new OrganizacionaJedinicaVM
@@ -114,6 +126,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -159,6 +176,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 OrganizacionaJedinica temp = new OrganizacionaJedinica
@@ -199,6 +221,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 OrganizacionaJedinica temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).FirstOrDefault();
@@ -236,6 +263,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 OrganizacionaJedinica temp = db.OrganizacionaJedinica.Where(a => a.OrganizacionaJedinica_ID == id).FirstOrDefault();
@@ -265,6 +297,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else

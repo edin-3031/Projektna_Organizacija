@@ -15,6 +15,7 @@ namespace WebApplication1.Areas.UserReport.Controllers
     {
         private readonly ApplicationDbContext db;
         string poruka = "Morate se ponovo prijaviti";
+        string poruka2 = "Nemate pravo pristupa";
 
         public AjaxController(ApplicationDbContext _db)
         {
@@ -26,6 +27,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else

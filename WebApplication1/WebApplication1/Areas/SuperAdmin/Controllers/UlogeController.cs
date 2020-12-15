@@ -14,6 +14,7 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
     {
         private readonly ApplicationDbContext db;
         public string poruka = "Morate se ponovo prijaviti";
+        public string poruka2 = "Nemate pravo pristupa";
 
         public UlogeController(ApplicationDbContext _db)
         {
@@ -25,6 +26,12 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -58,6 +65,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 List<Uloge> lista_uloga = db.Uloge.Select(x => new Uloge
@@ -81,6 +93,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 return View("Unos");
@@ -92,6 +109,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -129,6 +151,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 Uloge uloga = db.Uloge.Where(a => a.Uloge_ID == id).FirstOrDefault();
@@ -145,6 +172,11 @@ namespace WebApplication1.Areas.SuperAdmin.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "SuperAdmin")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else

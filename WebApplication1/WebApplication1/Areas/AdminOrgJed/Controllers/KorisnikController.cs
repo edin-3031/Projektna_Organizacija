@@ -26,6 +26,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
     {
         private readonly ApplicationDbContext db;
         string poruka = "Morate se ponovo prijaviti";
+        string poruka2 = "Nemate pravo pristupa";
 
         public KorisnikController(ApplicationDbContext _db)
         {
@@ -38,6 +39,12 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+
+            if (HttpContext.Session.GetString("role") != "Admin-Org-Jed")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -76,10 +83,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                     worksheet.Cell(currentRow, 1).Value = "Ime i prezime";
                     worksheet.Cell(currentRow, 2).Value = "Uloga";
                     worksheet.Cell(currentRow, 3).Value = "Šifra";
-                    worksheet.Cell(currentRow, 4).Value = "Korisničko ime";
-                    worksheet.Cell(currentRow, 5).Value = "Lozinka";
-                    worksheet.Cell(currentRow, 6).Value = "Mail";
-                    worksheet.Cell(currentRow, 7).Value = "Telefon";
+                    worksheet.Cell(currentRow, 4).Value = "Mail";
+                    worksheet.Cell(currentRow, 5).Value = "Telefon";
 
                     foreach (var x in k_final)
                     {
@@ -87,10 +92,8 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                         worksheet.Cell(currentRow, 1).Value = x.Ime.ToString() + " " + x.Prezime.ToString();
                         worksheet.Cell(currentRow, 2).Value = db.Uloge.Where(a => a.Uloge_ID == x.Uloge_FK).Select(o => o.Naziv).FirstOrDefault();
                         worksheet.Cell(currentRow, 3).Value = x.Sifra;
-                        worksheet.Cell(currentRow, 4).Value = x.Korisnicko_Ime;
-                        worksheet.Cell(currentRow, 5).Value = x.Lozinka;
-                        worksheet.Cell(currentRow, 6).Value = x.Mail;
-                        worksheet.Cell(currentRow, 7).Value = x.Telefon;
+                        worksheet.Cell(currentRow, 4).Value = x.Mail;
+                        worksheet.Cell(currentRow, 5).Value = x.Telefon;
                     }
 
                     using (var stream = new MemoryStream())
@@ -108,6 +111,11 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "Admin-Org-Jed")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -154,6 +162,11 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "Admin-Org-Jed")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
@@ -180,6 +193,11 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "Admin-Org-Jed")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -251,6 +269,11 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "Admin-Org-Jed")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
@@ -305,6 +328,11 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "Admin-Org-Jed")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 ViewData["logo"] = db.Organizacija.Where(a => a.Organizacija_ID == (int)HttpContext.Session.GetInt32("organisation ID")).Select(o => o.Logo).FirstOrDefault();
@@ -326,6 +354,11 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "Admin-Org-Jed")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else

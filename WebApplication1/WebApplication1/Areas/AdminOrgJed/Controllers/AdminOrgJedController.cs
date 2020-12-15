@@ -14,6 +14,7 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
     {
         private readonly ApplicationDbContext db;
         string poruka = "Morate se ponovo prijaviti";
+        string poruka2 = "Nemate pravo pristupa";
 
         public AdminOrgJedController(ApplicationDbContext _db)
         {
@@ -26,6 +27,12 @@ namespace WebApplication1.Areas.AdminOrgJed.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+
+            if (HttpContext.Session.GetString("role") != "Admin-Org-Jed")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else

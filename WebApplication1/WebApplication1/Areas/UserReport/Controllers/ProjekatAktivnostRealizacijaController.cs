@@ -25,6 +25,7 @@ namespace WebApplication1.Areas.UserReport.Controllers
     {
         private readonly ApplicationDbContext db;
         string poruka = "Morate se ponovo prijaviti";
+        string poruka2 = "Nemate pravo pristupa";
         public ProjekatAktivnostRealizacijaController(ApplicationDbContext _db)
         {
             db = _db;
@@ -36,6 +37,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -132,6 +138,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -256,6 +267,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 List<ProjekatAktivnostPlan> lista_pro_aktiv_plan = new List<ProjekatAktivnostPlan>();
@@ -369,6 +385,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -1376,6 +1397,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 int? orgId = (int)HttpContext.Session.GetInt32("organisation ID");
@@ -1469,6 +1495,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else
@@ -1614,6 +1645,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 int? orgId = (int)HttpContext.Session.GetInt32("organisation ID");
@@ -1724,6 +1760,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 int? orgId = (int)HttpContext.Session.GetInt32("organisation ID");
@@ -1829,6 +1870,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
                 TempData["poruka"] = poruka;
                 return Redirect("/Auth/Index");
             }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
+                return Redirect("/Auth/Index");
+            }
             else
             {
                 int? orgId = (int)HttpContext.Session.GetInt32("organisation ID");
@@ -1851,6 +1897,11 @@ namespace WebApplication1.Areas.UserReport.Controllers
             if (HttpContext.Session.GetInt32("user ID") == null)
             {
                 TempData["poruka"] = poruka;
+                return Redirect("/Auth/Index");
+            }
+            if (HttpContext.Session.GetString("role") != "User-Report")
+            {
+                TempData["poruka"] = poruka2;
                 return Redirect("/Auth/Index");
             }
             else

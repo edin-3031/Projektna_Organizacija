@@ -71,27 +71,23 @@
         </div>
         <table class="table">
             <thead>
-            <th>Korisničko ime</th>
-            <th>Uloga</th>
             <th>Šifra</th>
-            <th>Ime</th>
+            <th>Ime i prezime</th>
+            <th>Uloga</th>
             <th>Prezime</th>
             <th>Telefon</th>
             <th>Mail</th>
-            <th>Lozinka</th>
             </thead>
             <tbody>
                 @foreach (var x in lista)
                 {
                     <tr>
-                        <td>@x.Korisnicko_Ime</td>
-                        <td>@x.uloge.Naziv</td>
                         <td>@x.Sifra</td>
-                        <td>@x.Ime</td>
+                        <td>@(x.Ime.ToString()+" "+x.Prezime.ToString())</td>
+                        <td>@x.uloge.Naziv</td>
                         <td>@x.Prezime</td>
                         <td>@x.Telefon</td>
                         <td>@x.Mail</td>
-                        <td>@x.Lozinka</td>
                     </tr>
                 }
             </tbody>
